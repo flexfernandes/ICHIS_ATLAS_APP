@@ -468,22 +468,44 @@ def create_web_page_custom_fields():
     print("GF Atlas App: campos Auxiliary Block 1 e 2 criados em Web Page.")
 
 
-def create_content_groups():
-    for (internal_name, display_name, parent_internal_name,
-         is_group, sort_order, icon, color) in CONTENT_GROUPS:
-        if frappe.db.exists("GF Content Group", internal_name):
-            continue
+def _insert_content_group(internal_name, display_name, parent_internal_name,
+                           is_group, sort_order, icon, color):
+    if frappe.db.exists("GF Content Group", internal_name):
+        return
+    frappe.get_doc({
+        "doctype": "GF Content Group",
+        "internal_name": internal_name,
+        "display_name": display_name,
+        "parent_group": parent_internal_name,
+        "is_group": is_group,
+        "active": 1,
+        "sort_order": sort_order,
+        "icon": icon,
+        "color": color
+    }).insert(ignore_permissions=True)
 
-        frappe.get_doc({
-            "doctype": "GF Content Group",
-            "internal_name": internal_name,
-            "display_name": display_name,
-            "parent_group": parent_internal_name,
-            "is_group": is_group,
-            "active": 1,
-            "sort_order": sort_order,
-            "icon": icon,
-            "color": color
-        }).insert(ignore_permissions=True)
+
+def create_content_groups():
+    # Insere em 3 passagens com commit entre cada nível para garantir
+    # que o nested set (lft/rgt) do pai exista antes de inserir filhos.
+
+    # Nível 0 — raiz
+    roots = [r for r in CONTENT_GROUPS if r[2] is None]
+    for row in roots:
+        _insert_content_group(*row)
+    frappe.db.commit()
+
+    # Nível 1 — filhos da raiz
+    root_names = {r[0] for r in roots}
+    level1 = [r for r in CONTENT_GROUPS if r[2] in root_names]
+    for row in level1:
+        _insert_content_group(*row)
+    frappe.db.commit()
+
+    # Níveis 2+ — todos os demais
+    inserted = root_names | {r[0] for r in level1}
+    remaining = [r for r in CONTENT_GROUPS if r[0] not in inserted]
+    for row in remaining:
+        _insert_content_group(*row)
 
     print(f"GF Atlas App: {len(CONTENT_GROUPS)} grupos de conteúdo criados.")
