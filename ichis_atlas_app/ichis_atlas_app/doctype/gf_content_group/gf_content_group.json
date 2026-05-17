@@ -1,0 +1,153 @@
+﻿{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:internal_name",
+ "creation": "2026-05-16 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "internal_name",
+  "display_name",
+  "cb_col1",
+  "parent_group",
+  "is_group",
+  "default_access_group",
+  "active",
+  "sb_details",
+  "description",
+  "cb_col2",
+  "sort_order",
+  "icon",
+  "color"
+ ],
+ "fields": [
+  {
+   "fieldname": "internal_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nome Interno",
+   "reqd": 1,
+   "description": "Sem acentos, sem espaços, lowercase, underscore permitido. Ex: projetos_especiais"
+  },
+  {
+   "fieldname": "display_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nome de Exibição",
+   "reqd": 1,
+   "description": "Nome visível na interface. Com acentos e espaços. Ex: Projetos Especiais"
+  },
+  {
+   "fieldname": "cb_col1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "parent_group",
+   "fieldtype": "Link",
+   "label": "Grupo Pai",
+   "options": "GF Content Group"
+  },
+  {
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "É Grupo",
+   "default": "0"
+  },
+  {
+   "fieldname": "default_access_group",
+   "fieldtype": "Link",
+   "label": "Grupo de Acesso Padrão",
+   "options": "GF Access Group",
+   "description": "Pré-preenche o campo access_group ao criar um registro no GF Content Registry"
+  },
+  {
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Ativo",
+   "default": "1"
+  },
+  {
+   "fieldname": "sb_details",
+   "fieldtype": "Section Break",
+   "label": "Detalhes"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Descrição"
+  },
+  {
+   "fieldname": "cb_col2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sort_order",
+   "fieldtype": "Int",
+   "label": "Ordem"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Data",
+   "label": "Ícone"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "label": "Cor"
+  }
+ ],
+ "is_tree": 1,
+ "links": [],
+ "modified": "2026-05-16 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ichis Atlas App",
+ "name": "GF Content Group",
+ "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_group",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GF Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GF Editor"
+  },
+  {
+   "read": 1,
+   "role": "GF Viewer"
+  }
+ ],
+ "sort_field": "sort_order",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "display_name",
+ "track_changes": 1
+}

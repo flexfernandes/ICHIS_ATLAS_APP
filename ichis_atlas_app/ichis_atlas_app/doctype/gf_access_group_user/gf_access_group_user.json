@@ -1,0 +1,109 @@
+﻿{
+ "actions": [],
+ "creation": "2026-05-16 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Other",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "user",
+  "full_name",
+  "cb_col1",
+  "can_view",
+  "can_search",
+  "can_create",
+  "can_edit",
+  "cb_col2",
+  "can_delete",
+  "can_export",
+  "can_print",
+  "enabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Usuário",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "fetch_from": "user.full_name",
+   "in_list_view": 1,
+   "label": "Nome Completo",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_col1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "can_view",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Visualizar",
+   "default": "1"
+  },
+  {
+   "fieldname": "can_search",
+   "fieldtype": "Check",
+   "label": "Pesquisar",
+   "default": "1"
+  },
+  {
+   "fieldname": "can_create",
+   "fieldtype": "Check",
+   "label": "Criar",
+   "default": "0"
+  },
+  {
+   "fieldname": "can_edit",
+   "fieldtype": "Check",
+   "label": "Editar",
+   "default": "0"
+  },
+  {
+   "fieldname": "cb_col2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "can_delete",
+   "fieldtype": "Check",
+   "label": "Deletar",
+   "default": "0"
+  },
+  {
+   "fieldname": "can_export",
+   "fieldtype": "Check",
+   "label": "Exportar",
+   "default": "0"
+  },
+  {
+   "fieldname": "can_print",
+   "fieldtype": "Check",
+   "label": "Imprimir",
+   "default": "0"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Habilitado",
+   "default": "1"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-16 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ichis Atlas App",
+ "name": "GF Access Group User",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

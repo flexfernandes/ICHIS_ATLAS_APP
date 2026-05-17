@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ichis_atlas_app"
+version = "1.0.0"
+description = "GF Atlas — GREENFARMS Corporate Foundation App"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "GREENFARMS", email = "flexfernandes@gmail.com" }]
+dependencies = []
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ichis_atlas_app", "ichis_atlas_app.*"]

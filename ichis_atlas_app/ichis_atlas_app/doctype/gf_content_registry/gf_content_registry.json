@@ -1,0 +1,225 @@
+﻿{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "GF-REG-.YYYY.-.#####",
+ "creation": "2026-05-16 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "item_type",
+  "status",
+  "cb_col1",
+  "content_group",
+  "access_group",
+  "responsible_user",
+  "sb_reference",
+  "route_url",
+  "reference_doctype",
+  "cb_ref",
+  "reference_name",
+  "sb_details",
+  "description",
+  "tags",
+  "cb_details2",
+  "icon",
+  "color",
+  "sb_config",
+  "sort_order",
+  "show_on_home",
+  "favorite",
+  "active"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Título",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tipo do Item",
+   "options": "WEB_PAGE\nREPORT\nDASHBOARD\nPDF\nHTML\nDOCUMENT\nAPPLICATION\nWORKFLOW\nEXTERNAL_LINK\nAPI\nSCRIPT\nOTHER",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "ACTIVE\nDRAFT\nARCHIVED\nOBSOLETE",
+   "default": "ACTIVE"
+  },
+  {
+   "fieldname": "cb_col1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "content_group",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Grupo de Conteúdo",
+   "options": "GF Content Group",
+   "reqd": 1
+  },
+  {
+   "fieldname": "access_group",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Grupo de Acesso",
+   "options": "GF Access Group",
+   "reqd": 1,
+   "description": "Pré-preenchido automaticamente pelo Grupo de Conteúdo. Editável para exceções."
+  },
+  {
+   "fieldname": "responsible_user",
+   "fieldtype": "Link",
+   "label": "Responsável",
+   "options": "User"
+  },
+  {
+   "fieldname": "sb_reference",
+   "fieldtype": "Section Break",
+   "label": "Referência"
+  },
+  {
+   "fieldname": "route_url",
+   "fieldtype": "Data",
+   "label": "URL / Rota",
+   "description": "Ex: /app/query-report/timesheet ou https://greenfarms.com.br"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Data",
+   "label": "DocType de Referência"
+  },
+  {
+   "fieldname": "cb_ref",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "label": "Nome de Referência"
+  },
+  {
+   "fieldname": "sb_details",
+   "fieldtype": "Section Break",
+   "label": "Detalhes"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Descrição"
+  },
+  {
+   "fieldname": "tags",
+   "fieldtype": "Small Text",
+   "label": "Tags"
+  },
+  {
+   "fieldname": "cb_details2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Data",
+   "label": "Ícone"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "label": "Cor"
+  },
+  {
+   "fieldname": "sb_config",
+   "fieldtype": "Section Break",
+   "label": "Configurações"
+  },
+  {
+   "fieldname": "sort_order",
+   "fieldtype": "Int",
+   "label": "Ordem"
+  },
+  {
+   "fieldname": "show_on_home",
+   "fieldtype": "Check",
+   "label": "Exibir na Home",
+   "default": "0"
+  },
+  {
+   "fieldname": "favorite",
+   "fieldtype": "Check",
+   "label": "Favorito",
+   "default": "0"
+  },
+  {
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Ativo",
+   "default": "1"
+  }
+ ],
+ "links": [],
+ "modified": "2026-05-16 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ichis Atlas App",
+ "name": "GF Content Registry",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GF Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GF Editor",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GF Viewer"
+  }
+ ],
+ "search_fields": "title,item_type,status",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}
