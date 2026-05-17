@@ -1,5 +1,5 @@
 app_name = "ichis_atlas_app"
-app_title = "GF Atlas"
+app_title = "GF Atlas App"
 app_publisher = "GREENFARMS"
 app_description = "GREENFARMS Corporate Foundation — Estrutura organizacional corporativa"
 app_email = "flexfernandes@gmail.com"
