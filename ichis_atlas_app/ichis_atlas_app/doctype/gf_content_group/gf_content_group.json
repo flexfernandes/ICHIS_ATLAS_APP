@@ -20,6 +20,7 @@
   "old_parent",
   "sb_details",
   "description",
+  "external_reference",
   "cb_col2",
   "sort_order",
   "icon",
@@ -111,13 +112,20 @@
    "label": "Descrição"
   },
   {
+   "fieldname": "external_reference",
+   "fieldtype": "Data",
+   "label": "Referência Externa (Google Drive)",
+   "description": "URL de pasta ou arquivo no Google Drive vinculado a este grupo"
+  },
+  {
    "fieldname": "cb_col2",
    "fieldtype": "Column Break"
   },
   {
    "fieldname": "sort_order",
-   "fieldtype": "Int",
-   "label": "Ordem"
+   "fieldtype": "Data",
+   "label": "Ordem",
+   "description": "Código de ordenação. Ex: 01, 01.02, 01.02-A"
   },
   {
    "fieldname": "icon",
