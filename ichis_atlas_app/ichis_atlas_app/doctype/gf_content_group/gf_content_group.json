@@ -29,15 +29,15 @@
    "in_list_view": 1,
    "label": "Nome Interno",
    "reqd": 1,
-   "description": "Sem acentos, sem espaços, lowercase, underscore permitido. Ex: projetos_especiais"
+   "description": "Sem acentos, sem espacos, lowercase, underscore permitido. Ex: projetos_especiais"
   },
   {
    "fieldname": "display_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Nome de Exibição",
+   "label": "Nome de Exibicao",
    "reqd": 1,
-   "description": "Nome visível na interface. Com acentos e espaços. Ex: Projetos Especiais"
+   "description": "Nome visivel na interface. Com acentos e espacos. Ex: Projetos Especiais"
   },
   {
    "fieldname": "cb_col1",
@@ -52,15 +52,15 @@
   {
    "fieldname": "is_group",
    "fieldtype": "Check",
-   "label": "É Grupo",
+   "label": "E Grupo",
    "default": "0"
   },
   {
    "fieldname": "default_access_group",
    "fieldtype": "Link",
-   "label": "Grupo de Acesso Padrão",
+   "label": "Grupo de Acesso Padrao",
    "options": "GF Access Group",
-   "description": "Pré-preenche o campo access_group ao criar um registro no GF Content Registry"
+   "description": "Pre-preenche o campo access_group ao criar um registro no GF Content Registry"
   },
   {
    "fieldname": "active",
@@ -76,7 +76,7 @@
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Descrição"
+   "label": "Descricao"
   },
   {
    "fieldname": "cb_col2",
@@ -90,7 +90,7 @@
   {
    "fieldname": "icon",
    "fieldtype": "Data",
-   "label": "Ícone"
+   "label": "Icone"
   },
   {
    "fieldname": "color",
