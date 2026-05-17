@@ -404,7 +404,7 @@ const GF = {
         fields: ['name','display_name','parent_group','is_group','icon','color','sort_order','active','description'],
         filters: [['active','=',1]],
         order_by: 'sort_order asc, display_name asc',
-        limit: 500
+        limit_page_length: 500
       }
     });
     this.groups = r.message || [];
@@ -420,7 +420,7 @@ const GF = {
                  'icon','color','sort_order','show_on_home','favorite','active'],
         filters: [['active','=',1],['status','!=','ARCHIVED']],
         order_by: 'sort_order asc, title asc',
-        limit: 1000
+        limit_page_length: 1000
       }
     });
     this.items = r.message || [];
