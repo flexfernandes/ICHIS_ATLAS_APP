@@ -392,7 +392,6 @@ html{font-size:14px}
 {% endblock %}
 
 {% block script %}
-<script src="https://cdn.jsdelivr.net/npm/lucide@0.263.1/dist/umd/lucide.min.js"></script>
 <script>
 const GF = {
   groups: [],
@@ -402,12 +401,25 @@ const GF = {
   roots: [],
   recents: [],
 
+  _lucideReady: false,
+
+  _loadLucide() {
+    return new Promise((resolve) => {
+      if (window.lucide) { this._lucideReady = true; resolve(); return; }
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/lucide@0.263.1/dist/umd/lucide.min.js';
+      s.onload  = () => { this._lucideReady = true; resolve(); };
+      s.onerror = () => resolve(); // falha silenciosa
+      document.head.appendChild(s);
+    });
+  },
+
   async init() {
     this.recents = JSON.parse(localStorage.getItem('gf_recents') || '[]');
     this._setupUser();
     this._setupSearch();
     try {
-      await Promise.all([this._loadGroups(), this._loadItems()]);
+      await Promise.all([this._loadGroups(), this._loadItems(), this._loadLucide()]);
       this._buildTree();
       this._renderSidebar();
       this.renderHome();
