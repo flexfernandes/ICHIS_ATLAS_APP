@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/lucide@0.263.1/dist/umd/lucide.min.js"></script>
+<script src="/assets/ichis_atlas_app/js/lucide.min.js"></script>
 <style>
 /* ── RESET FRAPPE CONTAINER ── */
 .container,.page-container{max-width:100%!important;padding:0!important;width:100%!important;margin:0!important}
@@ -407,7 +407,7 @@ const GF = {
     return new Promise((resolve) => {
       if (window.lucide) { this._lucideReady = true; resolve(); return; }
       const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/lucide@0.263.1/dist/umd/lucide.min.js';
+      s.src = '/assets/ichis_atlas_app/js/lucide.min.js';
       s.onload  = () => { this._lucideReady = true; resolve(); };
       s.onerror = () => resolve(); // falha silenciosa
       document.head.appendChild(s);
