@@ -6,7 +6,7 @@ with open("requirements.txt") as f:
 setup(
     name="ichis_atlas_app",
     version="1.0.0",
-    description="GF Atlas — GREENFARMS Corporate Foundation App",
+    description="GF Atlas App — GREENFARMS Corporate Foundation App",
     author="GREENFARMS",
     author_email="flexfernandes@gmail.com",
     packages=find_packages(include=["ichis_atlas_app", "ichis_atlas_app.*"]),

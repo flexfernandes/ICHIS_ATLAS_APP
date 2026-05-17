@@ -1,4 +1,4 @@
-import frappe
+﻿import frappe
 
 
 def after_install():
@@ -7,7 +7,7 @@ def after_install():
     create_content_groups()
     create_web_page_custom_fields()
     frappe.db.commit()
-    print("GF Atlas: instalação concluída com sucesso.")
+    print("GF Atlas App: instalação concluída com sucesso.")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -22,7 +22,7 @@ def create_roles():
                 "role_name": role_name,
                 "desk_access": 1
             }).insert(ignore_permissions=True)
-    print("GF Atlas: roles criadas.")
+    print("GF Atlas App: roles criadas.")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -96,7 +96,7 @@ def create_access_groups():
                 "sort_order": sort_order,
                 "description": description
             }).insert(ignore_permissions=True)
-    print(f"GF Atlas: {len(ACCESS_GROUPS)} grupos de acesso criados.")
+    print(f"GF Atlas App: {len(ACCESS_GROUPS)} grupos de acesso criados.")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -465,7 +465,7 @@ def create_web_page_custom_fields():
                 **f
             }).insert(ignore_permissions=True)
 
-    print("GF Atlas: campos Auxiliary Block 1 e 2 criados em Web Page.")
+    print("GF Atlas App: campos Auxiliary Block 1 e 2 criados em Web Page.")
 
 
 def create_content_groups():
@@ -486,4 +486,4 @@ def create_content_groups():
             "color": color
         }).insert(ignore_permissions=True)
 
-    print(f"GF Atlas: {len(CONTENT_GROUPS)} grupos de conteúdo criados.")
+    print(f"GF Atlas App: {len(CONTENT_GROUPS)} grupos de conteúdo criados.")
