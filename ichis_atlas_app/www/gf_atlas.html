@@ -392,6 +392,7 @@ html{font-size:14px}
 {% endblock %}
 
 {% block script %}
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.263.1/dist/umd/lucide.min.js"></script>
 <script>
 const GF = {
   groups: [],
@@ -470,10 +471,6 @@ const GF = {
       if (!root.children.length) return;
       const sec = document.createElement('div');
       sec.className = 'sb-sec';
-      const lbl = document.createElement('div');
-      lbl.className = 'sb-lbl';
-      lbl.textContent = root.display_name;
-      sec.appendChild(lbl);
       root.children.forEach(child => {
         const hasKids = child.children.length > 0;
         const cnt = this._countItems(child.name);
@@ -491,10 +488,12 @@ const GF = {
           ns.className = 'ns';
           ns.id = 'ns-' + child.name;
           child.children.forEach(sub => {
+            const scnt = this._countItems(sub.name);
             const nsi = document.createElement('div');
             nsi.className = 'nsi';
             nsi.dataset.group = sub.name;
-            nsi.innerHTML = '<span class="nsi-d"></span>' + this._esc(sub.display_name);
+            nsi.innerHTML = '<span class="nsi-d"></span>' + this._esc(sub.display_name) +
+              (scnt > 0 ? '<span class="ni-ct">' + scnt + '</span>' : '');
             nsi.onclick = () => this.navigateTo(sub.name);
             ns.appendChild(nsi);
           });
@@ -552,7 +551,7 @@ const GF = {
     const fn    = this._esc(this.firstName   || 'Bem-vindo');
     return '<div class="hero">' +
       '<div class="hero-eyebrow">Central Corporativa · ' + co + '</div>' +
-      '<h1 class="hero-h">' + fn + ', bem-vindo ao <span>Wiki Hub Knowledge</span></h1>' +
+      '<h1 class="hero-h"><span>Wiki Hub Knowledge</span></h1>' +
       '<p class="hero-p">Toda documentação, projetos, aplicações, automações e sistemas da empresa organizados em um único lugar. Navegue, explore e acesse com precisão.</p>' +
       '<div class="hero-stats">' +
         '<div class="hs-item"><div class="hs-val">' + total + '<span>+</span></div><div class="hs-lbl">Recursos cadastrados</div></div>' +
@@ -917,7 +916,7 @@ const GF = {
   },
 
   _applyIcons() {
-    if (window.lucide) lucide.createIcons({attrs:{style:'display:block'}});
+    if (window.lucide) lucide.createIcons({ attrs: { style: 'display:block' } });
   },
 
   _typeLabel(t) {
