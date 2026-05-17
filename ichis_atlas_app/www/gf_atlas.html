@@ -264,6 +264,19 @@ html{font-size:14px}
 .pg-footer-t{font-size:12px;color:var(--text-3);font-weight:500}
 .pg-footer-s{font-size:11px;color:var(--text-3);margin-top:3px}
 
+/* ── IFRAME ── */
+#gf-iframe-wrap{flex:1;display:none;flex-direction:column;overflow:hidden;position:relative}
+#gf-iframe{width:100%;flex:1;border:none;display:block}
+.gf-back-btn{
+  display:none;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:6px;
+  background:var(--bg);border:1px solid var(--border);
+  font-size:12px;color:var(--text-2);cursor:pointer;
+  transition:background 120ms,border-color 120ms;flex-shrink:0;
+}
+.gf-back-btn:hover{background:var(--border-2);border-color:#cbd5e1}
+.gf-back-btn svg{flex-shrink:0}
+
 /* ── LOADING ── */
 .gf-loading{display:flex;align-items:center;justify-content:center;height:60vh;flex-direction:column;gap:12px;color:var(--text-3)}
 .gf-spin{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 700ms linear infinite}
@@ -349,6 +362,10 @@ html{font-size:14px}
         <div class="mob-toggle" onclick="document.getElementById('gf-sidebar').classList.toggle('open')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </div>
+        <button class="gf-back-btn" id="gf-back-btn" onclick="GF._backFromIframe()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Voltar
+        </button>
         <div class="bc" id="gf-breadcrumb">
           <span>Início</span>
         </div>
@@ -363,6 +380,10 @@ html{font-size:14px}
         <div class="gf-spin"></div>
         <span>Carregando GF Atlas...</span>
       </div>
+    </div>
+
+    <div id="gf-iframe-wrap">
+      <iframe id="gf-iframe" src="about:blank" allowfullscreen></iframe>
     </div>
 
   </div>
@@ -511,6 +532,7 @@ const GF = {
   },
 
   renderHome() {
+    this._showContent();
     this.current = 'home';
     this._setActive(null);
     this._breadcrumb(['Início']);
@@ -596,6 +618,7 @@ const GF = {
   },
 
   navigateTo(name) {
+    this._showContent();
     const node = this.tree[name];
     if (!node) return;
     this.current = name;
@@ -643,33 +666,94 @@ const GF = {
     const item = this.itemMap[itemName];
     if (!item) return;
     this._addRecent(itemName);
-    const url = item.route_url;
-    if (url) {
-      if (/^https?:\/\//.test(url)) { window.open(url, '_blank'); }
-      else { window.location.href = url; }
+
+    // Links externos sempre em nova aba
+    if (item.item_type === 'EXTERNAL_LINK') {
+      const href = item.route_url || item.reference_name;
+      if (href) window.open(href, '_blank');
       return;
     }
-    const ref = item.reference_name || '';
-    const dt = item.reference_doctype || '';
-    switch (item.item_type) {
-      case 'REPORT':
-        window.location.href = '/app/query-report/' + encodeURIComponent(ref || item.title); break;
-      case 'DASHBOARD':
-        window.location.href = '/app/dashboard/' + encodeURIComponent(ref || item.title); break;
-      case 'DOCUMENT':
-        if (dt && ref) window.location.href = '/app/' + this._slug(dt) + '/' + encodeURIComponent(ref);
-        else if (dt) window.location.href = '/app/' + this._slug(dt);
-        break;
-      case 'WEB_PAGE':
-        if (ref) window.location.href = ref; break;
-      case 'EXTERNAL_LINK':
-        if (ref) window.open(ref, '_blank'); break;
-      default:
-        if (dt && ref) window.location.href = '/app/' + this._slug(dt) + '/' + encodeURIComponent(ref);
+
+    // Resolve URL interna
+    let url = item.route_url || '';
+    if (!url) {
+      const ref = item.reference_name || '';
+      const dt  = item.reference_doctype || '';
+      switch (item.item_type) {
+        case 'REPORT':    url = '/app/query-report/' + encodeURIComponent(ref || item.title); break;
+        case 'DASHBOARD': url = '/app/dashboard/'    + encodeURIComponent(ref || item.title); break;
+        case 'WEB_PAGE':  url = ref; break;
+        default:
+          if (dt && ref) url = '/app/' + this._slug(dt) + '/' + encodeURIComponent(ref);
+          else if (dt)   url = '/app/' + this._slug(dt);
+      }
+    }
+
+    if (!url) return;
+
+    // URLs absolutas externas → nova aba
+    if (/^https?:\/\//.test(url) && !url.includes(window.location.hostname)) {
+      window.open(url, '_blank');
+      return;
+    }
+
+    // Carrega no iframe interno
+    this._loadIframe(url, item.title);
+  },
+
+  _loadIframe(url, title) {
+    const content = document.getElementById('gf-content');
+    const wrap    = document.getElementById('gf-iframe-wrap');
+    const iframe  = document.getElementById('gf-iframe');
+    const backBtn = document.getElementById('gf-back-btn');
+
+    content.style.display = 'none';
+    wrap.style.display    = 'flex';
+    backBtn.style.display = 'flex';
+
+    // Injeta CSS no iframe após carregar para ocultar nav do Frappe
+    iframe.onload = () => {
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!doc) return;
+        const s = doc.createElement('style');
+        s.textContent = [
+          '.navbar,.navbar-main,nav.navbar{display:none!important}',
+          '.page-head{display:none!important}',
+          '.layout-side-section,.sidebar-section{display:none!important}',
+          '.layout-main{padding-top:0!important}',
+          '.page-wrapper{padding-top:0!important}',
+          'body>.container{padding-top:0!important}',
+        ].join('');
+        doc.head.appendChild(s);
+      } catch(e) {}
+    };
+
+    iframe.src = url;
+    this._breadcrumb(['Início', title || url]);
+  },
+
+  _backFromIframe() {
+    const content = document.getElementById('gf-content');
+    const wrap    = document.getElementById('gf-iframe-wrap');
+    const iframe  = document.getElementById('gf-iframe');
+    const backBtn = document.getElementById('gf-back-btn');
+
+    iframe.src            = 'about:blank';
+    wrap.style.display    = 'none';
+    backBtn.style.display = 'none';
+    content.style.display = 'block';
+
+    // Restaura a view anterior (grupo ativo ou home)
+    if (this.current && this.current !== 'home') {
+      this.navigateTo(this.current);
+    } else {
+      this.renderHome();
     }
   },
 
   showFavorites() {
+    this._showContent();
     this._setActive('__fav__');
     this._breadcrumb(['Favoritos']);
     const favs = this.items.filter(i => i.favorite);
@@ -684,6 +768,7 @@ const GF = {
   },
 
   showRecents() {
+    this._showContent();
     this._setActive('__rec__');
     this._breadcrumb(['Recentes']);
     const list = this.recents.map(n => this.itemMap[n]).filter(Boolean).slice(0, 20);
@@ -745,6 +830,18 @@ const GF = {
   },
 
   /* ── helpers ── */
+  _showContent() {
+    const content = document.getElementById('gf-content');
+    const wrap    = document.getElementById('gf-iframe-wrap');
+    const iframe  = document.getElementById('gf-iframe');
+    const backBtn = document.getElementById('gf-back-btn');
+    if (!wrap) return;
+    iframe.src            = 'about:blank';
+    wrap.style.display    = 'none';
+    backBtn.style.display = 'none';
+    content.style.display = 'block';
+  },
+
   _setupUser() {
     const fullname = frappe.session.user_fullname || frappe.session.user || 'Usuário';
     const initials = fullname.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'GF';
