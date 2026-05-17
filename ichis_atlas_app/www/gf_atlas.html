@@ -311,10 +311,10 @@ html{font-size:14px}
   <aside class="sidebar" id="gf-sidebar">
 
     <div class="sb-logo">
-      <div class="sb-mark">GF</div>
+      <div class="sb-mark" id="gf-sb-mark">GF</div>
       <div>
-        <div class="sb-name">GREENFARMS</div>
-        <div class="sb-sub">Central Corporativa</div>
+        <div class="sb-name" id="gf-sb-name">Carregando...</div>
+        <div class="sb-sub">Wiki Hub Knowledge</div>
       </div>
     </div>
 
@@ -378,7 +378,7 @@ html{font-size:14px}
     <div class="content" id="gf-content">
       <div class="gf-loading">
         <div class="gf-spin"></div>
-        <span>Carregando GF Atlas...</span>
+        <span>Carregando Wiki Hub Knowledge...</span>
       </div>
     </div>
 
@@ -539,19 +539,21 @@ const GF = {
     const homeItems = this.items.filter(i => i.show_on_home);
     const techRoot = this.roots.find(r => /tecnolog|tech/i.test(r.name));
     let html = this._heroHtml() + this._quickHtml(homeItems) + this._groupsHtml(techRoot) + this._techHtml(techRoot);
-    html += '<div class="pg-footer"><div class="pg-footer-t">GREENFARMS — Central Corporativa</div><div class="pg-footer-s">Plataforma de Gestão e Conhecimento · GF Atlas</div></div>';
+    html += '<div class="pg-footer"><div class="pg-footer-t">Wiki Hub Knowledge — Central Corporativa</div><div class="pg-footer-s">Plataforma de Gestão e Conhecimento · ' + this._esc(this.companyName || 'GREENFARMS') + '</div></div>';
     document.getElementById('gf-content').innerHTML = html;
     this._applyIcons();
   },
 
   _heroHtml() {
     const total = this.items.length;
-    const grps = this.groups.length;
-    const favs = this.items.filter(i => i.favorite).length;
+    const grps  = this.groups.length;
+    const favs  = this.items.filter(i => i.favorite).length;
+    const co    = this._esc(this.companyName || 'GREENFARMS');
+    const fn    = this._esc(this.firstName   || 'Bem-vindo');
     return '<div class="hero">' +
-      '<div class="hero-eyebrow">Central Corporativa · GREENFARMS</div>' +
-      '<h1 class="hero-h">Bem-vindo ao <span>GF Atlas</span></h1>' +
-      '<p class="hero-p">Acesso centralizado a ferramentas, documentos, processos e recursos da empresa.</p>' +
+      '<div class="hero-eyebrow">Central Corporativa · ' + co + '</div>' +
+      '<h1 class="hero-h">' + fn + ', bem-vindo ao <span>Wiki Hub Knowledge</span></h1>' +
+      '<p class="hero-p">Toda documentação, projetos, aplicações, automações e sistemas da empresa organizados em um único lugar. Navegue, explore e acesse com precisão.</p>' +
       '<div class="hero-stats">' +
         '<div class="hs-item"><div class="hs-val">' + total + '<span>+</span></div><div class="hs-lbl">Recursos cadastrados</div></div>' +
         '<div class="hs-div"></div>' +
@@ -612,7 +614,7 @@ const GF = {
     return '<div class="ai">' +
       '<div class="ai-ey">Tecnologia & Inovação</div>' +
       '<div class="ai-h">' + this._esc(techRoot.display_name) + '</div>' +
-      '<div class="ai-p">' + this._esc(techRoot.description || 'Plataformas digitais, automação e ferramentas de IA da GREENFARMS.') + '</div>' +
+      '<div class="ai-p">' + this._esc(techRoot.description || 'Plataformas digitais, automação e ferramentas de IA da ' + (this.companyName || 'GREENFARMS') + '.') + '</div>' +
       '<div class="ai-g">' + cards + '</div>' +
     '</div>';
   },
@@ -844,13 +846,20 @@ const GF = {
 
   _setupUser() {
     const fullname = frappe.session.user_fullname || frappe.session.user || 'Usuário';
-    const initials = fullname.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'GF';
-    const av = document.getElementById('gf-avatar');
-    const un = document.getElementById('gf-username');
-    const ur = document.getElementById('gf-userrole');
-    if (av) av.textContent = initials;
-    if (un) un.textContent = fullname;
-    if (ur) ur.textContent = frappe.session.user || '';
+    this.firstName   = fullname.split(' ')[0] || 'Usuário';
+    this.companyName = (frappe.boot && frappe.boot.sysdefaults && frappe.boot.sysdefaults.company) || 'GREENFARMS';
+    const initials   = fullname.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'GF';
+    const coInitials = this.companyName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'GF';
+    const av   = document.getElementById('gf-avatar');
+    const un   = document.getElementById('gf-username');
+    const ur   = document.getElementById('gf-userrole');
+    const mark = document.getElementById('gf-sb-mark');
+    const name = document.getElementById('gf-sb-name');
+    if (av)   av.textContent   = initials;
+    if (un)   un.textContent   = fullname;
+    if (ur)   ur.textContent   = frappe.session.user || '';
+    if (mark) mark.textContent = coInitials;
+    if (name) name.textContent = this.companyName;
   },
 
   _setupSearch() {
