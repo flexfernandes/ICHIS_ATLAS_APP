@@ -239,6 +239,9 @@
     <div class="nav-group">Instalação</div>
     <a href="#instalacao">Processo de Instalação</a>
     <a href="#after-install">O que o after_install faz</a>
+    <a href="#dados-iniciais">Dados de Popularização</a>
+    <a class="sub" href="#access-groups-lista">↳ 37 Grupos de Acesso</a>
+    <a class="sub" href="#content-groups-lista">↳ 236 Grupos de Conteúdo</a>
     <a href="#web-page-fields">Campos Custom em Web Page</a>
 
     <div class="nav-group">Casos Práticos</div>
@@ -303,6 +306,7 @@
       <li><a href="#instalacao">Processo de Instalação</a></li>
       <li><a href="#web-page-fields">Campos Custom no DocType Web Page</a></li>
       <li><a href="#caso1">Casos Práticos de Uso</a></li>
+      <li><a href="#dados-iniciais">Dados de Popularização — Grupos de Acesso e de Conteúdo</a></li>
       <li><a href="#checklist">Checklist Pós-Instalação</a></li>
     </ol>
   </div>
@@ -1316,6 +1320,402 @@ fixtures = [<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"filters"</span>: [[<span class="str">"name"</span>, <span class="str">"in"</span>, [<span class="str">"GF Manager"</span>, <span class="str">"GF Editor"</span>, <span class="str">"GF Viewer"</span>]]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;}<br>
 ]</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-div">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO DADOS DE POPULARIZAÇÃO -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="dados-iniciais"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🌱 Dados de Popularização — Registros criados automaticamente na instalação</h2></div>
+      <div class="card-body">
+        <div class="intro-card">
+          <p>Na instalação, o GF Atlas App popula automaticamente <strong>37 Grupos de Acesso</strong> e <strong>236 Grupos de Conteúdo</strong> organizados em hierarquia de até 3 níveis. Todos são criados de forma idempotente — se já existirem, não são duplicados. Representam a estrutura completa da GREENFARMS e estão prontos para uso imediato, editáveis conforme necessidade.</p>
+        </div>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!-- GF ACCESS GROUPS -->
+        <!-- ════════════════════════════════════════════════ -->
+        <a class="section-anchor" id="access-groups-lista"></a>
+        <h3 style="margin:24px 0 10px;font-size:15px;color:#1a202c">GF Access Group — 37 Grupos de Acesso</h3>
+        <p style="font-size:14px;color:#4a5568;margin-bottom:14px">Todos os grupos são criados com <code style="background:#f0f0f0;padding:1px 6px;border-radius:3px;font-family:Consolas,monospace">system_group = true</code> e <code style="background:#f0f0f0;padding:1px 6px;border-radius:3px;font-family:Consolas,monospace">active = true</code>. Podem ser editados livremente após a instalação.</p>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;font-size:12px">
+          <span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:3px 10px;border-radius:12px;color:#1a4a8a;font-weight:600">🏢 Interno</span>
+          <span style="background:#fff3e6;border:1px solid #ffc980;padding:3px 10px;border-radius:12px;color:#8a4a00;font-weight:600">🌐 Externo</span>
+          <span style="background:#ffe6e6;border:1px solid #ff9999;padding:3px 10px;border-radius:12px;color:#8a0000;font-weight:600">🔒 Restrito</span>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>internal_name</th>
+              <th>Nome de Exibição</th>
+              <th>Perfil</th>
+              <th>Ord.</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5" style="background:#f0f4ff;font-weight:700;color:#3730a3;font-size:12px;letter-spacing:0.05em;padding:8px 14px">EXTERNOS</td></tr>
+            <tr><td><code>publico</code></td><td>Público</td><td><span style="background:#fff3e6;border:1px solid #ffc980;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a4a00">🌐 Externo</span></td><td>1</td><td style="color:#718096">Acesso público geral</td></tr>
+            <tr><td><code>visitante</code></td><td>Visitante</td><td><span style="background:#fff3e6;border:1px solid #ffc980;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a4a00">🌐 Externo</span></td><td>2</td><td style="color:#718096">Visitantes sem vínculo formal</td></tr>
+            <tr><td><code>terceirizado</code></td><td>Terceirizado</td><td><span style="background:#fff3e6;border:1px solid #ffc980;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a4a00">🌐 Externo</span></td><td>3</td><td style="color:#718096">Prestadores de serviço terceirizados</td></tr>
+            <tr><td><code>consultoria</code></td><td>Consultoria</td><td><span style="background:#fff3e6;border:1px solid #ffc980;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a4a00">🌐 Externo</span></td><td>4</td><td style="color:#718096">Consultores e assessores externos</td></tr>
+            <tr><td><code>cliente</code></td><td>Cliente</td><td><span style="background:#fff3e6;border:1px solid #ffc980;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a4a00">🌐 Externo</span></td><td>5</td><td style="color:#718096">Clientes da GREENFARMS</td></tr>
+            <tr><td><code>fornecedor</code></td><td>Fornecedor</td><td><span style="background:#fff3e6;border:1px solid #ffc980;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a4a00">🌐 Externo</span></td><td>6</td><td style="color:#718096">Fornecedores homologados</td></tr>
+
+            <tr><td colspan="5" style="background:#f0fff4;font-weight:700;color:#276749;font-size:12px;letter-spacing:0.05em;padding:8px 14px">OPERACIONAL</td></tr>
+            <tr><td><code>engenharia</code></td><td>Engenharia</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>10</td><td style="color:#718096">Equipe de engenharia</td></tr>
+            <tr><td><code>automacao</code></td><td>Automação</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>11</td><td style="color:#718096">Equipe de automação e CLP</td></tr>
+            <tr><td><code>producao</code></td><td>Produção</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>12</td><td style="color:#718096">Equipe de produção e fabricação</td></tr>
+            <tr><td><code>qualidade</code></td><td>Qualidade</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>13</td><td style="color:#718096">Equipe de qualidade e inspeção</td></tr>
+            <tr><td><code>manutencao</code></td><td>Manutenção</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>14</td><td style="color:#718096">Equipe de manutenção industrial</td></tr>
+            <tr><td><code>suprimentos</code></td><td>Suprimentos</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>15</td><td style="color:#718096">Compras e suprimentos</td></tr>
+            <tr><td><code>logistica</code></td><td>Logística</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>16</td><td style="color:#718096">Logística e expedição</td></tr>
+
+            <tr><td colspan="5" style="background:#fffbeb;font-weight:700;color:#92400e;font-size:12px;letter-spacing:0.05em;padding:8px 14px">ADMINISTRATIVO</td></tr>
+            <tr><td><code>financeiro</code></td><td>Financeiro</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>20</td><td style="color:#718096">Equipe financeira</td></tr>
+            <tr><td><code>comercial</code></td><td>Comercial</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>21</td><td style="color:#718096">Equipe comercial e vendas</td></tr>
+            <tr><td><code>rh</code></td><td>Recursos Humanos</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>22</td><td style="color:#718096">Gestão de pessoas</td></tr>
+            <tr><td><code>marketing</code></td><td>Marketing</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>23</td><td style="color:#718096">Marketing e comunicação</td></tr>
+            <tr><td><code>ti</code></td><td>Tecnologia da Informação</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>24</td><td style="color:#718096">TI e infraestrutura</td></tr>
+            <tr><td><code>erpnext</code></td><td>ERPNext</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>25</td><td style="color:#718096">Gestores e usuários do ERPNext</td></tr>
+            <tr><td><code>ia_e_automacoes</code></td><td>IA e Automações</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>26</td><td style="color:#718096">Projetos de IA e automações digitais</td></tr>
+
+            <tr><td colspan="5" style="background:#faf5ff;font-weight:700;color:#553c9a;font-size:12px;letter-spacing:0.05em;padding:8px 14px">GESTÃO</td></tr>
+            <tr><td><code>gerencia</code></td><td>Gerência</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>30</td><td style="color:#718096">Nível gerencial</td></tr>
+            <tr><td><code>diretoria</code></td><td>Diretoria</td><td><span style="background:#ffe6e6;border:1px solid #ff9999;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a0000">🔒 Restrito</span></td><td>31</td><td style="color:#718096">Diretoria executiva — acesso restrito</td></tr>
+            <tr><td><code>administrador</code></td><td>Administrador</td><td><span style="background:#ffe6e6;border:1px solid #ff9999;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a0000">🔒 Restrito</span></td><td>32</td><td style="color:#718096">Administrador do sistema — acesso restrito</td></tr>
+
+            <tr><td colspan="5" style="background:#fff5f5;font-weight:700;color:#9b2c2c;font-size:12px;letter-spacing:0.05em;padding:8px 14px">COMPLIANCE E JURÍDICO</td></tr>
+            <tr><td><code>juridico</code></td><td>Jurídico</td><td><span style="background:#ffe6e6;border:1px solid #ff9999;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a0000">🔒 Restrito</span></td><td>40</td><td style="color:#718096">Equipe jurídica — acesso restrito</td></tr>
+            <tr><td><code>controladoria</code></td><td>Controladoria</td><td><span style="background:#ffe6e6;border:1px solid #ff9999;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a0000">🔒 Restrito</span></td><td>41</td><td style="color:#718096">Controladoria — acesso restrito</td></tr>
+            <tr><td><code>auditoria</code></td><td>Auditoria</td><td><span style="background:#ffe6e6;border:1px solid #ff9999;padding:2px 8px;border-radius:10px;font-size:11px;color:#8a0000">🔒 Restrito</span></td><td>42</td><td style="color:#718096">Auditoria interna e externa — acesso restrito</td></tr>
+            <tr><td><code>seguranca_do_trabalho</code></td><td>Segurança do Trabalho</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>43</td><td style="color:#718096">Segurança do trabalho e CIPA</td></tr>
+
+            <tr><td colspan="5" style="background:#f0fff4;font-weight:700;color:#1a5c2a;font-size:12px;letter-spacing:0.05em;padding:8px 14px">TÉCNICO / P&amp;D</td></tr>
+            <tr><td><code>pesquisa_e_desenvolvimento</code></td><td>Pesquisa e Desenvolvimento</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>50</td><td style="color:#718096">P&amp;D e inovação</td></tr>
+            <tr><td><code>laboratorio</code></td><td>Laboratório</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>51</td><td style="color:#718096">Laboratório técnico</td></tr>
+            <tr><td><code>processos_industriais</code></td><td>Processos Industriais</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>52</td><td style="color:#718096">Engenharia de processos</td></tr>
+
+            <tr><td colspan="5" style="background:#ebf8ff;font-weight:700;color:#1a4a7a;font-size:12px;letter-spacing:0.05em;padding:8px 14px">DIGITAL</td></tr>
+            <tr><td><code>integracoes</code></td><td>Integrações</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>60</td><td style="color:#718096">APIs e integrações de sistemas</td></tr>
+            <tr><td><code>dashboards</code></td><td>Dashboards</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>61</td><td style="color:#718096">Painéis e dashboards corporativos</td></tr>
+            <tr><td><code>web_applications</code></td><td>Web Applications</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>62</td><td style="color:#718096">Aplicações web internas</td></tr>
+            <tr><td><code>documentacoes</code></td><td>Documentações</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>63</td><td style="color:#718096">Acesso à base de documentação</td></tr>
+            <tr><td><code>projetos_especiais</code></td><td>Projetos Especiais</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>64</td><td style="color:#718096">Projetos especiais e confidenciais</td></tr>
+
+            <tr><td colspan="5" style="background:#f3f4f6;font-weight:700;color:#374151;font-size:12px;letter-spacing:0.05em;padding:8px 14px">ARQUIVO</td></tr>
+            <tr><td><code>arquivo_morto</code></td><td>Arquivo Morto</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>90</td><td style="color:#718096">Documentos arquivados</td></tr>
+            <tr><td><code>obsoleto</code></td><td>Obsoleto</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>91</td><td style="color:#718096">Conteúdos obsoletos</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ════════════════════════════════════════════════ -->
+        <!-- GF CONTENT GROUPS -->
+        <!-- ════════════════════════════════════════════════ -->
+        <a class="section-anchor" id="content-groups-lista"></a>
+        <h3 style="margin:40px 0 10px;font-size:15px;color:#1a202c">GF Content Group — 236 Grupos de Conteúdo em Hierarquia</h3>
+        <p style="font-size:14px;color:#4a5568;margin-bottom:18px">A árvore tem <strong>3 níveis</strong>: Raiz → Grupos Principais (Nível 1) → Subgrupos (Nível 2) e, no caso do grupo 80, um Nível 3 adicional. O campo <code style="background:#f0f0f0;padding:1px 6px;border-radius:3px;font-family:Consolas,monospace">icon</code> armazena o nome do ícone <strong>Lucide Icons</strong>; o campo <code style="background:#f0f0f0;padding:1px 6px;border-radius:3px;font-family:Consolas,monospace">color</code> armazena o hex da cor do card.</p>
+
+        <!-- Visão geral dos grupos de nível 1 -->
+        <h4 style="font-size:13px;font-weight:700;color:#1a5c2a;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Raiz + 18 Grupos Principais (Nível 1)</h4>
+        <table class="data-table" style="margin-bottom:28px">
+          <thead>
+            <tr><th>Cor</th><th>Código</th><th>Nome</th><th>Ícone</th><th>Filhos diretos</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#166534;vertical-align:middle"></span></td>
+              <td><code>greenfarms_corp</code></td><td><strong>GREENFARMS Documentação Corporativa</strong> <em style="font-size:11px;color:#718096">(raiz)</em></td><td><code>building-2</code></td><td style="color:#718096">18 grupos filhos</td>
+            </tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#6366f1;vertical-align:middle"></span></td><td><code>g00</code></td><td>00 Governança e Administração</td><td><code>landmark</code></td><td>5</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#f59e0b;vertical-align:middle"></span></td><td><code>g01</code></td><td>01 Comercial</td><td><code>briefcase</code></td><td>6</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#3b82f6;vertical-align:middle"></span></td><td><code>g02</code></td><td>02 Engenharia</td><td><code>settings-2</code></td><td>7</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#8b5cf6;vertical-align:middle"></span></td><td><code>g03</code></td><td>03 Produtos e Equipamentos</td><td><code>package</code></td><td>7</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#f97316;vertical-align:middle"></span></td><td><code>g04</code></td><td>04 Produção e Fabricação</td><td><code>factory</code></td><td>7</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#22c55e;vertical-align:middle"></span></td><td><code>g05</code></td><td>05 Qualidade</td><td><code>shield-check</code></td><td>7</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#06b6d4;vertical-align:middle"></span></td><td><code>g06</code></td><td>06 Compras e Suprimentos</td><td><code>shopping-cart</code></td><td>6</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#eab308;vertical-align:middle"></span></td><td><code>g07</code></td><td>07 Financeiro</td><td><code>banknote</code></td><td>7</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#dc2626;vertical-align:middle"></span></td><td><code>g08</code></td><td>08 Jurídico e Compliance</td><td><code>scale</code></td><td>6</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#ec4899;vertical-align:middle"></span></td><td><code>g09</code></td><td>09 Recursos Humanos</td><td><code>users</code></td><td>6</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#a855f7;vertical-align:middle"></span></td><td><code>g10</code></td><td>10 Marketing e Comunicação</td><td><code>megaphone</code></td><td>7</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#0ea5e9;vertical-align:middle"></span></td><td><code>g11</code></td><td>11 Tecnologia e ERPNext</td><td><code>monitor</code></td><td>7</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#f43f5e;vertical-align:middle"></span></td><td><code>g12</code></td><td>12 Projetos Especiais</td><td><code>rocket</code></td><td>6</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#14b8a6;vertical-align:middle"></span></td><td><code>g13</code></td><td>13 Clientes e Obras</td><td><code>hard-hat</code></td><td>6</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#64748b;vertical-align:middle"></span></td><td><code>g14</code></td><td>14 Manuais Técnicos</td><td><code>book-open</code></td><td>6</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#78716c;vertical-align:middle"></span></td><td><code>g15</code></td><td>15 Biblioteca Técnica</td><td><code>library</code></td><td>6</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#84cc16;vertical-align:middle"></span></td><td><code>g80</code></td><td>80 Informações Pessoa Física</td><td><code>user</code></td><td>15 subgrupos + 99 folhas</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#6b7280;vertical-align:middle"></span></td><td><code>g99</code></td><td>99 Arquivo Morto</td><td><code>archive</code></td><td>5</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ─── DETALHE POR GRUPO ─── -->
+        <h4 style="font-size:13px;font-weight:700;color:#1a5c2a;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px">Subgrupos por Área</h4>
+
+        <!-- Helper: grupo block -->
+        <!-- g00 -->
+        <div style="border-left:4px solid #6366f1;margin:6px 0;padding:10px 18px;background:#f8f7ff;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#4338ca;margin-bottom:4px">g00 — 00 Governança e Administração <span style="font-weight:400;color:#818cf8;font-family:Consolas,monospace;font-size:11px">landmark</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g00_contratos_sociais</code> Contratos Sociais e Documentos da Empresa &nbsp;·&nbsp;
+            <code>g00_procuracoes</code> Procurações e Autorizações &nbsp;·&nbsp;
+            <code>g00_politicas</code> Políticas Internas &nbsp;·&nbsp;
+            <code>g00_atas</code> Atas e Reuniões &nbsp;·&nbsp;
+            <code>g00_planejamento</code> Planejamento Estratégico
+          </div>
+        </div>
+
+        <!-- g01 -->
+        <div style="border-left:4px solid #f59e0b;margin:6px 0;padding:10px 18px;background:#fffdf0;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#b45309;margin-bottom:4px">g01 — 01 Comercial <span style="font-weight:400;color:#f59e0b;font-family:Consolas,monospace;font-size:11px">briefcase</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g01_clientes</code> Clientes &nbsp;·&nbsp;
+            <code>g01_propostas</code> Propostas Comerciais &nbsp;·&nbsp;
+            <code>g01_tabelas_preco</code> Tabelas de Preço &nbsp;·&nbsp;
+            <code>g01_apresentacoes</code> Apresentações Comerciais &nbsp;·&nbsp;
+            <code>g01_followups</code> Follow-ups e Negociações &nbsp;·&nbsp;
+            <code>g01_contratos</code> Contratos Comerciais
+          </div>
+        </div>
+
+        <!-- g02 -->
+        <div style="border-left:4px solid #3b82f6;margin:6px 0;padding:10px 18px;background:#eff6ff;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#1d4ed8;margin-bottom:4px">g02 — 02 Engenharia <span style="font-weight:400;color:#60a5fa;font-family:Consolas,monospace;font-size:11px">settings-2</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g02_proj_mecanicos</code> Projetos Mecânicos &nbsp;·&nbsp;
+            <code>g02_proj_eletricos</code> Projetos Elétricos &nbsp;·&nbsp;
+            <code>g02_automacao</code> Automação e CLP &nbsp;·&nbsp;
+            <code>g02_layouts</code> Layouts Industriais &nbsp;·&nbsp;
+            <code>g02_memoriais</code> Memoriais Descritivos &nbsp;·&nbsp;
+            <code>g02_calculos</code> Cálculos Técnicos &nbsp;·&nbsp;
+            <code>g02_revisoes</code> Revisões de Projeto
+          </div>
+        </div>
+
+        <!-- g03 -->
+        <div style="border-left:4px solid #8b5cf6;margin:6px 0;padding:10px 18px;background:#f5f3ff;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#6d28d9;margin-bottom:4px">g03 — 03 Produtos e Equipamentos <span style="font-weight:400;color:#a78bfa;font-family:Consolas,monospace;font-size:11px">package</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g03_biorreatores</code> Biorreatores &nbsp;·&nbsp;
+            <code>g03_cisalhadores</code> Cisalhadores &nbsp;·&nbsp;
+            <code>g03_spray_heads</code> Spray Heads e CIP &nbsp;·&nbsp;
+            <code>g03_skids</code> Skids &nbsp;·&nbsp;
+            <code>g03_tanques</code> Tanques e Vasos de Pressão &nbsp;·&nbsp;
+            <code>g03_plantas_piloto</code> Plantas Piloto &nbsp;·&nbsp;
+            <code>g03_componentes</code> Componentes Sanitários
+          </div>
+        </div>
+
+        <!-- g04 -->
+        <div style="border-left:4px solid #f97316;margin:6px 0;padding:10px 18px;background:#fff7ed;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#c2410c;margin-bottom:4px">g04 — 04 Produção e Fabricação <span style="font-weight:400;color:#fb923c;font-family:Consolas,monospace;font-size:11px">factory</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g04_ordens</code> Ordens de Produção &nbsp;·&nbsp;
+            <code>g04_desenhos_fab</code> Desenhos para Fabricação &nbsp;·&nbsp;
+            <code>g04_usinagem</code> Usinagem &nbsp;·&nbsp;
+            <code>g04_soldagem</code> Soldagem &nbsp;·&nbsp;
+            <code>g04_polimento</code> Polimento e Acabamento &nbsp;·&nbsp;
+            <code>g04_montagem</code> Montagem &nbsp;·&nbsp;
+            <code>g04_inspecao</code> Inspeção Final
+          </div>
+        </div>
+
+        <!-- g05 -->
+        <div style="border-left:4px solid #22c55e;margin:6px 0;padding:10px 18px;background:#f0fdf4;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#15803d;margin-bottom:4px">g05 — 05 Qualidade <span style="font-weight:400;color:#4ade80;font-family:Consolas,monospace;font-size:11px">shield-check</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g05_pop</code> Procedimentos Operacionais Padrão &nbsp;·&nbsp;
+            <code>g05_checklists</code> Checklists &nbsp;·&nbsp;
+            <code>g05_relatorios</code> Relatórios de Inspeção &nbsp;·&nbsp;
+            <code>g05_certificados</code> Certificados de Materiais &nbsp;·&nbsp;
+            <code>g05_rastreabilidade</code> Rastreabilidade &nbsp;·&nbsp;
+            <code>g05_nao_conformidades</code> Não Conformidades &nbsp;·&nbsp;
+            <code>g05_melhoria</code> Melhoria Contínua
+          </div>
+        </div>
+
+        <!-- g06 -->
+        <div style="border-left:4px solid #06b6d4;margin:6px 0;padding:10px 18px;background:#ecfeff;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#0e7490;margin-bottom:4px">g06 — 06 Compras e Suprimentos <span style="font-weight:400;color:#22d3ee;font-family:Consolas,monospace;font-size:11px">shopping-cart</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g06_solicitacoes</code> Solicitações de Compra &nbsp;·&nbsp;
+            <code>g06_cotacoes</code> Cotações de Fornecedores &nbsp;·&nbsp;
+            <code>g06_pedidos</code> Pedidos de Compra &nbsp;·&nbsp;
+            <code>g06_fornecedores</code> Fornecedores Homologados &nbsp;·&nbsp;
+            <code>g06_materiais_criticos</code> Materiais Críticos &nbsp;·&nbsp;
+            <code>g06_notas</code> Notas e Comprovantes
+          </div>
+        </div>
+
+        <!-- g07 -->
+        <div style="border-left:4px solid #eab308;margin:6px 0;padding:10px 18px;background:#fefce8;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#a16207;margin-bottom:4px">g07 — 07 Financeiro <span style="font-weight:400;color:#facc15;font-family:Consolas,monospace;font-size:11px">banknote</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g07_contas_pagar</code> Contas a Pagar &nbsp;·&nbsp;
+            <code>g07_contas_receber</code> Contas a Receber &nbsp;·&nbsp;
+            <code>g07_fluxo_caixa</code> Fluxo de Caixa &nbsp;·&nbsp;
+            <code>g07_custos_proj</code> Custos de Projetos &nbsp;·&nbsp;
+            <code>g07_investimentos</code> Investimentos &nbsp;·&nbsp;
+            <code>g07_impostos</code> Impostos e Obrigações &nbsp;·&nbsp;
+            <code>g07_relatorios</code> Relatórios Financeiros
+          </div>
+        </div>
+
+        <!-- g08 -->
+        <div style="border-left:4px solid #dc2626;margin:6px 0;padding:10px 18px;background:#fef2f2;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#b91c1c;margin-bottom:4px">g08 — 08 Jurídico e Compliance <span style="font-weight:400;color:#f87171;font-family:Consolas,monospace;font-size:11px">scale</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g08_contratos</code> Contratos &nbsp;·&nbsp;
+            <code>g08_notificacoes</code> Notificações &nbsp;·&nbsp;
+            <code>g08_propriedade</code> Propriedade Intelectual &nbsp;·&nbsp;
+            <code>g08_marcas</code> Marcas e Registros &nbsp;·&nbsp;
+            <code>g08_nda</code> Termos de Confidencialidade &nbsp;·&nbsp;
+            <code>g08_docs_legais</code> Documentos Legais
+          </div>
+        </div>
+
+        <!-- g09 -->
+        <div style="border-left:4px solid #ec4899;margin:6px 0;padding:10px 18px;background:#fdf2f8;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#be185d;margin-bottom:4px">g09 — 09 Recursos Humanos <span style="font-weight:400;color:#f472b6;font-family:Consolas,monospace;font-size:11px">users</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g09_colaboradores</code> Colaboradores &nbsp;·&nbsp;
+            <code>g09_prestadores</code> Prestadores de Serviço &nbsp;·&nbsp;
+            <code>g09_treinamentos</code> Treinamentos &nbsp;·&nbsp;
+            <code>g09_funcoes</code> Funções e Responsabilidades &nbsp;·&nbsp;
+            <code>g09_sst</code> Segurança do Trabalho &nbsp;·&nbsp;
+            <code>g09_conduta</code> Políticas de Conduta
+          </div>
+        </div>
+
+        <!-- g10 -->
+        <div style="border-left:4px solid #a855f7;margin:6px 0;padding:10px 18px;background:#faf5ff;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#7e22ce;margin-bottom:4px">g10 — 10 Marketing e Comunicação <span style="font-weight:400;color:#c084fc;font-family:Consolas,monospace;font-size:11px">megaphone</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g10_identidade</code> Identidade Visual &nbsp;·&nbsp;
+            <code>g10_logotipos</code> Logotipos &nbsp;·&nbsp;
+            <code>g10_fotos_prod</code> Fotos de Produtos &nbsp;·&nbsp;
+            <code>g10_catalogos</code> Catálogos &nbsp;·&nbsp;
+            <code>g10_site</code> Site e Conteúdos Web &nbsp;·&nbsp;
+            <code>g10_redes_sociais</code> Redes Sociais &nbsp;·&nbsp;
+            <code>g10_apresentacoes</code> Apresentações Institucionais
+          </div>
+        </div>
+
+        <!-- g11 -->
+        <div style="border-left:4px solid #0ea5e9;margin:6px 0;padding:10px 18px;background:#f0f9ff;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#0369a1;margin-bottom:4px">g11 — 11 Tecnologia e ERPNext <span style="font-weight:400;color:#38bdf8;font-family:Consolas,monospace;font-size:11px">monitor</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g11_erpnext</code> ERPNext &nbsp;·&nbsp;
+            <code>g11_frappe_cloud</code> Frappe Cloud &nbsp;·&nbsp;
+            <code>g11_ichis</code> Aplicativo ICHIS &nbsp;·&nbsp;
+            <code>g11_relatorios</code> Relatórios Customizados &nbsp;·&nbsp;
+            <code>g11_scripts</code> Scripts e Customizações &nbsp;·&nbsp;
+            <code>g11_backups</code> Backups e Segurança &nbsp;·&nbsp;
+            <code>g11_manuais_sis</code> Manuais Internos do Sistema
+          </div>
+        </div>
+
+        <!-- g12 -->
+        <div style="border-left:4px solid #f43f5e;margin:6px 0;padding:10px 18px;background:#fff1f2;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#be123c;margin-bottom:4px">g12 — 12 Projetos Especiais <span style="font-weight:400;color:#fb7185;font-family:Consolas,monospace;font-size:11px">rocket</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g12_yellow</code> Projeto Yellow &nbsp;·&nbsp;
+            <code>g12_alphablade</code> AlphaBlade &nbsp;·&nbsp;
+            <code>g12_plantas_piloto</code> Plantas Piloto &nbsp;·&nbsp;
+            <code>g12_dev_produtos</code> Desenvolvimento de Produtos &nbsp;·&nbsp;
+            <code>g12_pesquisa</code> Pesquisa e Inovação &nbsp;·&nbsp;
+            <code>g12_encerrados</code> Projetos Encerrados
+          </div>
+        </div>
+
+        <!-- g13 -->
+        <div style="border-left:4px solid #14b8a6;margin:6px 0;padding:10px 18px;background:#f0fdfa;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#0f766e;margin-bottom:4px">g13 — 13 Clientes e Obras <span style="font-weight:400;color:#2dd4bf;font-family:Consolas,monospace;font-size:11px">hard-hat</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g13_clientes_ativos</code> Clientes Ativos &nbsp;·&nbsp;
+            <code>g13_historico_proj</code> Histórico de Projetos &nbsp;·&nbsp;
+            <code>g13_instalacoes</code> Instalações em Campo &nbsp;·&nbsp;
+            <code>g13_assistencia</code> Assistência Técnica &nbsp;·&nbsp;
+            <code>g13_entregas</code> Entregas Técnicas &nbsp;·&nbsp;
+            <code>g13_pos_venda</code> Pós-venda
+          </div>
+        </div>
+
+        <!-- g14 -->
+        <div style="border-left:4px solid #64748b;margin:6px 0;padding:10px 18px;background:#f8fafc;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#334155;margin-bottom:4px">g14 — 14 Manuais Técnicos <span style="font-weight:400;color:#94a3b8;font-family:Consolas,monospace;font-size:11px">book-open</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g14_equipamentos</code> Manuais de Equipamentos &nbsp;·&nbsp;
+            <code>g14_operacao</code> Manuais de Operação &nbsp;·&nbsp;
+            <code>g14_manutencao</code> Manuais de Manutenção &nbsp;·&nbsp;
+            <code>g14_cip_sip</code> Manuais de CIP e SIP &nbsp;·&nbsp;
+            <code>g14_automacao</code> Manuais de Automação &nbsp;·&nbsp;
+            <code>g14_doc_clientes</code> Documentação para Clientes
+          </div>
+        </div>
+
+        <!-- g15 -->
+        <div style="border-left:4px solid #78716c;margin:6px 0;padding:10px 18px;background:#faf9f8;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#44403c;margin-bottom:4px">g15 — 15 Biblioteca Técnica <span style="font-weight:400;color:#a8a29e;font-family:Consolas,monospace;font-size:11px">library</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g15_normas</code> Normas Técnicas &nbsp;·&nbsp;
+            <code>g15_artigos</code> Artigos e Estudos &nbsp;·&nbsp;
+            <code>g15_catalogos_forn</code> Catálogos de Fornecedores &nbsp;·&nbsp;
+            <code>g15_referencias</code> Materiais de Referência &nbsp;·&nbsp;
+            <code>g15_tabelas</code> Tabelas Técnicas &nbsp;·&nbsp;
+            <code>g15_treinamentos</code> Conteúdos de Treinamento
+          </div>
+        </div>
+
+        <!-- g80 — 3 níveis -->
+        <div style="border-left:4px solid #84cc16;margin:6px 0;padding:10px 18px;background:#f7fee7;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#4d7c0f;margin-bottom:8px">g80 — 80 Informações Pessoa Física <span style="font-weight:400;color:#a3e635;font-family:Consolas,monospace;font-size:11px">user</span> &nbsp;<em style="font-size:11px;color:#65a30d;font-weight:400">(3 níveis: g80 → subgrupo → folha)</em></div>
+          <table class="data-table" style="font-size:12.5px">
+            <thead>
+              <tr><th>Subgrupo (Nível 2)</th><th>Ícone</th><th>Cor</th><th>Folhas (Nível 3)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>g80_00</code> 00 Documentos Pessoais</td><td><code>credit-card</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#6366f1;vertical-align:middle"></span> #6366f1</td><td style="color:#4a5568;font-size:12px">RG/CPF/CNH · Certidões · Passaporte e Vistos · Comprovantes de Endereço · Títulos e Registros · Documentos Digitalizados</td></tr>
+              <tr><td><code>g80_01</code> 01 Família</td><td><code>heart</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#ec4899;vertical-align:middle"></span> #ec4899</td><td style="color:#4a5568;font-size:12px">Documentos da Esposa · Documentos dos Filhos · Certidões da Família · Escola e Educação · Viagens em Família · Registros Importantes</td></tr>
+              <tr><td><code>g80_02</code> 02 Imóveis e Patrimônio</td><td><code>home</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#f59e0b;vertical-align:middle"></span> #f59e0b</td><td style="color:#4a5568;font-size:12px">Escrituras · Contratos de Compra e Venda · IPTU · Condomínio · Reformas e Manutenções · Fotos dos Imóveis · Documentos de Regularização</td></tr>
+              <tr><td><code>g80_03</code> 03 Veículos</td><td><code>car</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#3b82f6;vertical-align:middle"></span> #3b82f6</td><td style="color:#4a5568;font-size:12px">Documentos dos Veículos · Seguro · IPVA · Multas e Taxas · Manutenções · Fotos dos Veículos · Compra e Venda</td></tr>
+              <tr><td><code>g80_04</code> 04 Saúde e Medicina</td><td><code>heart-pulse</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#dc2626;vertical-align:middle"></span> #dc2626</td><td style="color:#4a5568;font-size:12px">Exames Médicos · Consultas · Receitas e Prescrições · Histórico de Saúde · Planos de Saúde · Odontologia · Vacinas · Cirurgias e Procedimentos · Emergências</td></tr>
+              <tr><td><code>g80_05</code> 05 Financeiro Pessoal</td><td><code>wallet</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#eab308;vertical-align:middle"></span> #eab308</td><td style="color:#4a5568;font-size:12px">Bancos · Cartões · Investimentos · Empréstimos e Financiamentos · Imposto de Renda · Comprovantes de Pagamento · Recibos · Planejamento Financeiro</td></tr>
+              <tr><td><code>g80_06</code> 06 Seguros</td><td><code>shield</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#8b5cf6;vertical-align:middle"></span> #8b5cf6</td><td style="color:#4a5568;font-size:12px">Seguro de Vida · Seguro Residencial · Seguro de Veículos · Seguro Saúde · Seguro Empresarial Pessoal · Apólices · Sinistros</td></tr>
+              <tr><td><code>g80_07</code> 07 Jurídico Pessoal</td><td><code>scale</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#f97316;vertical-align:middle"></span> #f97316</td><td style="color:#4a5568;font-size:12px">Contratos Pessoais · Procurações · Declarações · Inventário e Testamento · Processos · Notificações · Acordos</td></tr>
+              <tr><td><code>g80_08</code> 08 Fotos e Memórias</td><td><code>camera</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#a855f7;vertical-align:middle"></span> #a855f7</td><td style="color:#4a5568;font-size:12px">Fotos Pessoais · Fotos da Família · Fotos de Viagens · Eventos e Comemorações · Vídeos Pessoais · Documentos Históricos · Memórias da Vida</td></tr>
+              <tr><td><code>g80_09</code> 09 Viagens e Lazer</td><td><code>plane</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#0ea5e9;vertical-align:middle"></span> #0ea5e9</td><td style="color:#4a5568;font-size:12px">Reservas · Passagens · Hospedagens · Roteiros · Documentos de Viagem · Fotos de Viagens · Comprovantes</td></tr>
+              <tr><td><code>g80_10</code> 10 Educação e Formação</td><td><code>graduation-cap</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#22c55e;vertical-align:middle"></span> #22c55e</td><td style="color:#4a5568;font-size:12px">Cursos · Certificados · Diplomas · Treinamentos · Palestras · Materiais de Estudo</td></tr>
+              <tr><td><code>g80_11</code> 11 Senhas e Acessos</td><td><code>lock</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#64748b;vertical-align:middle"></span> #64748b</td><td style="color:#4a5568;font-size:12px">Contas Importantes · Acessos Bancários · Acessos Governamentais · Acessos de Sistemas · Recuperação de Contas · Observações de Segurança</td></tr>
+              <tr><td><code>g80_12</code> 12 Projetos Pessoais</td><td><code>lightbulb</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#f43f5e;vertical-align:middle"></span> #f43f5e</td><td style="color:#4a5568;font-size:12px">Ideias · Planejamento · Documentos · Fotos · Referências · Histórico</td></tr>
+              <tr><td><code>g80_13</code> 13 Espiritualidade e Vida Pessoal</td><td><code>sun</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#84cc16;vertical-align:middle"></span> #84cc16</td><td style="color:#4a5568;font-size:12px">Reflexões · Mensagens · Orações · Registros Especiais · Textos Pessoais</td></tr>
+              <tr><td><code>g80_14</code> 14 Arquivo Pessoal</td><td><code>archive</code></td><td><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#6b7280;vertical-align:middle"></span> #6b7280</td><td style="color:#4a5568;font-size:12px">Documentos Antigos · Fotos Antigas · Registros Antigos · Arquivos Obsoletos · Histórico Geral</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- g99 -->
+        <div style="border-left:4px solid #6b7280;margin:6px 0;padding:10px 18px;background:#f9fafb;border-radius:0 8px 8px 0">
+          <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:4px">g99 — 99 Arquivo Morto <span style="font-weight:400;color:#9ca3af;font-family:Consolas,monospace;font-size:11px">archive</span></div>
+          <div style="font-size:13px;color:#4a5568;line-height:1.9">
+            <code>g99_docs_antigos</code> Documentos Antigos &nbsp;·&nbsp;
+            <code>g99_proj_encerrados</code> Projetos Encerrados &nbsp;·&nbsp;
+            <code>g99_versoes_obsoletas</code> Versões Obsoletas &nbsp;·&nbsp;
+            <code>g99_propostas_perdidas</code> Propostas Perdidas &nbsp;·&nbsp;
+            <code>g99_historico</code> Histórico Geral
+          </div>
+        </div>
+
+        <div class="alert alert-success" style="margin-top:20px">
+          <strong>✅ Total inserido:</strong> 1 raiz + 18 grupos principais + 98 subgrupos (g00–g15 e g99) + 15 grupos intermediários (g80) + 99 folhas (g80) = <strong>231 registros em GF Content Group</strong>. Todos com ícone Lucide e cor hexadecimal configurados.
+        </div>
       </div>
     </div>
   </div>
