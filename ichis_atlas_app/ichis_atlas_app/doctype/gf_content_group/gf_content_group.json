@@ -126,7 +126,7 @@
   },
   {
    "fieldname": "color",
-   "fieldtype": "Data",
+   "fieldtype": "Color",
    "label": "Cor"
   }
  ],
