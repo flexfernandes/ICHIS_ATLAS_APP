@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GF Atlas App — Manual Técnico Completo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f7fafc; color: #2d3748; }
+  a { color: #1a5c2a; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* NAV LATERAL */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 260px; min-width: 260px; background: #1a2e1c;
+    padding: 28px 0; position: sticky; top: 0; height: 100vh;
+    overflow-y: auto; flex-shrink: 0;
+  }
+  .sidebar-logo {
+    padding: 0 24px 20px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 16px;
+  }
+  .sidebar-logo span {
+    display: block; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 4px;
+  }
+  .sidebar-logo strong { color: #fff; font-size: 15px; }
+  .sidebar nav a {
+    display: block; padding: 7px 24px; font-size: 13px;
+    color: rgba(255,255,255,0.65); border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar nav a:hover, .sidebar nav a.active {
+    color: #fff; background: rgba(255,255,255,0.06);
+    border-left-color: #4ade80; text-decoration: none;
+  }
+  .sidebar nav .nav-group {
+    padding: 16px 24px 4px 24px; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 700;
+  }
+  .sidebar nav a.sub { padding-left: 36px; font-size: 12px; }
+
+  /* CONTEÚDO */
+  .main { flex: 1; min-width: 0; }
+  .content-wrap { max-width: 900px; margin: 0 auto; padding: 0 32px 80px 32px; }
+
+  /* SEÇÕES */
+  .section { margin-bottom: 48px; }
+  .section-anchor { display: block; margin-top: -20px; padding-top: 20px; }
+
+  /* CARDS */
+  .card {
+    background: #fff; border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 24px; overflow: hidden;
+  }
+  .card-header {
+    background: #f7fafc; border-bottom: 1px solid #e2e8f0;
+    padding: 14px 24px;
+  }
+  .card-header h2 { font-size: 16px; font-weight: 600; color: #1a202c; }
+  .card-header h3 { font-size: 14px; font-weight: 600; color: #2d3748; }
+  .card-body { padding: 24px; }
+  .card-body p { font-size: 15px; color: #4a5568; line-height: 1.7; margin-bottom: 12px; }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* INTRO CARD */
+  .intro-card {
+    background: linear-gradient(135deg, #eaf5ec 0%, #f0fff4 100%);
+    border: 1px solid #c6f6d5; border-radius: 12px;
+    padding: 28px; margin-bottom: 28px;
+  }
+  .intro-card p { font-size: 15px; color: #276749; line-height: 1.75; }
+
+  /* TABELAS */
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.data-table thead tr { background: #f0faf4; }
+  table.data-table th {
+    text-align: left; padding: 10px 14px; font-weight: 600;
+    color: #1a5c2a; border-bottom: 2px solid #c6f6d5; white-space: nowrap;
+  }
+  table.data-table td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #4a5568; vertical-align: top; }
+  table.data-table tbody tr:last-child td { border-bottom: none; }
+  table.data-table tbody tr:hover { background: #f9fffe; }
+
+  /* BADGE */
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 11px; font-weight: 600; white-space: nowrap;
+  }
+  .badge-req { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; }
+  .badge-opt { background: #f7fafc; color: #718096; border: 1px solid #e2e8f0; }
+  .badge-ro  { background: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; }
+  .badge-check { background: #f0fff4; color: #276749; border: 1px solid #9ae6b4; }
+  .badge-link { background: #faf5ff; color: #6b46c1; border: 1px solid #d6bcfa; }
+  .badge-select { background: #fffbeb; color: #b7791f; border: 1px solid #fbd38d; }
+  .badge-tree { background: #e8f4fd; color: #1a5276; border: 1px solid #aed6f1; }
+
+  /* CÓDIGO */
+  .code-block {
+    background: #1a202c; border-radius: 8px;
+    padding: 18px 22px; font-family: Consolas, 'Courier New', monospace;
+    font-size: 13px; line-height: 1.8; color: #e2e8f0; margin: 12px 0;
+    overflow-x: auto;
+  }
+  .code-block .kw  { color: #f6ad55; }
+  .code-block .str { color: #68d391; }
+  .code-block .cm  { color: #718096; font-style: italic; }
+  .code-block .fn  { color: #63b3ed; }
+
+  /* ALERTAS */
+  .alert { border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .alert-info    { background: #ebf8ff; border: 1px solid #90cdf4; border-left: 4px solid #3182ce; color: #2a4a6b; }
+  .alert-success { background: #f0fff4; border: 1px solid #68d391; border-left: 4px solid #38a169; color: #22543d; }
+  .alert-warn    { background: #fffbeb; border: 1px solid #f6ad55; border-left: 4px solid #ed8936; color: #744210; }
+  .alert-tip     { background: #faf5ff; border: 1px solid #d6bcfa; border-left: 4px solid #805ad5; color: #44337a; }
+
+  /* DIAGRAMA */
+  .diagram {
+    background: #1a202c; border-radius: 10px; padding: 28px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 13px; line-height: 2; color: #e2e8f0;
+    text-align: center; margin: 12px 0;
+  }
+  .diagram .box {
+    display: inline-block; background: #2d3748;
+    border: 1px solid #4a5568; border-radius: 6px;
+    padding: 6px 18px; margin: 4px; color: #e2e8f0;
+  }
+  .diagram .box-green {
+    background: #1a3a1f; border-color: #38a169; color: #68d391; font-weight: 700;
+  }
+  .diagram .box-blue {
+    background: #1a2a3a; border-color: #3182ce; color: #63b3ed;
+  }
+  .diagram .box-purple {
+    background: #2d1a3a; border-color: #805ad5; color: #d6bcfa;
+  }
+  .diagram .arrow { color: #68d391; font-size: 16px; display: block; margin: 2px 0; }
+
+  /* EXEMPLO PRÁTICO */
+  .example-block {
+    background: #f7fafc; border: 1px solid #e2e8f0;
+    border-radius: 8px; padding: 20px; margin: 12px 0;
+  }
+  .example-block h4 { font-size: 13px; font-weight: 700; color: #1a5c2a; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; }
+  .checklist li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; color: #4a5568; display: flex; align-items: flex-start; gap: 10px; }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before { content: "☐"; color: #1a5c2a; font-size: 16px; flex-shrink: 0; margin-top: -1px; }
+
+  /* STEP */
+  .step-list { counter-reset: step; }
+  .step-item { counter-increment: step; display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+  .step-num {
+    background: #1a5c2a; color: #fff; border-radius: 50%;
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .step-content h4 { font-size: 14px; font-weight: 600; color: #1a202c; margin-bottom: 4px; }
+  .step-content p  { font-size: 14px; color: #4a5568; line-height: 1.6; }
+
+  /* FIELD GRID */
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .field-item {
+    background: #f7fafc; border: 1px solid #e2e8f0;
+    border-radius: 8px; padding: 14px;
+  }
+  .field-item .fname { font-weight: 700; font-size: 13px; color: #1a202c; font-family: Consolas, monospace; }
+  .field-item .flabel { font-size: 12px; color: #718096; margin: 2px 0 6px 0; }
+  .field-item p { font-size: 13px; color: #4a5568; line-height: 1.5; }
+
+  /* TIPO BADGE */
+  .type-select { color: #b7791f; }
+  .type-link { color: #6b46c1; }
+  .type-check { color: #276749; }
+  .type-data { color: #2b6cb0; }
+  .type-text { color: #c05621; }
+  .type-int { color: #744210; }
+
+  /* DIVIDER */
+  hr.section-div { border: none; border-top: 2px solid #e2e8f0; margin: 40px 0; }
+
+  /* TOC RÁPIDO */
+  .toc-quick {
+    background: #f0faf4; border: 1px solid #c6f6d5;
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 32px;
+  }
+  .toc-quick h3 { font-size: 14px; font-weight: 700; color: #1a5c2a; margin-bottom: 12px; }
+  .toc-quick ol { padding-left: 20px; }
+  .toc-quick li { font-size: 13.5px; color: #2d3748; margin-bottom: 6px; }
+  .toc-quick a { color: #1a5c2a; font-weight: 500; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .field-grid { grid-template-columns: 1fr; }
+    .content-wrap { padding: 0 16px 60px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ═══════════════════════════════════ SIDEBAR ═══════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span>GREENFARMS</span>
+    <strong>GF Atlas App</strong>
+  </div>
+  <nav>
+    <div class="nav-group">Introdução</div>
+    <a href="#visao-geral">Visão Geral</a>
+    <a href="#arquitetura">Arquitetura</a>
+    <a href="#roles">Roles e Permissões</a>
+
+    <div class="nav-group">DocTypes</div>
+    <a href="#access-group">GF Access Group</a>
+    <a class="sub" href="#access-group-campos">↳ Campos</a>
+    <a class="sub" href="#access-group-exemplos">↳ Exemplos</a>
+    <a href="#access-group-user">GF Access Group User</a>
+    <a class="sub" href="#user-campos">↳ Campos</a>
+    <a href="#content-group">GF Content Group</a>
+    <a class="sub" href="#content-group-campos">↳ Campos</a>
+    <a class="sub" href="#content-group-arvore">↳ Hierarquia</a>
+    <a href="#content-registry">GF Content Registry</a>
+    <a class="sub" href="#registry-campos">↳ Campos</a>
+    <a class="sub" href="#registry-tipos">↳ Tipos de Item</a>
+    <a class="sub" href="#registry-auto">↳ Auto-preenchimento</a>
+
+    <div class="nav-group">Relacionamentos</div>
+    <a href="#relacionamentos">Diagrama de Relações</a>
+    <a href="#fluxo-heranca">Herança de Acesso</a>
+
+    <div class="nav-group">Instalação</div>
+    <a href="#instalacao">Processo de Instalação</a>
+    <a href="#after-install">O que o after_install faz</a>
+    <a href="#web-page-fields">Campos Custom em Web Page</a>
+
+    <div class="nav-group">Casos Práticos</div>
+    <a href="#caso1">Cadastrar um Relatório</a>
+    <a href="#caso2">Novo Grupo de Conteúdo</a>
+    <a href="#caso3">Adicionar Usuário a Grupo</a>
+
+    <div class="nav-group">Referência</div>
+    <a href="#checklist">Checklist Pós-Instalação</a>
+    <a href="#faq">Perguntas Frequentes</a>
+  </nav>
+</aside>
+
+<!-- ═══════════════════════════════════ MAIN ═══════════════════════════════════ -->
+<main class="main">
+
+<!-- CABEÇALHO PADRÃO GREENFARMS -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff">
+  <tbody><tr>
+    <td style="background:#1a5c2a;padding:40px 48px 32px 48px">
+      <div style="display:inline-block;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);border-radius:20px;font-size:12px;padding:3px 12px;margin-bottom:14px;color:#ffffff;letter-spacing:0.05em;text-transform:uppercase">
+        DOCUMENTAÇÃO INTERNA
+      </div>
+      <h1 style="font-size:28px;font-weight:700;color:#ffffff;margin:0 0 8px 0;line-height:1.25">
+        GF Atlas App — Manual Técnico Completo
+      </h1>
+      <p style="font-size:15px;color:rgba(255,255,255,0.85);margin:0;max-width:680px;line-height:1.6">
+        Guia completo de arquitetura, DocTypes, relacionamentos, instalação e casos de uso do aplicativo GF Atlas — a base estrutural do ecossistema digital da GREENFARMS.
+      </p>
+    </td>
+  </tr></tbody>
+</table>
+
+<!-- BARRA DE METADADOS -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff">
+  <tbody><tr>
+    <td style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:10px 48px;font-size:13px;color:#718096">
+      <b style="color:#2d3748">Data:</b> 17/05/2026 &nbsp;&nbsp;
+      <b style="color:#2d3748">Empresa:</b> GREENFARMS &nbsp;&nbsp;
+      <b style="color:#2d3748">App:</b> ichis_atlas_app v1.0.0 &nbsp;&nbsp;
+      <b style="color:#2d3748">Repositório:</b>
+      <a href="https://github.com/flexfernandes/ICHIS_ATLAS_APP" target="_blank" rel="noopener noreferrer" style="color:#1a5c2a;font-weight:600">ICHIS_ATLAS_APP</a>
+    </td>
+  </tr></tbody>
+</table>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<div class="content-wrap" style="padding-top:36px">
+
+  <!-- ÍNDICE RÁPIDO -->
+  <div class="toc-quick">
+    <h3>Índice Rápido</h3>
+    <ol>
+      <li><a href="#visao-geral">Visão Geral e Importância</a></li>
+      <li><a href="#arquitetura">Arquitetura do App</a></li>
+      <li><a href="#roles">Roles e Permissões</a></li>
+      <li><a href="#access-group">DocType: GF Access Group</a></li>
+      <li><a href="#access-group-user">DocType: GF Access Group User (Child)</a></li>
+      <li><a href="#content-group">DocType: GF Content Group (Tree)</a></li>
+      <li><a href="#content-registry">DocType: GF Content Registry</a></li>
+      <li><a href="#relacionamentos">Relacionamentos entre os DocTypes</a></li>
+      <li><a href="#instalacao">Processo de Instalação</a></li>
+      <li><a href="#web-page-fields">Campos Custom no DocType Web Page</a></li>
+      <li><a href="#caso1">Casos Práticos de Uso</a></li>
+      <li><a href="#checklist">Checklist Pós-Instalação</a></li>
+    </ol>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 1: VISÃO GERAL -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="visao-geral"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🗺️ 1. Visão Geral e Importância</h2></div>
+      <div class="card-body">
+        <div class="intro-card">
+          <p>O <strong>GF Atlas App</strong> é a fundação estrutural do ecossistema digital da GREENFARMS. Seu papel é criar uma camada organizacional centralizada que conecta <em>quem pode acessar o quê</em> dentro do ERPNext, de forma rastreável, hierárquica e gerenciável.</p>
+        </div>
+
+        <p>Toda organização com múltiplos sistemas, relatórios, dashboards, documentos e aplicações enfrenta o mesmo desafio: <strong>como organizar o acesso ao conhecimento de forma eficiente?</strong> O ERPNext oferece controle de permissões por Role, mas esse controle é binário — o usuário tem ou não tem acesso a um DocType inteiro.</p>
+
+        <p>O GF Atlas resolve um problema mais fino: <strong>catálogo de conteúdo com controle de acesso por grupo</strong>. Em vez de gerenciar permissões individualmente para cada relatório ou página, você agrupa conteúdos em categorias (Content Groups) e define quem acessa cada categoria (Access Groups). O conteúdo herda automaticamente o grupo de acesso padrão de sua categoria.</p>
+
+        <h3 style="margin:20px 0 10px;font-size:15px;color:#1a202c">O que o GF Atlas App entrega:</h3>
+        <ul style="padding-left:20px;line-height:2;color:#4a5568;font-size:14px">
+          <li><strong>Catálogo centralizado</strong> de todos os conteúdos digitais da empresa (relatórios, dashboards, PDFs, automações, APIs, links externos...)</li>
+          <li><strong>Grupos de acesso</strong> com permissões granulares por usuário (visualizar, buscar, criar, editar, deletar, exportar, imprimir)</li>
+          <li><strong>Hierarquia de conteúdo</strong> em árvore — categorias e subcategorias organizadas por área</li>
+          <li><strong>Herança automática</strong> de grupo de acesso: o conteúdo herda o grupo padrão de sua categoria, mas pode ter exceções</li>
+          <li><strong>Rastreabilidade</strong> — cada conteúdo tem responsável, status, tipo, tags e rota</li>
+          <li><strong>Extensibilidade</strong> do DocType Web Page, adicionando dois blocos HTML auxiliares para uso no Knowledge Hub</li>
+        </ul>
+
+        <div class="alert alert-success" style="margin-top:18px">
+          <strong>✅ Resultado prático:</strong> Com o GF Atlas instalado, qualquer portal interno, Knowledge Hub ou painel de navegação da GREENFARMS pode consultar qual conteúdo um determinado usuário tem permissão de ver, usando apenas dois parâmetros: o grupo de acesso do usuário e o registro do conteúdo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 2: ARQUITETURA -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="arquitetura"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🏗️ 2. Arquitetura do App</h2></div>
+      <div class="card-body">
+        <p>O GF Atlas App é um aplicativo Frappe customizado instalado como dependência no ERPNext. Ele é composto por <strong>4 DocTypes</strong>, <strong>3 Roles</strong>, um <strong>script de instalação automática</strong> e <strong>2 campos custom</strong> no DocType nativo Web Page.</p>
+
+        <h3 style="margin:18px 0 10px;font-size:14px;color:#1a202c">Estrutura do Repositório</h3>
+        <div class="code-block">ICHIS_ATLAS_APP/<br>
+├── ichis_atlas_app/                  <span class="cm"># pacote Python principal</span><br>
+│   ├── hooks.py                      <span class="cm"># configuração do app (nome, após instalação, fixtures)</span><br>
+│   ├── install.py                    <span class="cm"># lógica de instalação automática</span><br>
+│   ├── modules.txt                   <span class="cm"># nome do módulo Frappe: "Ichis Atlas App"</span><br>
+│   └── ichis_atlas_app/              <span class="cm"># módulo Frappe</span><br>
+│       └── doctype/<br>
+│           ├── gf_access_group/      <span class="cm"># Grupo de Acesso</span><br>
+│           ├── gf_access_group_user/ <span class="cm"># Child Table: Usuários do Grupo</span><br>
+│           ├── gf_content_group/     <span class="cm"># Grupo de Conteúdo (Tree)</span><br>
+│           └── gf_content_registry/  <span class="cm"># Registro de Conteúdo</span><br>
+├── setup.py<br>
+├── pyproject.toml<br>
+└── MANIFEST.in</div>
+
+        <h3 style="margin:24px 0 12px;font-size:14px;color:#1a202c">Diagrama de Componentes</h3>
+        <div class="diagram">
+          <div style="margin-bottom:8px;color:#68d391;font-size:11px;letter-spacing:0.1em">GREENFARMS — GF ATLAS APP — COMPONENTES</div>
+          <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:16px 0">
+            <div class="box box-green">🗂️ GF Content Group<br><small style="color:#a0e6b2;font-size:11px">Hierarquia em Árvore</small></div>
+            <div class="box box-green">🔑 GF Access Group<br><small style="color:#a0e6b2;font-size:11px">Grupos de Acesso</small></div>
+            <div class="box box-green">📋 GF Content Registry<br><small style="color:#a0e6b2;font-size:11px">Catálogo de Conteúdo</small></div>
+            <div class="box box-blue">👤 GF Access Group User<br><small style="color:#93c5fd;font-size:11px">Child Table</small></div>
+          </div>
+          <div style="margin:12px 0;font-size:11px;color:#718096">▼ suportado por</div>
+          <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap">
+            <div class="box box-purple">⚙️ install.py<br><small style="color:#c4b5fd;font-size:11px">Roles + Dados Iniciais</small></div>
+            <div class="box box-purple">🌐 Web Page Custom Fields<br><small style="color:#c4b5fd;font-size:11px">auxiliary_block_1 / 2</small></div>
+            <div class="box box-purple">🏷️ Roles: GF Manager / Editor / Viewer<br><small style="color:#c4b5fd;font-size:11px">Controle de permissão</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 3: ROLES -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="roles"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🏷️ 3. Roles e Permissões</h2></div>
+      <div class="card-body">
+        <p>O GF Atlas App cria automaticamente 3 Roles durante a instalação. Elas controlam o acesso aos DocTypes do próprio app (não são Roles do ERPNext padrão).</p>
+
+        <table class="data-table" style="margin-top:16px">
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Perfil</th>
+              <th>Leitura</th>
+              <th>Escrita</th>
+              <th>Criação</th>
+              <th>Deleção</th>
+              <th>Export/Print</th>
+              <th>Share</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>GF Manager</strong></td>
+              <td>Gestores e administradores do atlas</td>
+              <td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+            </tr>
+            <tr>
+              <td><strong>GF Editor</strong></td>
+              <td>Responsáveis por cadastrar e manter conteúdos</td>
+              <td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td>
+            </tr>
+            <tr>
+              <td><strong>GF Viewer</strong></td>
+              <td>Usuários que apenas consultam o catálogo</td>
+              <td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert alert-info" style="margin-top:18px">
+          <strong>ℹ️ Importante:</strong> Estas Roles controlam quem pode <em>gerenciar o atlas em si</em> (os DocTypes GF Access Group, GF Content Group, GF Content Registry). O controle de acesso ao conteúdo em si (relatórios, dashboards, etc.) é feito pelos grupos de acesso cadastrados no app — a Role sozinha não dá acesso ao conteúdo referenciado.
+        </div>
+
+        <h3 style="margin:20px 0 10px;font-size:14px;color:#1a202c">Como atribuir as Roles</h3>
+        <p>Após a instalação, acesse <strong>ERPNext → Configurações → Usuário</strong>, abra o usuário desejado, vá na aba <em>Roles</em> e adicione a Role correspondente.</p>
+        <div class="example-block">
+          <h4>Exemplo de atribuição</h4>
+          <ul style="padding-left:20px;font-size:13.5px;color:#4a5568;line-height:2">
+            <li>Analista de TI responsável pela manutenção do catálogo → <strong>GF Editor</strong></li>
+            <li>Gerente de Sistemas → <strong>GF Manager</strong></li>
+            <li>Colaboradores que consultam o Knowledge Hub → <strong>GF Viewer</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-div">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 4: GF ACCESS GROUP -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="access-group"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🔑 4. DocType: GF Access Group (Grupo de Acesso)</h2></div>
+      <div class="card-body">
+        <p>O <strong>GF Access Group</strong> é o coração do controle de acesso do GF Atlas. Ele define <em>quem é</em> em termos de perfil de acesso — não apenas através de uma Role do ERPNext, mas por meio de um grupo com identidade própria, flags comportamentais e uma lista explícita de usuários com permissões individuais.</p>
+
+        <p>Cada grupo representa um perfil de acesso da empresa: pode ser um departamento, um tipo de colaborador (interno, externo, consultor), uma combinação de acesso (público, restrito, executivo) ou qualquer segmentação relevante para o negócio.</p>
+
+        <div class="alert alert-tip">
+          <strong>💡 Diferença do ERPNext padrão:</strong> No ERPNext nativo, permissão = Role aplicada ao DocType. No GF Atlas, permissão = usuário listado em um Access Group com flags específicas (pode criar? pode deletar? está ativo?). Isso permite controlar acesso a conteúdos que nem são DocTypes — como URLs, relatórios externos e links.
+        </div>
+
+        <a class="section-anchor" id="access-group-campos"></a>
+        <h3 style="margin:24px 0 12px;font-size:15px;color:#1a202c">4.1 Campos do DocType</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Campo (fieldname)</th>
+              <th>Rótulo</th>
+              <th>Tipo</th>
+              <th>Obrig.</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>internal_name</code></td>
+              <td>Nome Interno</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-req">Sim</span></td>
+              <td>Identificador único técnico (snake_case). Usado como autoname do documento.</td>
+            </tr>
+            <tr>
+              <td><code>display_name</code></td>
+              <td>Nome de Exibição</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-req">Sim</span></td>
+              <td>Nome legível exibido na interface, ex.: "Financeiro", "Engenharia".</td>
+            </tr>
+            <tr>
+              <td><code>is_internal</code></td>
+              <td>É Interno</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Indica que este grupo é formado por colaboradores internos da empresa.</td>
+            </tr>
+            <tr>
+              <td><code>is_external</code></td>
+              <td>É Externo</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Indica que este grupo inclui pessoas externas (clientes, fornecedores, consultores).</td>
+            </tr>
+            <tr>
+              <td><code>is_restricted</code></td>
+              <td>É Restrito</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Sinaliza acesso altamente limitado. Útil para grupos de auditoria, jurídico, diretoria.</td>
+            </tr>
+            <tr>
+              <td><code>system_group</code></td>
+              <td>Grupo de Sistema</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Se marcado, usuários não podem ser adicionados manualmente via interface — grupo gerenciado por automação.</td>
+            </tr>
+            <tr>
+              <td><code>active</code></td>
+              <td>Ativo</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Padrão: marcado. Desmarcar desativa o grupo sem excluí-lo.</td>
+            </tr>
+            <tr>
+              <td><code>default_landing_workspace</code></td>
+              <td>Workspace Padrão</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Workspace do ERPNext para onde usuários deste grupo são direcionados ao logar.</td>
+            </tr>
+            <tr>
+              <td><code>sort_order</code></td>
+              <td>Ordem</td>
+              <td><span class="badge badge-select">Int</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Controla a ordem de exibição em listagens e portais.</td>
+            </tr>
+            <tr>
+              <td><code>description</code></td>
+              <td>Descrição</td>
+              <td><span class="badge badge-opt">Small Text</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Texto livre explicando o propósito e abrangência do grupo.</td>
+            </tr>
+            <tr>
+              <td><code>users</code></td>
+              <td>Usuários</td>
+              <td><span class="badge badge-tree">Table</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Child Table com a lista de usuários e suas permissões individuais dentro do grupo.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <a class="section-anchor" id="access-group-exemplos"></a>
+        <h3 style="margin:28px 0 12px;font-size:15px;color:#1a202c">4.2 Exemplos Práticos de Cadastro</h3>
+
+        <div class="example-block">
+          <h4>Exemplo 1 — Grupo Interno: Financeiro</h4>
+          <table class="data-table">
+            <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td><code>internal_name</code></td><td>financeiro</td></tr>
+              <tr><td><code>display_name</code></td><td>Financeiro</td></tr>
+              <tr><td><code>is_internal</code></td><td>✅ Sim</td></tr>
+              <tr><td><code>is_external</code></td><td>❌ Não</td></tr>
+              <tr><td><code>is_restricted</code></td><td>❌ Não</td></tr>
+              <tr><td><code>system_group</code></td><td>❌ Não</td></tr>
+              <tr><td><code>default_landing_workspace</code></td><td>Accounting</td></tr>
+              <tr><td><code>sort_order</code></td><td>14</td></tr>
+              <tr><td><code>description</code></td><td>Colaboradores do departamento Financeiro. Acesso a relatórios contábeis, fluxo de caixa e conciliações.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-block" style="margin-top:14px">
+          <h4>Exemplo 2 — Grupo Externo: Consultoria</h4>
+          <table class="data-table">
+            <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td><code>internal_name</code></td><td>consultoria</td></tr>
+              <tr><td><code>display_name</code></td><td>Consultoria</td></tr>
+              <tr><td><code>is_internal</code></td><td>❌ Não</td></tr>
+              <tr><td><code>is_external</code></td><td>✅ Sim</td></tr>
+              <tr><td><code>is_restricted</code></td><td>❌ Não</td></tr>
+              <tr><td><code>system_group</code></td><td>❌ Não</td></tr>
+              <tr><td><code>description</code></td><td>Consultores externos com acesso limitado à documentação de processos e relatórios específicos de projeto.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-block" style="margin-top:14px">
+          <h4>Exemplo 3 — Grupo Restrito: Diretoria</h4>
+          <table class="data-table">
+            <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td><code>internal_name</code></td><td>diretoria</td></tr>
+              <tr><td><code>display_name</code></td><td>Diretoria</td></tr>
+              <tr><td><code>is_internal</code></td><td>✅ Sim</td></tr>
+              <tr><td><code>is_external</code></td><td>❌ Não</td></tr>
+              <tr><td><code>is_restricted</code></td><td>✅ Sim</td></tr>
+              <tr><td><code>system_group</code></td><td>❌ Não</td></tr>
+              <tr><td><code>description</code></td><td>Diretores executivos com acesso a todos os painéis estratégicos e relatórios consolidados.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-warn" style="margin-top:16px">
+          <strong>⚠️ Grupos criados na instalação:</strong> O <code>after_install</code> já cria automaticamente 37 grupos de acesso pré-configurados representando todos os departamentos e perfis da empresa. Eles servem como ponto de partida e podem ser editados conforme necessidade.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 5: GF ACCESS GROUP USER -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="access-group-user"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>👤 5. DocType: GF Access Group User (Child Table)</h2></div>
+      <div class="card-body">
+        <p>O <strong>GF Access Group User</strong> é uma <em>Child Table</em> — um DocType filho que vive dentro do GF Access Group, na aba de usuários. Cada linha representa um usuário e define suas permissões individuais dentro daquele grupo específico.</p>
+
+        <p>Esse design permite <strong>permissões granulares por usuário dentro do mesmo grupo</strong>: dois usuários no mesmo grupo Financeiro podem ter capacidades diferentes — um pode exportar e imprimir, o outro apenas visualizar.</p>
+
+        <a class="section-anchor" id="user-campos"></a>
+        <h3 style="margin:20px 0 12px;font-size:15px;color:#1a202c">5.1 Campos da Child Table</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Campo (fieldname)</th>
+              <th>Rótulo</th>
+              <th>Tipo</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>user</code></td>
+              <td>Usuário</td>
+              <td><span class="badge badge-link">Link → User</span></td>
+              <td>Usuário do ERPNext a ser adicionado ao grupo. Campo obrigatório.</td>
+            </tr>
+            <tr>
+              <td><code>full_name</code></td>
+              <td>Nome Completo</td>
+              <td><span class="badge badge-ro">Fetch</span></td>
+              <td>Preenchido automaticamente de <code>user.full_name</code>. Somente leitura.</td>
+            </tr>
+            <tr>
+              <td><code>can_view</code></td>
+              <td>Pode Visualizar</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td>Usuário pode ver o conteúdo. Padrão: ✅ marcado.</td>
+            </tr>
+            <tr>
+              <td><code>can_search</code></td>
+              <td>Pode Buscar</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td>Usuário aparece nos resultados de busca. Padrão: ✅ marcado.</td>
+            </tr>
+            <tr>
+              <td><code>can_create</code></td>
+              <td>Pode Criar</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td>Usuário pode criar novos itens associados a este grupo.</td>
+            </tr>
+            <tr>
+              <td><code>can_edit</code></td>
+              <td>Pode Editar</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td>Usuário pode modificar conteúdos existentes no grupo.</td>
+            </tr>
+            <tr>
+              <td><code>can_delete</code></td>
+              <td>Pode Deletar</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td>Usuário pode remover conteúdos. Use com cautela.</td>
+            </tr>
+            <tr>
+              <td><code>can_export</code></td>
+              <td>Pode Exportar</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td>Usuário pode exportar dados (Excel, CSV) dos conteúdos do grupo.</td>
+            </tr>
+            <tr>
+              <td><code>can_print</code></td>
+              <td>Pode Imprimir</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td>Usuário pode imprimir documentos e relatórios do grupo.</td>
+            </tr>
+            <tr>
+              <td><code>enabled</code></td>
+              <td>Ativo</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td>Ativa ou suspende o usuário do grupo sem removê-lo. Padrão: ✅ marcado.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin:24px 0 12px;font-size:15px;color:#1a202c">5.2 Exemplo de Configuração de Usuários em um Grupo</h3>
+        <div class="example-block">
+          <h4>Grupo: Financeiro — Lista de Usuários</h4>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Usuário</th>
+                <th>Nome</th>
+                <th>Ver</th>
+                <th>Buscar</th>
+                <th>Criar</th>
+                <th>Editar</th>
+                <th>Deletar</th>
+                <th>Exportar</th>
+                <th>Imprimir</th>
+                <th>Ativo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ana@greenfarms.com</code></td>
+                <td>Ana Silva</td>
+                <td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td>
+              </tr>
+              <tr>
+                <td><code>pedro@greenfarms.com</code></td>
+                <td>Pedro Costa</td>
+                <td>✅</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td>
+              </tr>
+              <tr>
+                <td><code>consultor@ext.com</code></td>
+                <td>João Consultor</td>
+                <td>✅</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-info" style="margin-top:14px">
+          <strong>ℹ️ Comportamento do <code>system_group</code>:</strong> Quando o GF Access Group tem <code>system_group = true</code>, o JavaScript do formulário bloqueia a adição manual de usuários na Child Table. Esses grupos são gerenciados exclusivamente por automações ou scripts do sistema.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 6: GF CONTENT GROUP -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="content-group"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🗂️ 6. DocType: GF Content Group (Grupo de Conteúdo)</h2></div>
+      <div class="card-body">
+        <p>O <strong>GF Content Group</strong> é um DocType do tipo <em>Tree</em> (Árvore) — o que significa que seus registros se organizam em uma hierarquia pai-filho com profundidade ilimitada. É a espinha dorsal da organização de conteúdo do GF Atlas.</p>
+
+        <p>Pense nele como uma árvore de categorias: no topo ficam as grandes áreas da empresa (RH, Financeiro, TI, Produção…), e dentro de cada uma existem subcategorias cada vez mais específicas até chegar nas folhas, que são os grupos que efetivamente classificam conteúdos registrados.</p>
+
+        <div class="alert alert-tip">
+          <strong>💡 Tree DocType no Frappe:</strong> Internamente, Frappe usa o modelo Nested Set (NSM) para armazenar árvores. Cada nó tem campos <code>lft</code>, <code>rgt</code> e <code>parent_group</code> gerenciados automaticamente. Você não precisa se preocupar com isso — basta informar o pai ao criar um grupo.
+        </div>
+
+        <a class="section-anchor" id="content-group-campos"></a>
+        <h3 style="margin:20px 0 12px;font-size:15px;color:#1a202c">6.1 Campos do DocType</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Campo (fieldname)</th>
+              <th>Rótulo</th>
+              <th>Tipo</th>
+              <th>Obrig.</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>internal_name</code></td>
+              <td>Nome Interno</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-req">Sim</span></td>
+              <td>Identificador único técnico. Usado como autoname. Ex.: <code>rh_admissao</code>.</td>
+            </tr>
+            <tr>
+              <td><code>display_name</code></td>
+              <td>Nome de Exibição</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-req">Sim</span></td>
+              <td>Nome legível para exibição. É o <code>title_field</code> do DocType.</td>
+            </tr>
+            <tr>
+              <td><code>parent_group</code></td>
+              <td>Grupo Pai</td>
+              <td><span class="badge badge-link">Link → GF Content Group</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Define o pai na hierarquia. Deixar em branco cria um nó raiz. É o <code>nsm_parent_field</code>.</td>
+            </tr>
+            <tr>
+              <td><code>is_group</code></td>
+              <td>É Grupo</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Se marcado, este nó pode ter filhos. Se desmarcado, é uma folha (categoria final).</td>
+            </tr>
+            <tr>
+              <td><code>default_access_group</code></td>
+              <td>Grupo de Acesso Padrão</td>
+              <td><span class="badge badge-link">Link → GF Access Group</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Quando um GF Content Registry usa este grupo, herda automaticamente este grupo de acesso.</td>
+            </tr>
+            <tr>
+              <td><code>active</code></td>
+              <td>Ativo</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Padrão: marcado. Grupos inativos ficam ocultos em portais e seletores.</td>
+            </tr>
+            <tr>
+              <td><code>sort_order</code></td>
+              <td>Ordem</td>
+              <td><span class="badge badge-select">Int</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Ordem de exibição entre irmãos na mesma hierarquia.</td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td>
+              <td>Ícone</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Nome de um ícone Lucide Icons. Ex.: <code>users</code>, <code>bar-chart-2</code>, <code>briefcase</code>. Renderizado via <code>data-lucide</code>.</td>
+            </tr>
+            <tr>
+              <td><code>color</code></td>
+              <td>Cor</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Cor hexadecimal para identidade visual. Ex.: <code>#1a5c2a</code>.</td>
+            </tr>
+            <tr>
+              <td><code>description</code></td>
+              <td>Descrição</td>
+              <td><span class="badge badge-opt">Small Text</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Texto descritivo sobre o propósito e abrangência do grupo.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <a class="section-anchor" id="content-group-arvore"></a>
+        <h3 style="margin:28px 0 12px;font-size:15px;color:#1a202c">6.2 Hierarquia em Árvore — Exemplo Visual</h3>
+        <p>A instalação cria 270+ grupos de conteúdo organizados em uma hierarquia profunda. Abaixo um exemplo da estrutura de RH:</p>
+
+        <div class="code-block">
+<span class="cm"># Exemplo de árvore para o departamento de RH</span><br>
+<br>
+📁 <span class="str">recursos_humanos</span>        <span class="cm"># Raiz — is_group: true, parent_group: vazio</span><br>
+   ├── 📁 <span class="str">rh_admissao</span>      <span class="cm"># Subfolder — is_group: true</span><br>
+   │   ├── 📄 <span class="str">rh_admissao_documentos</span><br>
+   │   ├── 📄 <span class="str">rh_admissao_formularios</span><br>
+   │   └── 📄 <span class="str">rh_admissao_checklist</span><br>
+   ├── 📁 <span class="str">rh_treinamento</span><br>
+   │   ├── 📄 <span class="str">rh_treinamento_ead</span><br>
+   │   └── 📄 <span class="str">rh_treinamento_presencial</span><br>
+   ├── 📁 <span class="str">rh_folha_pagamento</span><br>
+   │   ├── 📄 <span class="str">rh_folha_relatorios</span><br>
+   │   └── 📄 <span class="str">rh_folha_contracheques</span><br>
+   └── 📁 <span class="str">rh_desligamento</span><br>
+       ├── 📄 <span class="str">rh_desligamento_documentos</span><br>
+       └── 📄 <span class="str">rh_desligamento_checklist</span></div>
+
+        <div class="example-block" style="margin-top:16px">
+          <h4>Exemplo de Cadastro — Criando um novo grupo folha</h4>
+          <table class="data-table">
+            <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td><code>internal_name</code></td><td>rh_admissao_documentos</td></tr>
+              <tr><td><code>display_name</code></td><td>Documentos de Admissão</td></tr>
+              <tr><td><code>parent_group</code></td><td>rh_admissao</td></tr>
+              <tr><td><code>is_group</code></td><td>❌ Não (é uma folha)</td></tr>
+              <tr><td><code>default_access_group</code></td><td>rh</td></tr>
+              <tr><td><code>icon</code></td><td>file-text</td></tr>
+              <tr><td><code>color</code></td><td>#2d6a4f</td></tr>
+              <tr><td><code>sort_order</code></td><td>1</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-success" style="margin-top:14px">
+          <strong>✅ Herança automática:</strong> Ao cadastrar um GF Content Registry com <code>content_group = rh_admissao_documentos</code>, o campo <code>access_group</code> será preenchido automaticamente com <code>rh</code> (o <code>default_access_group</code> do grupo). O usuário pode sobrescrever para casos de exceção.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 7: GF CONTENT REGISTRY -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="content-registry"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>📋 7. DocType: GF Content Registry (Registro de Conteúdo)</h2></div>
+      <div class="card-body">
+        <p>O <strong>GF Content Registry</strong> é o catálogo propriamente dito. Cada registro representa um item de conteúdo da empresa — pode ser um relatório, um dashboard, um PDF, uma automação, uma página web, uma API ou qualquer outro tipo de item digital que a empresa queira organizar e controlar.</p>
+
+        <p>O autoname segue o padrão <code>GF-REG-.YYYY.-.#####</code>, gerando IDs como <code>GF-REG-2026-00001</code>. Isso garante rastreabilidade e unicidade permanente.</p>
+
+        <a class="section-anchor" id="registry-campos"></a>
+        <h3 style="margin:20px 0 12px;font-size:15px;color:#1a202c">7.1 Campos do DocType</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Campo</th>
+              <th>Rótulo</th>
+              <th>Tipo</th>
+              <th>Obrig.</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>title</code></td>
+              <td>Título</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-req">Sim</span></td>
+              <td>Nome legível do conteúdo. É o <code>title_field</code> do DocType.</td>
+            </tr>
+            <tr>
+              <td><code>item_type</code></td>
+              <td>Tipo do Item</td>
+              <td><span class="badge badge-select">Select</span></td>
+              <td><span class="badge badge-req">Sim</span></td>
+              <td>Categoria técnica do conteúdo. Ver seção 7.2 para detalhes.</td>
+            </tr>
+            <tr>
+              <td><code>status</code></td>
+              <td>Status</td>
+              <td><span class="badge badge-select">Select</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Ciclo de vida do conteúdo: ACTIVE / DRAFT / ARCHIVED / OBSOLETE. Padrão: ACTIVE.</td>
+            </tr>
+            <tr>
+              <td><code>content_group</code></td>
+              <td>Grupo de Conteúdo</td>
+              <td><span class="badge badge-link">Link → GF Content Group</span></td>
+              <td><span class="badge badge-req">Sim</span></td>
+              <td>Categoriza o item na árvore de conteúdo. Dispara o auto-preenchimento do access_group.</td>
+            </tr>
+            <tr>
+              <td><code>access_group</code></td>
+              <td>Grupo de Acesso</td>
+              <td><span class="badge badge-link">Link → GF Access Group</span></td>
+              <td><span class="badge badge-req">Sim</span></td>
+              <td>Define quem pode acessar este item. Pré-preenchido pelo grupo de conteúdo, editável para exceções.</td>
+            </tr>
+            <tr>
+              <td><code>responsible_user</code></td>
+              <td>Responsável</td>
+              <td><span class="badge badge-link">Link → User</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Usuário responsável pela manutenção e atualização deste conteúdo.</td>
+            </tr>
+            <tr>
+              <td><code>route_url</code></td>
+              <td>URL / Rota</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Caminho de acesso. Pode ser relativo (<code>/app/query-report/...</code>) ou absoluto (<code>https://...</code>).</td>
+            </tr>
+            <tr>
+              <td><code>reference_doctype</code></td>
+              <td>DocType de Referência</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Nome do DocType associado. Ex.: <code>Sales Invoice</code>, <code>Project</code>.</td>
+            </tr>
+            <tr>
+              <td><code>reference_name</code></td>
+              <td>Nome de Referência</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Identificador do documento específico referenciado.</td>
+            </tr>
+            <tr>
+              <td><code>description</code></td>
+              <td>Descrição</td>
+              <td><span class="badge badge-opt">Small Text</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Texto explicando o conteúdo, seu uso e relevância.</td>
+            </tr>
+            <tr>
+              <td><code>tags</code></td>
+              <td>Tags</td>
+              <td><span class="badge badge-opt">Small Text</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Palavras-chave para busca e filtragem. Ex.: <code>rh, admissão, 2026, mensal</code>.</td>
+            </tr>
+            <tr>
+              <td><code>icon</code></td>
+              <td>Ícone</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Nome Lucide Icons para exibição em cards e listas.</td>
+            </tr>
+            <tr>
+              <td><code>color</code></td>
+              <td>Cor</td>
+              <td><span class="badge badge-link">Data</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Cor hexadecimal para identidade visual do item.</td>
+            </tr>
+            <tr>
+              <td><code>sort_order</code></td>
+              <td>Ordem</td>
+              <td><span class="badge badge-select">Int</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Controla a ordem de exibição em portais e listagens.</td>
+            </tr>
+            <tr>
+              <td><code>show_on_home</code></td>
+              <td>Exibir na Home</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Destaca o item na página inicial do portal.</td>
+            </tr>
+            <tr>
+              <td><code>favorite</code></td>
+              <td>Favorito</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Marca o item como favorito para acesso rápido.</td>
+            </tr>
+            <tr>
+              <td><code>active</code></td>
+              <td>Ativo</td>
+              <td><span class="badge badge-check">Check</span></td>
+              <td><span class="badge badge-opt">Não</span></td>
+              <td>Padrão: marcado. Itens inativos ficam ocultos nos portais.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <a class="section-anchor" id="registry-tipos"></a>
+        <h3 style="margin:28px 0 12px;font-size:15px;color:#1a202c">7.2 Tipos de Item (item_type)</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Tipo</th><th>Quando usar</th><th>Exemplo de route_url</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>WEB_PAGE</strong></td><td>Páginas criadas no ERPNext Web Builder</td><td><code>/knowledge-hub</code></td></tr>
+            <tr><td><strong>REPORT</strong></td><td>Relatórios do ERPNext (Query Report, Script Report)</td><td><code>/app/query-report/Timesheet</code></td></tr>
+            <tr><td><strong>DASHBOARD</strong></td><td>Dashboards do ERPNext ou externos</td><td><code>/app/dashboard-view/Vendas</code></td></tr>
+            <tr><td><strong>PDF</strong></td><td>Arquivos PDF hospedados ou gerados</td><td><code>/files/manual-rh-2026.pdf</code></td></tr>
+            <tr><td><strong>HTML</strong></td><td>Páginas HTML customizadas, documentações internas</td><td><code>/pages/instrucoes-admissao</code></td></tr>
+            <tr><td><strong>DOCUMENT</strong></td><td>Documentos ERPNext (NF, Pedido, Projeto, etc.)</td><td><code>/app/project/PROJ-2026-001</code></td></tr>
+            <tr><td><strong>APPLICATION</strong></td><td>Sistemas e aplicações internas ou externas</td><td><code>https://app.interno.greenfarms.com</code></td></tr>
+            <tr><td><strong>WORKFLOW</strong></td><td>Fluxos de aprovação e automações</td><td><code>/app/workflow/Aprovacao-de-Compras</code></td></tr>
+            <tr><td><strong>EXTERNAL_LINK</strong></td><td>URLs externas (fornecedores, portais gov.)</td><td><code>https://esocial.fazenda.gov.br</code></td></tr>
+            <tr><td><strong>API</strong></td><td>Endpoints de API internos ou externos documentados</td><td><code>/api/method/gf_atlas.get_content</code></td></tr>
+            <tr><td><strong>SCRIPT</strong></td><td>Scripts de automação, notebooks Jupyter, RPA</td><td>—</td></tr>
+            <tr><td><strong>OTHER</strong></td><td>Qualquer conteúdo que não se encaixa nas categorias</td><td>—</td></tr>
+          </tbody>
+        </table>
+
+        <a class="section-anchor" id="registry-auto"></a>
+        <h3 style="margin:28px 0 12px;font-size:15px;color:#1a202c">7.3 Auto-preenchimento do Grupo de Acesso</h3>
+        <p>Este é um dos comportamentos mais importantes do GF Atlas. Quando o usuário seleciona um <code>content_group</code>, o sistema busca automaticamente o <code>default_access_group</code> daquele grupo e preenche o campo <code>access_group</code> — tanto no cliente (via JavaScript) quanto no servidor (via Python no <code>validate</code>).</p>
+
+        <div class="code-block">
+<span class="cm"># Python — gf_content_registry.py</span><br>
+<span class="kw">def</span> <span class="fn">validate</span>(self):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> self.content_group <span class="kw">and not</span> self.access_group:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_ag = frappe.db.get_value(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"GF Content Group"</span>, self.content_group, <span class="str">"default_access_group"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> default_ag:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.access_group = default_ag</div>
+
+        <div class="code-block">
+<span class="cm">// JavaScript — gf_content_registry.js</span><br>
+frappe.ui.form.on(<span class="str">"GF Content Registry"</span>, {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;content_group(frm) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (frm.doc.content_group) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frappe.db.get_value(<span class="str">"GF Content Group"</span>, frm.doc.content_group,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"default_access_group"</span>, (r) => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (r &amp;&amp; r.default_access_group &amp;&amp; !frm.doc.access_group) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frm.set_value(<span class="str">"access_group"</span>, r.default_access_group);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+});</div>
+
+        <div class="alert alert-info">
+          <strong>ℹ️ Dois níveis de proteção:</strong> O JavaScript age imediatamente ao selecionar o grupo (UX fluida). O Python age no <code>validate</code>, garantindo que mesmo um registro criado via API ou import tenha o access_group correto — desde que não tenha sido definido explicitamente.
+        </div>
+
+        <h3 style="margin:24px 0 12px;font-size:15px;color:#1a202c">7.4 Exemplo de Cadastro Completo</h3>
+        <div class="example-block">
+          <h4>Cadastro: Relatório Mensal de Folha de Pagamento</h4>
+          <table class="data-table">
+            <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td><code>name</code> (autoname)</td><td>GF-REG-2026-00001</td></tr>
+              <tr><td><code>title</code></td><td>Relatório Mensal de Folha de Pagamento</td></tr>
+              <tr><td><code>item_type</code></td><td>REPORT</td></tr>
+              <tr><td><code>status</code></td><td>ACTIVE</td></tr>
+              <tr><td><code>content_group</code></td><td>rh_folha_relatorios</td></tr>
+              <tr><td><code>access_group</code></td><td>rh <em style="color:#718096">(auto-preenchido)</em></td></tr>
+              <tr><td><code>responsible_user</code></td><td>ana@greenfarms.com</td></tr>
+              <tr><td><code>route_url</code></td><td>/app/query-report/Salary Slip</td></tr>
+              <tr><td><code>description</code></td><td>Relatório consolidado de folha mensal. Gerado todo dia 1º às 08h via scheduler.</td></tr>
+              <tr><td><code>tags</code></td><td>rh, folha, pagamento, mensal, salary</td></tr>
+              <tr><td><code>icon</code></td><td>file-spreadsheet</td></tr>
+              <tr><td><code>color</code></td><td>#2d6a4f</td></tr>
+              <tr><td><code>show_on_home</code></td><td>✅ Sim</td></tr>
+              <tr><td><code>active</code></td><td>✅ Sim</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-div">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 8: RELACIONAMENTOS -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="relacionamentos"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🔗 8. Relacionamento entre os DocTypes</h2></div>
+      <div class="card-body">
+        <p>Os quatro DocTypes do GF Atlas se relacionam de forma intencional e coesa. Compreender esse relacionamento é fundamental para usar o app corretamente e para construir portais e automações sobre ele.</p>
+
+        <div class="diagram" style="text-align:left;line-height:1.6">
+          <div style="margin-bottom:16px;text-align:center;color:#68d391;font-size:11px;letter-spacing:0.08em">DIAGRAMA DE RELACIONAMENTOS — GF ATLAS APP</div>
+<pre style="font-family:Consolas,'Courier New',monospace;font-size:13px;color:#e2e8f0;line-height:1.9;display:inline-block;text-align:left">
+  ┌─────────────────────────────────┐
+  │       GF ACCESS GROUP           │
+  │  id: internal_name (snake_case) │
+  │  + is_internal / is_external    │
+  │  + is_restricted / system_group │
+  └──────────────┬──────────────────┘
+                 │ 1 para N (child table)
+                 ▼
+  ┌─────────────────────────────────┐
+  │    GF ACCESS GROUP USER         │
+  │  user → Link(User)              │
+  │  can_view / can_edit / ...      │
+  └─────────────────────────────────┘
+
+  ┌─────────────────────────────────┐     default_access_group
+  │       GF CONTENT GROUP          │ ─────────────────────────►  GF ACCESS GROUP
+  │  id: internal_name              │
+  │  parent_group → self (Tree)     │
+  │  is_group / icon / color        │
+  └──────────────┬──────────────────┘
+                 │ 1 para N
+                 ▼
+  ┌─────────────────────────────────┐     access_group (herdado)
+  │    GF CONTENT REGISTRY          │ ─────────────────────────►  GF ACCESS GROUP
+  │  id: GF-REG-YYYY-#####          │
+  │  content_group → Content Group  │
+  │  item_type / status / route_url │
+  └─────────────────────────────────┘
+</pre>
+        </div>
+
+        <a class="section-anchor" id="fluxo-heranca"></a>
+        <h3 style="margin:24px 0 12px;font-size:15px;color:#1a202c">8.1 Fluxo de Herança do Grupo de Acesso</h3>
+
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Definição do Grupo de Acesso</h4>
+              <p>O administrador cria um <strong>GF Access Group</strong> (ex.: <code>financeiro</code>) e adiciona usuários na Child Table, definindo as permissões de cada um.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Associação ao Grupo de Conteúdo</h4>
+              <p>Um <strong>GF Content Group</strong> folha (ex.: <code>financeiro_relatorios</code>) define <code>default_access_group = financeiro</code>. Isso significa que todo conteúdo desta categoria pertencerá ao grupo Financeiro por padrão.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Cadastro do Conteúdo com Herança</h4>
+              <p>Ao criar um <strong>GF Content Registry</strong> com <code>content_group = financeiro_relatorios</code>, o campo <code>access_group</code> é preenchido automaticamente com <code>financeiro</code> — sem intervenção manual.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>Exceção pontual</h4>
+              <p>Um relatório específico precisa ser acessível também pela Diretoria? Basta editar aquele registro e trocar o <code>access_group</code> para <code>diretoria</code>. Os demais itens do grupo ficam inalterados.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <h4>Consulta no portal</h4>
+              <p>O portal ou Knowledge Hub consulta via API: "quais registros têm <code>access_group</code> igual ao grupo do usuário logado, estão <code>active = 1</code> e têm <code>status = ACTIVE</code>?" — e exibe apenas o que aquele usuário pode ver.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin:24px 0 12px;font-size:15px;color:#1a202c">8.2 Exemplo de Consulta via API Frappe</h3>
+        <div class="code-block">
+<span class="cm"># Buscar conteúdos acessíveis para um grupo específico</span><br>
+frappe.get_all(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"GF Content Registry"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;filters={<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"access_group"</span>: <span class="str">"financeiro"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"status"</span>: <span class="str">"ACTIVE"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"active"</span>: <span class="str">1</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fields=[<span class="str">"name"</span>, <span class="str">"title"</span>, <span class="str">"item_type"</span>, <span class="str">"route_url"</span>, <span class="str">"icon"</span>, <span class="str">"color"</span>],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;order_by=<span class="str">"sort_order asc"</span><br>
+)</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-div">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 9: INSTALAÇÃO -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="instalacao"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>⚙️ 9. Processo de Instalação</h2></div>
+      <div class="card-body">
+        <p>A instalação do GF Atlas App é feita com dois comandos no servidor Frappe. Tudo que o app precisa para funcionar — roles, grupos de acesso, grupos de conteúdo e campos custom — é criado <strong>automaticamente</strong> pelo script <code>install.py</code>.</p>
+
+        <h3 style="margin:20px 0 10px;font-size:14px;color:#1a202c">Comandos de Instalação</h3>
+        <div class="code-block">
+<span class="cm"># 1. Obter o app a partir do repositório GitHub</span><br>
+bench get-app https://github.com/flexfernandes/ICHIS_ATLAS_APP<br>
+<br>
+<span class="cm"># 2. Instalar no site desejado</span><br>
+bench --site greenfarmsagro.frappe.cloud install-app ichis_atlas_app<br>
+<br>
+<span class="cm"># 3. Executar migrate (garante que os DocTypes são criados no banco)</span><br>
+bench --site greenfarmsagro.frappe.cloud migrate</div>
+
+        <div class="alert alert-warn" style="margin-top:14px">
+          <strong>⚠️ Frappe Cloud:</strong> No Frappe Cloud, a instalação é feita pelo painel administrativo em <em>Sites → seu-site → Apps → Install App</em>. Informe a URL do repositório GitHub. O migrate é executado automaticamente pela plataforma.
+        </div>
+
+        <a class="section-anchor" id="after-install"></a>
+        <h3 style="margin:28px 0 12px;font-size:15px;color:#1a202c">9.1 O que o <code>after_install</code> executa</h3>
+        <p>Quando o Frappe detecta que o app foi instalado, chama automaticamente a função <code>after_install()</code> definida em <code>hooks.py</code>. Esta função orquestra 4 etapas em sequência:</p>
+
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>create_roles()</h4>
+              <p>Cria as 3 Roles do app (<strong>GF Manager</strong>, <strong>GF Editor</strong>, <strong>GF Viewer</strong>) caso não existam. Usa <code>frappe.get_doc</code> com <code>ignore_permissions=True</code>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>create_access_groups()</h4>
+              <p>Cria os <strong>37 grupos de acesso</strong> pré-definidos — todos os departamentos e perfis da GREENFARMS. Cada grupo é criado apenas se não existir (idempotente). Inclui: público, visitante, terceirizado, consultoria, cliente, fornecedor, engenharia, automação, produção, qualidade, manutenção, suprimentos, logística, financeiro, comercial, RH, marketing, TI, ERPNext, IA & automações, gerência, diretoria, administrador, jurídico, controladoria, auditoria, segurança do trabalho, P&D, laboratório, processos industriais, integrações, dashboards, web applications, documentações, projetos especiais, arquivo morto, obsoleto.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>create_content_groups()</h4>
+              <p>Cria a árvore de <strong>270+ grupos de conteúdo</strong> hierárquicos representando toda a estrutura de conhecimento da empresa (RH, Financeiro, Operações, TI, Engenharia, Automações, BI, etc.). Cada grupo recebe seu <code>default_access_group</code>, ícone Lucide e cor hexadecimal.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>create_web_page_custom_fields()</h4>
+              <p>Adiciona dois campos do tipo <strong>HTML Editor</strong> ao DocType nativo <em>Web Page</em> do Frappe: <code>auxiliary_block_1</code> e <code>auxiliary_block_2</code>. Ver seção 10 para detalhes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># Trecho do install.py — função principal</span><br>
+<span class="kw">def</span> <span class="fn">after_install</span>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;create_roles()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;create_access_groups()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;create_content_groups()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;create_web_page_custom_fields()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;frappe.db.commit()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print(<span class="str">"GF Atlas App: instalação concluída com sucesso."</span>)</div>
+
+        <div class="alert alert-success" style="margin-top:14px">
+          <strong>✅ Idempotência:</strong> Todas as funções verificam se o registro já existe antes de criar. Isso significa que o <code>after_install</code> pode ser executado novamente sem duplicar dados — útil em reinstalações ou atualizações.
+        </div>
+
+        <h3 style="margin:24px 0 12px;font-size:15px;color:#1a202c">9.2 Fixtures</h3>
+        <p>O arquivo <code>hooks.py</code> define fixtures para a Role, garantindo que os dados de Role sejam exportáveis e importáveis via <code>bench export-fixtures</code>:</p>
+        <div class="code-block">
+<span class="cm"># hooks.py</span><br>
+fixtures = [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"dt"</span>: <span class="str">"Role"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"filters"</span>: [[<span class="str">"name"</span>, <span class="str">"in"</span>, [<span class="str">"GF Manager"</span>, <span class="str">"GF Editor"</span>, <span class="str">"GF Viewer"</span>]]]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+]</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 10: CUSTOM FIELDS WEB PAGE -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="web-page-fields"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🌐 10. Campos Custom no DocType Web Page</h2></div>
+      <div class="card-body">
+        <p>Durante a instalação, o GF Atlas estende o DocType nativo <strong>Web Page</strong> do Frappe com dois campos HTML Editor. Esses campos permitem que cada página do portal interno (como o Knowledge Hub) tenha blocos de HTML completamente customizáveis, independentes do conteúdo principal.</p>
+
+        <table class="data-table" style="margin:16px 0">
+          <thead>
+            <tr>
+              <th>Custom Field</th>
+              <th>Rótulo</th>
+              <th>Tipo</th>
+              <th>Posição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>auxiliary_block_1</code></td>
+              <td>Auxiliary Block 1</td>
+              <td>HTML Editor</td>
+              <td>Seção "Auxiliary Blocks" (ao final do formulário)</td>
+            </tr>
+            <tr>
+              <td><code>auxiliary_block_2</code></td>
+              <td>Auxiliary Block 2</td>
+              <td>HTML Editor</td>
+              <td>Após auxiliary_block_1</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin:20px 0 10px;font-size:14px;color:#1a202c">Como são criados</h3>
+        <div class="code-block">
+<span class="cm"># install.py — create_web_page_custom_fields()</span><br>
+<span class="kw">def</span> <span class="fn">create_web_page_custom_fields</span>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;meta_fields = frappe.get_meta(<span class="str">"Web Page"</span>).fields<br>
+&nbsp;&nbsp;&nbsp;&nbsp;last_fieldname = meta_fields[-1].fieldname <span class="kw">if</span> meta_fields <span class="kw">else</span> <span class="str">""</span><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;custom_fields = [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="str">"fieldname"</span>: <span class="str">"gf_sb_auxiliary_blocks"</span>, <span class="str">"label"</span>: <span class="str">"Auxiliary Blocks"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"fieldtype"</span>: <span class="str">"Section Break"</span>, <span class="str">"insert_after"</span>: last_fieldname},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="str">"fieldname"</span>: <span class="str">"auxiliary_block_1"</span>, <span class="str">"label"</span>: <span class="str">"Auxiliary Block 1"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"fieldtype"</span>: <span class="str">"HTML Editor"</span>, <span class="str">"insert_after"</span>: <span class="str">"gf_sb_auxiliary_blocks"</span>},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="str">"fieldname"</span>: <span class="str">"auxiliary_block_2"</span>, <span class="str">"label"</span>: <span class="str">"Auxiliary Block 2"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"fieldtype"</span>: <span class="str">"HTML Editor"</span>, <span class="str">"insert_after"</span>: <span class="str">"auxiliary_block_1"</span>},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> f <span class="kw">in</span> custom_fields:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;field_id = f<span class="str">"Web Page-{f['fieldname']}"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if not</span> frappe.db.exists(<span class="str">"Custom Field"</span>, field_id):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frappe.get_doc({<span class="str">"doctype"</span>: <span class="str">"Custom Field"</span>, <span class="str">"dt"</span>: <span class="str">"Web Page"</span>, **f}).insert(ignore_permissions=<span class="kw">True</span>)</div>
+
+        <h3 style="margin:20px 0 10px;font-size:14px;color:#1a202c">Como usar no Knowledge Hub</h3>
+        <p>Após a instalação, abra qualquer Web Page no ERPNext. Role até o final do formulário — a seção <em>Auxiliary Blocks</em> estará disponível. Escreva HTML diretamente nos editores.</p>
+        <p>No template Jinja da página ou via API Python, acesse os campos assim:</p>
+        <div class="code-block">
+<span class="cm"># Via API Python (template Jinja no Web Page)</span><br>
+{{ doc.auxiliary_block_1 }}<br>
+{{ doc.auxiliary_block_2 }}<br>
+<br>
+<span class="cm"># Via frappe.db (script Python)</span><br>
+doc = frappe.get_doc(<span class="str">"Web Page"</span>, <span class="str">"knowledge-hub"</span>)<br>
+bloco_1 = doc.auxiliary_block_1<br>
+bloco_2 = doc.auxiliary_block_2<br>
+<br>
+<span class="cm"># Via API REST</span><br>
+GET /api/resource/Web Page/knowledge-hub<br>
+<span class="cm"># Retorna auxiliary_block_1 e auxiliary_block_2 no JSON</span></div>
+
+        <div class="alert alert-tip">
+          <strong>💡 Caso de uso prático:</strong> O Knowledge Hub da GREENFARMS usa <code>auxiliary_block_1</code> para renderizar um painel de acesso rápido aos conteúdos mais visitados, e <code>auxiliary_block_2</code> para um bloco de avisos e comunicados. Tudo gerenciado diretamente pelo editor do ERPNext, sem deploy de código.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-div">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 11: CASOS PRÁTICOS -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="caso1"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>🎯 11. Casos Práticos de Uso</h2></div>
+      <div class="card-body">
+
+        <h3 style="margin-bottom:16px;font-size:15px;color:#1a202c">Cenário 1 — Cadastrar um Relatório de RH no Catálogo</h3>
+        <p>A analista de RH quer registrar o relatório de absenteísmo mensal para que os gestores de RH possam encontrá-lo facilmente no portal.</p>
+
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Acesse GF Content Registry → Novo</h4>
+              <p>Menu ERPNext → GF Atlas App → GF Content Registry → botão <em>+ Novo</em>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Preencha Título e Tipo</h4>
+              <p><code>title = "Relatório de Absenteísmo Mensal"</code> | <code>item_type = REPORT</code></p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Selecione o Grupo de Conteúdo</h4>
+              <p><code>content_group = rh_relatorios_pessoas</code> → o campo <code>access_group</code> é preenchido automaticamente com <code>rh</code>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>Informe a Rota e o Responsável</h4>
+              <p><code>route_url = /app/query-report/Employee Analytics</code> | <code>responsible_user = rh@greenfarms.com</code></p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <h4>Salve — o ID é gerado automaticamente</h4>
+              <p>O registro recebe o nome <code>GF-REG-2026-00042</code> e fica disponível para consulta via API e portal.</p>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0">
+
+        <a class="section-anchor" id="caso2"></a>
+        <h3 style="margin-bottom:16px;font-size:15px;color:#1a202c">Cenário 2 — Criar um Novo Grupo de Conteúdo para uma Nova Área</h3>
+        <p>A empresa cria o departamento de <em>Inovação</em> e precisa de uma categoria de conteúdo dedicada na árvore.</p>
+
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Crie o Grupo de Acesso para Inovação</h4>
+              <p>GF Access Group → Novo: <code>internal_name = inovacao</code> | <code>display_name = Inovação</code> | <code>is_internal = true</code>. Adicione os usuários na aba Usuários.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Crie o Grupo Pai na Árvore</h4>
+              <p>GF Content Group → Novo: <code>internal_name = inovacao</code> | <code>display_name = Inovação</code> | <code>is_group = true</code> | <code>parent_group</code> em branco | <code>default_access_group = inovacao</code> | <code>icon = lightbulb</code> | <code>color = #7c3aed</code>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Crie as Subcategorias Filhas</h4>
+              <p>Ex.: <code>inovacao_projetos</code> com <code>parent_group = inovacao</code> | <code>is_group = false</code>. Repita para cada subcategoria necessária.</p>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0">
+
+        <a class="section-anchor" id="caso3"></a>
+        <h3 style="margin-bottom:16px;font-size:15px;color:#1a202c">Cenário 3 — Adicionar um Novo Colaborador ao Grupo de TI</h3>
+        <p>Um novo analista de TI foi contratado e precisa ter acesso ao conteúdo do departamento.</p>
+
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Garanta que o usuário existe no ERPNext</h4>
+              <p>Configurações → Usuário → verifique que o e-mail do novo colaborador já está cadastrado e ativo.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Abra o GF Access Group "ti"</h4>
+              <p>GF Access Group → abra o registro <code>ti</code> → aba Usuários.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Adicione uma nova linha na Child Table</h4>
+              <p>Clique em <em>Adicionar Linha</em>, selecione o usuário. O nome é preenchido automaticamente. Configure as permissões conforme o perfil do colaborador e salve.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>Acesso imediato</h4>
+              <p>No próximo login, o portal consultará o access_group do usuário e exibirá automaticamente todos os conteúdos de TI que estejam ativos.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 12: CHECKLIST -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="checklist"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>✅ 12. Checklist Pós-Instalação</h2></div>
+      <div class="card-body">
+        <p>Após instalar o GF Atlas App, verifique os itens abaixo para garantir que tudo está funcionando corretamente:</p>
+
+        <h3 style="margin:16px 0 10px;font-size:14px;color:#1a5c2a">Verificação dos DocTypes</h3>
+        <ul class="checklist">
+          <li>GF Access Group aparece no menu do módulo Ichis Atlas App</li>
+          <li>GF Content Group aparece em modo de árvore com a hierarquia carregada</li>
+          <li>GF Content Registry permite criar novos registros com autoname GF-REG-YYYY-#####</li>
+          <li>Ao selecionar um Content Group com default_access_group, o campo access_group é preenchido automaticamente</li>
+        </ul>
+
+        <h3 style="margin:20px 0 10px;font-size:14px;color:#1a5c2a">Verificação dos Dados Iniciais</h3>
+        <ul class="checklist">
+          <li>Roles GF Manager, GF Editor e GF Viewer existem em Configurações → Roles</li>
+          <li>37 grupos de acesso foram criados em GF Access Group</li>
+          <li>270+ grupos de conteúdo foram criados em GF Content Group (visualize na árvore)</li>
+          <li>Os grupos de conteúdo estão com seus ícones e cores corretos</li>
+        </ul>
+
+        <h3 style="margin:20px 0 10px;font-size:14px;color:#1a5c2a">Verificação dos Custom Fields</h3>
+        <ul class="checklist">
+          <li>Abra qualquer Web Page no ERPNext e role até o final — a seção "Auxiliary Blocks" deve aparecer</li>
+          <li>Os campos auxiliary_block_1 e auxiliary_block_2 são do tipo HTML Editor</li>
+          <li>É possível salvar conteúdo HTML nesses campos sem erros</li>
+          <li>Os campos aparecem na API: GET /api/resource/Web Page/{nome} retorna os dois campos</li>
+        </ul>
+
+        <h3 style="margin:20px 0 10px;font-size:14px;color:#1a5c2a">Verificação de Permissões</h3>
+        <ul class="checklist">
+          <li>Usuário com Role GF Manager consegue criar, editar e deletar nos 4 DocTypes</li>
+          <li>Usuário com Role GF Editor consegue criar e editar, mas não deletar</li>
+          <li>Usuário com Role GF Viewer consegue apenas visualizar registros</li>
+          <li>Usuário sem nenhuma Role GF não enxerga os DocTypes do atlas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SEÇÃO 13: FAQ -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <a class="section-anchor" id="faq"></a>
+  <div class="section">
+    <div class="card">
+      <div class="card-header"><h2>❓ 13. Perguntas Frequentes</h2></div>
+      <div class="card-body">
+
+        <div style="margin-bottom:20px">
+          <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">O GF Atlas substitui o controle de permissões do ERPNext?</h3>
+          <p style="font-size:14px;color:#4a5568;line-height:1.7">Não. O GF Atlas é complementar. O ERPNext controla quem pode acessar cada DocType. O GF Atlas controla quais <em>itens de conteúdo catalogados</em> (relatórios, links, PDFs…) cada grupo de usuários pode ver em portais e dashboards personalizados. Os dois sistemas coexistem.</p>
+        </div>
+
+        <div style="margin-bottom:20px">
+          <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">O que acontece se eu reinstalar o app?</h3>
+          <p style="font-size:14px;color:#4a5568;line-height:1.7">O <code>after_install</code> é idempotente: verifica se cada registro já existe antes de criar. Roles, grupos de acesso e grupos de conteúdo existentes não são sobrescritos. Os Custom Fields também são verificados antes de inserir.</p>
+        </div>
+
+        <div style="margin-bottom:20px">
+          <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">Posso adicionar novos campos aos DocTypes do GF Atlas?</h3>
+          <p style="font-size:14px;color:#4a5568;line-height:1.7">Sim, via <em>Custom Fields</em> do ERPNext. Evite alterar diretamente os arquivos JSON do repositório, pois isso pode causar conflitos em atualizações futuras. Use a interface de Customização de Formulário do ERPNext.</p>
+        </div>
+
+        <div style="margin-bottom:20px">
+          <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">Como consulto todos os conteúdos de um usuário específico?</h3>
+          <p style="font-size:14px;color:#4a5568;line-height:1.7">Determine o grupo de acesso do usuário (via GF Access Group User), depois filtre GF Content Registry por esse <code>access_group</code>, <code>status = ACTIVE</code> e <code>active = 1</code>. Ver exemplo de consulta na seção 8.2.</p>
+        </div>
+
+        <div style="margin-bottom:20px">
+          <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">Um conteúdo pode pertencer a mais de um grupo de acesso?</h3>
+          <p style="font-size:14px;color:#4a5568;line-height:1.7">No modelo atual, cada GF Content Registry tem um único <code>access_group</code>. Para que um conteúdo seja acessível por múltiplos grupos, crie registros duplicados com o mesmo <code>route_url</code> e diferentes <code>access_group</code>. Uma futura versão pode adicionar uma child table de grupos de acesso.</p>
+        </div>
+
+        <div>
+          <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">Os ícones Lucide funcionam automaticamente?</h3>
+          <p style="font-size:14px;color:#4a5568;line-height:1.7">O campo <code>icon</code> armazena apenas o nome do ícone (ex.: <code>users</code>, <code>bar-chart-2</code>). A renderização visual depende do template do portal. Para ativar, inclua a biblioteca Lucide Icons no HTML e chame <code>lucide.createIcons()</code> após o carregamento da página.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content-wrap -->
+
+<!-- RODAPÉ PADRÃO GREENFARMS -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff">
+  <tbody><tr>
+    <td style="text-align:center;font-size:12px;color:#a0aec0;padding:20px 0 40px 0;border-top:1px solid #e2e8f0;background:#ffffff">
+      GREENFARMS — Documentação Interna — 17/05/2026
+    </td>
+  </tr></tbody>
+</table>
+
+</main>
+</div><!-- /layout -->
+
+</body>
+</html>
