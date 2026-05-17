@@ -24,7 +24,7 @@
    "fieldname": "user",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Usuario",
+   "label": "Usuário",
    "options": "User",
    "reqd": 1
   },

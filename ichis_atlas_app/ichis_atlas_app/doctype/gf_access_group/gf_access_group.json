@@ -31,13 +31,13 @@
    "in_list_view": 1,
    "label": "Nome Interno",
    "reqd": 1,
-   "description": "Sem acentos, sem espacos, lowercase, underscore permitido."
+   "description": "Sem acentos, sem espaços, lowercase, underscore permitido."
   },
   {
    "fieldname": "display_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Nome de Exibicao",
+   "label": "Nome de Exibição",
    "reqd": 1
   },
   {
@@ -63,7 +63,7 @@
    "fieldtype": "Check",
    "label": "Restrito",
    "default": "0",
-   "description": "Acesso sensivel ou confidencial"
+   "description": "Acesso sensível ou confidencial"
   },
   {
    "fieldname": "system_group",
@@ -86,7 +86,7 @@
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Descricao"
+   "label": "Descrição"
   },
   {
    "fieldname": "cb_col2",
@@ -95,7 +95,7 @@
   {
    "fieldname": "default_landing_workspace",
    "fieldtype": "Data",
-   "label": "Workspace Padrao"
+   "label": "Workspace Padrão"
   },
   {
    "fieldname": "sort_order",
@@ -105,12 +105,12 @@
   {
    "fieldname": "sb_users",
    "fieldtype": "Section Break",
-   "label": "Usuarios do Grupo"
+   "label": "Usuários do Grupo"
   },
   {
    "fieldname": "users",
    "fieldtype": "Table",
-   "label": "Usuarios",
+   "label": "Usuários",
    "options": "GF Access Group User"
   }
  ],

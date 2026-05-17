@@ -37,7 +37,7 @@
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Titulo",
+   "label": "Título",
    "reqd": 1
   },
   {
@@ -64,7 +64,7 @@
    "fieldname": "content_group",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Grupo de Conteudo",
+   "label": "Grupo de Conteúdo",
    "options": "GF Content Group",
    "reqd": 1
   },
@@ -75,18 +75,18 @@
    "label": "Grupo de Acesso",
    "options": "GF Access Group",
    "reqd": 1,
-   "description": "Pre-preenchido automaticamente pelo Grupo de Conteudo. Editavel para excecoes."
+   "description": "Pré-preenchido automaticamente pelo Grupo de Conteúdo. Editável para exceções."
   },
   {
    "fieldname": "responsible_user",
    "fieldtype": "Link",
-   "label": "Responsavel",
+   "label": "Responsável",
    "options": "User"
   },
   {
    "fieldname": "sb_reference",
    "fieldtype": "Section Break",
-   "label": "Referencia"
+   "label": "Referência"
   },
   {
    "fieldname": "route_url",
@@ -97,7 +97,7 @@
   {
    "fieldname": "reference_doctype",
    "fieldtype": "Data",
-   "label": "DocType de Referencia"
+   "label": "DocType de Referência"
   },
   {
    "fieldname": "cb_ref",
@@ -106,7 +106,7 @@
   {
    "fieldname": "reference_name",
    "fieldtype": "Data",
-   "label": "Nome de Referencia"
+   "label": "Nome de Referência"
   },
   {
    "fieldname": "sb_details",
@@ -116,7 +116,7 @@
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Descricao"
+   "label": "Descrição"
   },
   {
    "fieldname": "tags",
@@ -130,7 +130,7 @@
   {
    "fieldname": "icon",
    "fieldtype": "Data",
-   "label": "Icone"
+   "label": "Ícone"
   },
   {
    "fieldname": "color",
@@ -140,7 +140,7 @@
   {
    "fieldname": "sb_config",
    "fieldtype": "Section Break",
-   "label": "Configuracoes"
+   "label": "Configurações"
   },
   {
    "fieldname": "sort_order",
