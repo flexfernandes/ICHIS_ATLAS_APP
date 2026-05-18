@@ -216,6 +216,39 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 }
 .btn-del:hover{background:#fee2e2;border-color:#fca5a5;color:#dc2626}
 
+/* ── Action toolbar ───────────────────────────────── */
+.gfsk-toolbar{
+  display:flex;align-items:center;gap:5px;flex-wrap:wrap;
+  padding:10px 20px;background:#fff;border-bottom:1px solid var(--border);
+  flex-shrink:0
+}
+.gfsk-toolbar-sep{width:1px;height:22px;background:var(--border);margin:0 3px;flex-shrink:0}
+.btn-act{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;
+  cursor:pointer;border:1px solid var(--border);background:#fff;
+  color:#475569;transition:all 150ms;white-space:nowrap
+}
+.btn-act:hover{background:var(--surface2);border-color:var(--border-h)}
+.btn-act.btn-primary{background:var(--primary);color:#fff;border-color:transparent}
+.btn-act.btn-primary:hover{background:var(--primary-h)}
+.btn-act.btn-outline{background:#fff;color:var(--primary);border-color:var(--primary-l)}
+.btn-act.btn-outline:hover{background:var(--primary-bg)}
+.btn-act.btn-danger{color:#dc2626}
+.btn-act.btn-danger:hover{background:#fee2e2;border-color:#fca5a5}
+.btn-act.btn-warn{color:#d97706}
+.btn-act.btn-warn:hover{background:#fef3c7;border-color:#fde68a}
+
+/* ── Version panel ────────────────────────────────── */
+.ver-panel{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:10px 20px;background:var(--primary-bg);border-bottom:1px solid var(--primary-pale);
+  flex-shrink:0;font-size:12px
+}
+.ver-panel-item{display:flex;align-items:center;gap:5px;color:var(--primary)}
+.ver-panel-item strong{font-weight:700}
+.ver-panel-item span{color:var(--text-m)}
+
 .gfsk-det-hdr-desc{
   font-size:13px;color:var(--text-m);line-height:1.5;
   padding-top:8px;border-top:1px solid var(--border)
@@ -316,15 +349,22 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .form-label .req{color:#dc2626;margin-left:2px}
 .form-desc{font-size:10.5px;color:var(--text-l);line-height:1.4;margin-top:1px}
 .form-control{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:7px;padding:8px 11px;font-size:13px;color:var(--text);
-  outline:none;transition:border-color 150ms;font-family:var(--font);
+  background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;
+  border-radius:7px;padding:8px 11px;font-size:13px;color:#0f172a !important;
+  outline:none;transition:border-color 150ms,box-shadow 150ms;font-family:var(--font);
   width:100%
 }
-.form-control:focus{border-color:var(--primary-l);box-shadow:0 0 0 3px rgba(22,163,74,.1)}
-textarea.form-control{resize:vertical;min-height:90px;line-height:1.5}
+.form-control:focus{
+  background:#ffffff !important;border-color:#16a34a !important;
+  box-shadow:0 0 0 3px rgba(22,163,74,.12) !important
+}
+textarea.form-control{
+  resize:vertical;min-height:90px;line-height:1.6;
+  background:#f7fef9 !important
+}
 textarea.form-control.mono{font-family:var(--mono);font-size:12.5px}
 select.form-control{cursor:pointer}
+.form-label{font-size:11px;font-weight:600;color:#166534 !important;letter-spacing:.3px}
 .form-check{display:flex;align-items:center;gap:8px;padding:8px 0}
 .form-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
 .form-check label{font-size:13px;color:var(--text);cursor:pointer}
@@ -660,6 +700,8 @@ class GFSkillApp {
     const isDraft = s.docstatus === 0;
     const stCls   = STATUS_COLORS[s.status] || 'draft';
 
+    const modified = s.modified ? s.modified.substring(0,16).replace('T',' ') : '—';
+
     $main.innerHTML = `
       <!-- Detail Header -->
       <div class="gfsk-det-hdr">
@@ -673,25 +715,57 @@ class GFSkillApp {
               <span class="badge badge-${stCls}">${this._esc(s.status||'Draft')}</span>
               ${s.category ? `<span class="badge badge-cat">${this._esc(s.category)}</span>` : ''}
               ${s.output_type ? `<span class="badge badge-out">${this._esc(s.output_type)}</span>` : ''}
+              ${s.skill_priority ? `<span class="badge badge-prio-${(s.skill_priority||'').toLowerCase()}">${this._esc(s.skill_priority)}</span>` : ''}
               <span class="sep">·</span>
               <span>v${this._esc(s.version||'1.0.0')}</span>
               ${s.skill_owner ? `<span class="sep">·</span><span>${this._esc(s.skill_owner)}</span>` : ''}
             </div>
           </div>
-          <div class="gfsk-det-hdr-actions">
-            ${isDraft ? `
-              <button class="btn-submit" onclick="app._submitSkill()">
-                <i data-lucide="send" style="width:13px;height:13px"></i> Submeter
-              </button>
-              <button class="btn-edit" onclick="app._startEdit()">
-                <i data-lucide="edit-2" style="width:13px;height:13px"></i> Editar
-              </button>` : ''}
-            <button class="btn-del" onclick="app._deleteSkill()" title="Excluir">
-              <i data-lucide="trash-2" style="width:14px;height:14px"></i>
-            </button>
-          </div>
         </div>
         ${s.short_description ? `<div class="gfsk-det-hdr-desc">${this._esc(s.short_description)}</div>` : ''}
+      </div>
+
+      <!-- Version panel -->
+      <div class="ver-panel">
+        <div class="ver-panel-item"><i data-lucide="tag" style="width:12px;height:12px"></i><span>Versão</span><strong>v${this._esc(s.version||'1.0.0')}</strong></div>
+        <div class="ver-panel-item"><i data-lucide="activity" style="width:12px;height:12px"></i><span>Status</span><strong>${this._esc(s.status||'—')}</strong></div>
+        <div class="ver-panel-item"><i data-lucide="clock" style="width:12px;height:12px"></i><span>Modificado</span><strong>${modified}</strong></div>
+        ${s.skill_owner ? `<div class="ver-panel-item"><i data-lucide="user" style="width:12px;height:12px"></i><span>Responsável</span><strong>${this._esc(s.skill_owner)}</strong></div>` : ''}
+        ${s.docstatus===1 ? '<div class="ver-panel-item" style="margin-left:auto"><span style="color:#166534;font-weight:600">✓ Submetido</span></div>' : ''}
+      </div>
+
+      <!-- Action toolbar -->
+      <div class="gfsk-toolbar">
+        ${isDraft ? `
+          <button class="btn-act btn-primary" onclick="app._startEdit()">
+            <i data-lucide="edit-2" style="width:13px;height:13px"></i> Editar
+          </button>
+          <button class="btn-act btn-outline" onclick="app._submitSkill()">
+            <i data-lucide="send" style="width:13px;height:13px"></i> Submeter
+          </button>
+        ` : ''}
+        <button class="btn-act" onclick="app._duplicateSkill()">
+          <i data-lucide="copy" style="width:13px;height:13px"></i> Duplicar
+        </button>
+        <button class="btn-act" onclick="app._newVersion()">
+          <i data-lucide="git-branch" style="width:13px;height:13px"></i> Nova Versão
+        </button>
+        <div class="gfsk-toolbar-sep"></div>
+        ${s.status !== 'Obsoleto' ? `
+          <button class="btn-act btn-warn" onclick="app._markObsolete()">
+            <i data-lucide="archive" style="width:13px;height:13px"></i> Marcar Obsoleto
+          </button>` : ''}
+        ${s.active ? `
+          <button class="btn-act btn-warn" onclick="app._inactivate()">
+            <i data-lucide="eye-off" style="width:13px;height:13px"></i> Inativar
+          </button>` : `
+          <button class="btn-act" onclick="app._activate()">
+            <i data-lucide="eye" style="width:13px;height:13px"></i> Ativar
+          </button>`}
+        <div class="gfsk-toolbar-sep"></div>
+        <button class="btn-act btn-danger" onclick="app._deleteSkill()">
+          <i data-lucide="trash-2" style="width:13px;height:13px"></i> Excluir
+        </button>
       </div>
 
       <!-- Tabs -->
@@ -1190,6 +1264,89 @@ class GFSkillApp {
         });
       }
     );
+  }
+
+  // ── Duplicate ─────────────────────────────────────
+  _duplicateSkill() {
+    if (!this.selected) return;
+    const s = this.selected;
+    this.mode      = 'new';
+    this.activeTab = 0;
+    this.selected  = null;
+    this.editData  = Object.assign({}, s, {
+      name: undefined,
+      internal_name: (s.internal_name || '') + '_copia',
+      skill_name:    (s.skill_name || '') + ' (Cópia)',
+      status:        'Draft',
+      docstatus:     0,
+      version:       '1.0.0',
+      full_prompt:   ''
+    });
+    document.querySelectorAll('.sk-card').forEach(c => c.classList.remove('active'));
+    this._renderEditMode();
+    this._toast('Skill duplicado. Ajuste os campos e salve.', 'info');
+  }
+
+  // ── New Version ───────────────────────────────────
+  _newVersion() {
+    if (!this.selected) return;
+    const s   = this.selected;
+    const ver = s.version || '1.0.0';
+    const parts = ver.split('.').map(Number);
+    parts[1] = (parts[1] || 0) + 1;
+    parts[2] = 0;
+    const newVer = parts.join('.');
+    this.mode      = 'new';
+    this.activeTab = 0;
+    this.selected  = null;
+    this.editData  = Object.assign({}, s, {
+      name:          undefined,
+      internal_name: (s.internal_name || '') + '_v' + newVer.replace(/\./g,'_'),
+      status:        'Draft',
+      docstatus:     0,
+      version:       newVer,
+      version_notes: `Nova versão a partir de v${ver}`,
+      full_prompt:   ''
+    });
+    document.querySelectorAll('.sk-card').forEach(c => c.classList.remove('active'));
+    this._renderEditMode();
+    this._toast(`Nova versão v${newVer} criada a partir de v${ver}. Ajuste e salve.`, 'info');
+  }
+
+  // ── Mark Obsolete ─────────────────────────────────
+  _markObsolete() {
+    if (!this.selected) return;
+    frappe.confirm('Marcar este Skill como Obsoleto?', () => {
+      frappe.call({
+        method: 'frappe.client.set_value',
+        args: { doctype:'GF Skill', name:this.selected.name, fieldname:'status', value:'Obsoleto' },
+        callback: () => { this._toast('Skill marcado como Obsoleto.', 'info'); this.selectSkill(this.selected.name); },
+        error:    () => { this._toast('Erro ao atualizar o status.', 'error'); }
+      });
+    });
+  }
+
+  // ── Inactivate / Activate ─────────────────────────
+  _inactivate() {
+    if (!this.selected) return;
+    frappe.confirm('Inativar este Skill?', () => {
+      frappe.call({
+        method: 'frappe.client.set_value',
+        args: { doctype:'GF Skill', name:this.selected.name, fieldname:'active', value:0 },
+        callback: () => { this._toast('Skill inativado.', 'info'); this.selectSkill(this.selected.name); },
+        error:    () => { this._toast('Erro ao inativar.', 'error'); }
+      });
+    });
+  }
+
+  _activate() {
+    if (!this.selected) return;
+    frappe.call({
+      method: 'frappe.client.set_value',
+      args: { doctype:'GF Skill', name:this.selected.name, fieldname:'active', value:1 },
+      callback: () => { this._toast('Skill ativado.', 'success'); this.selectSkill(this.selected.name); },
+      error:    () => { this._toast('Erro ao ativar.', 'error'); }
+    });
   }
 
   // ── Copy helper ───────────────────────────────────
