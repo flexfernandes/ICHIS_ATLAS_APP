@@ -496,8 +496,8 @@ class GFSkillApp {
   }
 
   async init() {
-    this._setupUser();
-    this._bindSidebar();
+    try { this._setupUser(); }    catch(e) { /* session not ready yet, skip */ }
+    try { this._bindSidebar(); } catch(e) {}
     await this._loadSkills();
     this._renderEmpty();
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
@@ -514,24 +514,25 @@ class GFSkillApp {
   }
 
   // ── Load Skills ───────────────────────────────────
-  async _loadSkills() {
-    try {
-      const r = await frappe.call({
-        method: 'frappe.client.get_list',
-        args: {
-          doctype: 'GF Skill',
-          fields: ['name','skill_name','internal_name','category','status','version',
-                   'short_description','skill_owner','active','output_type','skill_priority',
-                   'tags','docstatus'],
-          order_by: 'modified desc',
-          limit_page_length: 2000
-        }
-      });
-      this.skills = (r && r.message) ? r.message : [];
-    } catch(e) {
-      this.skills = [];
-    }
-    this._renderList();
+  _loadSkills() {
+    return new Promise((resolve) => {
+      const done = (data) => { this.skills = data || []; resolve(); };
+      try {
+        frappe.call({
+          method: 'frappe.client.get_list',
+          args: {
+            doctype: 'GF Skill',
+            fields: ['name','skill_name','internal_name','category','status','version',
+                     'short_description','skill_owner','active','output_type','skill_priority',
+                     'tags','docstatus'],
+            order_by: 'modified desc',
+            limit_page_length: 2000
+          },
+          callback: (r) => done((r && r.message) ? r.message : []),
+          error:    ()  => done([])
+        });
+      } catch(e) { done([]); }
+    });
   }
 
   // ── Sidebar bindings ──────────────────────────────
@@ -589,23 +590,26 @@ class GFSkillApp {
   }
 
   // ── Select skill ──────────────────────────────────
-  async selectSkill(name) {
+  selectSkill(name) {
     const $main = document.getElementById('gfsk-main');
     $main.innerHTML = `<div class="gfsk-loading" style="flex:1"><div class="spinner"></div><span>Carregando...</span></div>`;
-    try {
-      const r = await frappe.call({
-        method: 'frappe.client.get',
-        args: { doctype:'GF Skill', name }
-      });
-      this.selected  = r.message;
-      this.activeTab = 0;
-      this.mode      = 'view';
-      this._renderView();
-      this._markActive(name);
-    } catch(e) {
-      this._toast('Erro ao carregar o Skill.','error');
-      this._renderEmpty();
-    }
+    frappe.call({
+      method: 'frappe.client.get',
+      args: { doctype:'GF Skill', name },
+      callback: (r) => {
+        if (r && r.message) {
+          this.selected  = r.message;
+          this.activeTab = 0;
+          this.mode      = 'view';
+          this._renderView();
+          this._markActive(name);
+        } else {
+          this._toast('Skill não encontrado.','error');
+          this._renderEmpty();
+        }
+      },
+      error: () => { this._toast('Erro ao carregar o Skill.','error'); this._renderEmpty(); }
+    });
   }
 
   _markActive(name) {
@@ -1102,72 +1106,75 @@ class GFSkillApp {
 
     this._saving = true;
     const $btn = document.getElementById('gfsk-btn-save');
+    const resetBtn = () => {
+      if ($btn) { $btn.disabled = false; $btn.innerHTML = '<i data-lucide="save" style="width:14px;height:14px"></i> Salvar Skill'; if(window.lucide)lucide.createIcons({attrs:{style:'display:block'}}); }
+      this._saving = false;
+    };
     if ($btn) { $btn.disabled = true; $btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px"></div> Salvando...'; }
 
-    try {
-      let result;
-      if (this.mode === 'new') {
-        const r = await frappe.call({
-          method: 'frappe.client.insert',
-          args: { doc: Object.assign({ doctype:'GF Skill' }, d) }
-        });
-        result = r.message;
-      } else {
-        const r = await frappe.call({
-          method: 'frappe.client.save',
-          args: { doc: Object.assign({ doctype:'GF Skill', name:this.selected.name }, d) }
-        });
-        result = r.message;
-      }
-      this._toast('Skill salvo com sucesso!', 'success');
-      await this._loadSkills();
-      this.selected  = result;
-      this.mode      = 'view';
-      this.activeTab = 0;
-      this._renderView();
-      this._markActive(result.name);
-    } catch(e) {
-      const msg = (e && e.message) ? e.message : 'Erro ao salvar o Skill.';
-      this._toast(msg, 'error');
-      if ($btn) { $btn.disabled = false; $btn.innerHTML = '<i data-lucide="save" style="width:14px;height:14px"></i> Salvar Skill'; if(window.lucide)lucide.createIcons({attrs:{style:'display:block'}}); }
-    }
-    this._saving = false;
+    const method = this.mode === 'new' ? 'frappe.client.insert' : 'frappe.client.save';
+    const doc    = this.mode === 'new'
+      ? Object.assign({ doctype:'GF Skill' }, d)
+      : Object.assign({ doctype:'GF Skill', name:this.selected.name }, d);
+
+    frappe.call({
+      method,
+      args: { doc },
+      callback: (r) => {
+        if (r && r.message) {
+          this._toast('Skill salvo com sucesso!', 'success');
+          const saved = r.message;
+          this._loadSkills().then(() => {
+            this.selected  = saved;
+            this.mode      = 'view';
+            this.activeTab = 0;
+            this._renderView();
+            this._markActive(saved.name);
+          });
+        } else {
+          this._toast('Erro ao salvar o Skill.', 'error');
+          resetBtn();
+        }
+      },
+      error: () => { this._toast('Erro ao salvar o Skill.', 'error'); resetBtn(); }
+    });
   }
 
   // ── Submit ────────────────────────────────────────
-  async _submitSkill() {
+  _submitSkill() {
     if (!this.selected) return;
-    const conf = await this._confirm('Submeter o Skill? Após submetido, não poderá ser editado diretamente.');
-    if (!conf) return;
-    try {
-      await frappe.call({
-        method: 'frappe.client.submit',
-        args: { doc: { doctype:'GF Skill', name:this.selected.name } }
-      });
-      this._toast('Skill submetido com sucesso!', 'success');
-      await this.selectSkill(this.selected.name);
-    } catch(e) {
-      this._toast('Erro ao submeter o Skill.', 'error');
-    }
+    const name = this.selected.name;
+    frappe.confirm('Submeter o Skill? Após submetido, não poderá ser editado diretamente.',
+      () => {
+        frappe.call({
+          method: 'frappe.client.submit',
+          args: { doc: { doctype:'GF Skill', name } },
+          callback: () => { this._toast('Skill submetido!', 'success'); this.selectSkill(name); },
+          error:    () => { this._toast('Erro ao submeter o Skill.', 'error'); }
+        });
+      }
+    );
   }
 
   // ── Delete ────────────────────────────────────────
-  async _deleteSkill() {
+  _deleteSkill() {
     if (!this.selected) return;
-    const conf = await this._confirm(`Excluir o Skill "${this.selected.skill_name}"? Esta ação não pode ser desfeita.`);
-    if (!conf) return;
-    try {
-      await frappe.call({
-        method: 'frappe.client.delete',
-        args: { doctype:'GF Skill', name:this.selected.name }
-      });
-      this._toast('Skill excluído.', 'info');
-      this.selected = null;
-      await this._loadSkills();
-      this._renderEmpty();
-    } catch(e) {
-      this._toast('Erro ao excluir. Verifique permissões.', 'error');
-    }
+    const name  = this.selected.name;
+    const label = this.selected.skill_name || name;
+    frappe.confirm(`Excluir o Skill "${label}"? Esta ação não pode ser desfeita.`,
+      () => {
+        frappe.call({
+          method: 'frappe.client.delete',
+          args: { doctype:'GF Skill', name },
+          callback: () => {
+            this._toast('Skill excluído.', 'info');
+            this.selected = null;
+            this._loadSkills().then(() => this._renderEmpty());
+          },
+          error: () => { this._toast('Erro ao excluir. Verifique permissões.', 'error'); }
+        });
+      }
+    );
   }
 
   // ── Copy helper ───────────────────────────────────
