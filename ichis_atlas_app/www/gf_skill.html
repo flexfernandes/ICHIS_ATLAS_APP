@@ -1223,7 +1223,7 @@ class GFSkillApp {
     const d   = this.editData;
     const sel = (opts, val) => opts.map(o=>`<option value="${this._esc(o)}"${o===val?' selected':''}>${this._esc(o||'—')}</option>`).join('');
     const txt = (f, rows=4) => {
-      const h = (rows * 28 + 40) + 'px';
+      const h = ((rows * 28 + 40) * 3) + 'px';
       return `<textarea data-cm="${f}" data-height="${h}" style="display:none">${this._esc(d[f]||'')}</textarea>`;
     };
     const inp = (f, ph='') =>
@@ -1311,7 +1311,7 @@ class GFSkillApp {
               Script CSS
               <span style="font-size:9px;background:#1e293b;color:#93c5fd;padding:2px 6px;border-radius:4px;font-family:monospace;font-weight:600">CSS</span>
             </label>
-            <textarea data-cm="css_script" data-mode="css" data-height="420px" style="display:none">${this._esc(d.css_script||'')}</textarea>
+            <textarea data-cm="css_script" data-mode="css" data-height="1260px" style="display:none">${this._esc(d.css_script||'')}</textarea>
             <div class="form-desc" style="margin-top:8px">CSS aplicado automaticamente ao HTML gerado por este Skill. Sobrescreve estilos padrão do GF Atlas.</div>
           </div>
         </div>`;
@@ -1498,11 +1498,11 @@ class GFSkillApp {
     if (!window.CodeMirror) return;
     document.querySelectorAll('#gfsk-tab-body textarea[data-cm]').forEach(ta => {
       const field  = ta.dataset.cm;
-      const mode   = ta.dataset.mode || null;
-      const height = ta.dataset.height || '140px';
-      const wrap   = !mode; // texto puro quebra linha; código não
+      const mode   = ta.dataset.mode || 'markdown';
+      const height = ta.dataset.height || '456px';
+      const wrap   = !ta.dataset.mode; // markdown quebra linha; css não
       const cm = CodeMirror.fromTextArea(ta, {
-        mode:           mode || null,
+        mode:           mode,
         theme:          'material-darker',
         lineNumbers:    true,
         lineWrapping:   wrap,
