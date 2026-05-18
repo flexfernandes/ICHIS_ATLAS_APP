@@ -1,5 +1,5 @@
 INSTRUÇÃO INICIAL PARA DESENVOLVIMENTO DO GF SKILL
-================================================================================
+================================================================================  
 
 Com base em todas as informações descritas abaixo, desenvolver integralmente o
 Doctype `GF Skill` dentro do app em desenvolvimento, seguindo rigorosamente
