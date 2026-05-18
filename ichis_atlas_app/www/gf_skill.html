@@ -527,9 +527,8 @@ class GFSkillApp {
           limit_page_length: 2000
         }
       });
-      this.skills = r.message || [];
+      this.skills = (r && r.message) ? r.message : [];
     } catch(e) {
-      this._toast('Erro ao carregar Skills.','error');
       this.skills = [];
     }
     this._renderList();
@@ -1216,11 +1215,9 @@ class GFSkillApp {
 
 // ── Boot ───────────────────────────────────────────
 let app;
-$(document).ready(() => {
-  frappe.after_ajax(() => {
-    app = new GFSkillApp();
-    app.init();
-  });
+$(function() {
+  app = new GFSkillApp();
+  app.init();
 });
 </script>
 {% endblock %}
