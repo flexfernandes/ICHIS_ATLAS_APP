@@ -514,9 +514,20 @@ class GFSkillApp {
   }
 
   // ── Load Skills ───────────────────────────────────
+  // NOTE: when tabGF Skill doesn't exist yet (pre-migrate), Frappe returns HTTP 200
+  // with {"exc":"...traceback..."} — it shows its own alert and silently drops both
+  // callback and error handlers, leaving the Promise pending forever.
+  // The timeout is the only reliable escape hatch in that scenario.
   _loadSkills() {
     return new Promise((resolve) => {
-      const done = (data) => { this.skills = data || []; resolve(); };
+      const done = (data) => {
+        clearTimeout(timer);
+        this.skills = data || [];
+        this._renderList();
+        resolve();
+      };
+      // 6-second safety timeout: resolves even if frappe.call never responds
+      const timer = setTimeout(() => done([]), 6000);
       try {
         frappe.call({
           method: 'frappe.client.get_list',
@@ -526,7 +537,8 @@ class GFSkillApp {
                      'short_description','skill_owner','active','output_type','skill_priority',
                      'tags','docstatus'],
             order_by: 'modified desc',
-            limit_page_length: 2000
+            limit_page_length: 2000,
+            freeze: false
           },
           callback: (r) => done((r && r.message) ? r.message : []),
           error:    ()  => done([])
