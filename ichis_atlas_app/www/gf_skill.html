@@ -940,6 +940,9 @@ class GFSkillApp {
       </div>`;
 
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    this._initFieldViewers();
+    if (this.activeTab === 3) this._initCssViewer();
+    if (this.activeTab === 8) this._initPromptViewer();
   }
 
   // ── Tab bar ───────────────────────────────────────
@@ -965,7 +968,7 @@ class GFSkillApp {
         : this._renderTabContent(idx);
       if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
       if (this.mode==='edit'||this.mode==='new') this._initTabEditors();
-      else if (idx === 3) this._initCssViewer();
+      else { this._initFieldViewers(); if (idx===3) this._initCssViewer(); }
       if (idx === 8) this._initPromptViewer();
     }
   }
@@ -995,6 +998,26 @@ class GFSkillApp {
               : `<i data-lucide="x-circle" style="width:14px;height:14px" class="fld-check-no"></i><span>Não</span>`}
       </div>
     </div>`;
+    const fldCM = (label, val, id, mode='markdown') => {
+      if (!val) return `<div class="fld-box" style="grid-column:1/-1">
+        <div class="fld-lbl">${label}</div>
+        <div class="fld-val empty">—</div>
+      </div>`;
+      const lines = val.split('\n').length;
+      return `<div class="fld-box" style="grid-column:1/-1">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
+          <div class="fld-lbl" style="margin:0">${label}</div>
+          <div class="prompt-meta" style="margin:0">
+            <div class="prompt-meta-item"><i data-lucide="list" style="width:12px;height:12px"></i> <strong>${lines}</strong> linhas</div>
+            <div class="prompt-meta-item"><i data-lucide="hash" style="width:12px;height:12px"></i> <strong>${val.length}</strong> chars</div>
+            <button class="btn-copy" onclick="app._copyViewerById('${id}',this)">
+              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar
+            </button>
+          </div>
+        </div>
+        <textarea data-view-cm="${id}" data-view-mode="${mode}" style="display:none">${this._esc(val)}</textarea>
+      </div>`;
+    };
 
     switch(idx) {
       case 0: {
@@ -1087,20 +1110,18 @@ class GFSkillApp {
 
       case 1: return `
         <div class="fld-grid full">
-          ${fldFull('Main Instructions', v('main_instructions'), true)}
-          ${fldFull('Mandatory Rules', v('mandatory_rules'), true)}
-          ${fldFull('Forbidden Actions', v('forbidden_actions'), true)}
-          ${fldFull('Validation Checklist', v('validation_checklist'), true)}
+          ${fldCM('Main Instructions', v('main_instructions'), 'main_instructions')}
+          ${fldCM('Mandatory Rules', v('mandatory_rules'), 'mandatory_rules')}
+          ${fldCM('Forbidden Actions', v('forbidden_actions'), 'forbidden_actions')}
+          ${fldCM('Validation Checklist', v('validation_checklist'), 'validation_checklist')}
         </div>`;
 
       case 2: return `
-        <div class="fld-grid">
-          ${fld('Writing Style', v('writing_style'))}
-          ${fld('Visual Style', v('visual_style'))}
-          ${fld('Tone of Voice', v('tone_of_voice'))}
-        </div>
         <div class="fld-grid full">
-          ${fldFull('Formatting Rules', v('formatting_rules'), true)}
+          ${fldCM('Writing Style', v('writing_style'), 'writing_style')}
+          ${fldCM('Visual Style', v('visual_style'), 'visual_style')}
+          ${fldCM('Tone of Voice', v('tone_of_voice'), 'tone_of_voice')}
+          ${fldCM('Formatting Rules', v('formatting_rules'), 'formatting_rules')}
         </div>`;
 
       case 3: {
@@ -1122,44 +1143,26 @@ class GFSkillApp {
       }
 
       case 4: return v('header_template') ? `
-        <div class="code-block" style="margin-bottom:14px">
-          <div class="code-block-bar">
-            <span class="code-block-label">Header Template</span>
-            <button class="btn-copy" onclick="app._copyText(\`${this._escJs(v('header_template'))}\`, this)">
-              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar
-            </button>
-          </div>
-          <pre>${this._esc(v('header_template'))}</pre>
+        <div class="fld-grid full">
+          ${fldCM('Header Template', v('header_template'), 'header_template')}
+          ${fldCM('Header Notes', v('header_notes'), 'header_notes')}
         </div>
-        ${v('header_notes') ? fldFull('Header Notes', v('header_notes')) : ''}
       ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
         <p>Nenhum template de cabeçalho definido.</p></div>`;
 
       case 5: return v('footer_template') ? `
-        <div class="code-block" style="margin-bottom:14px">
-          <div class="code-block-bar">
-            <span class="code-block-label">Footer Template</span>
-            <button class="btn-copy" onclick="app._copyText(\`${this._escJs(v('footer_template'))}\`, this)">
-              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar
-            </button>
-          </div>
-          <pre>${this._esc(v('footer_template'))}</pre>
+        <div class="fld-grid full">
+          ${fldCM('Footer Template', v('footer_template'), 'footer_template')}
+          ${fldCM('Footer Notes', v('footer_notes'), 'footer_notes')}
         </div>
-        ${v('footer_notes') ? fldFull('Footer Notes', v('footer_notes')) : ''}
       ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
         <p>Nenhum template de rodapé definido.</p></div>`;
 
       case 6: return v('full_example') ? `
-        <div class="code-block" style="margin-bottom:14px">
-          <div class="code-block-bar">
-            <span class="code-block-label">Full Example</span>
-            <button class="btn-copy" onclick="app._copyText(\`${this._escJs(v('full_example'))}\`, this)">
-              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar
-            </button>
-          </div>
-          <pre>${this._esc(v('full_example'))}</pre>
+        <div class="fld-grid full">
+          ${fldCM('Full Example', v('full_example'), 'full_example')}
+          ${fldCM('Example Notes', v('example_notes'), 'example_notes')}
         </div>
-        ${v('example_notes') ? fldFull('Example Notes', v('example_notes')) : ''}
       ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
         <p>Nenhum exemplo completo definido.</p></div>`;
 
@@ -1189,8 +1192,8 @@ class GFSkillApp {
           ${chk('Allow API Usage', v('allow_api_usage'))}
         </div>
         <div class="fld-grid full">
-          ${fldFull('Review Notes', v('review_notes'))}
-          ${fldFull('Version History', v('version_history'), true)}
+          ${fldCM('Review Notes', v('review_notes'), 'review_notes')}
+          ${fldCM('Version History', v('version_history'), 'version_history')}
         </div>`;
 
       case 8: {
@@ -1513,6 +1516,36 @@ class GFSkillApp {
       cm.setSize('100%', height);
       cm.on('change', (cm) => { this._fd(field, cm.getValue()); });
     });
+  }
+
+  // ── Field Viewers (CodeMirror read-only — todos os campos de texto) ──
+  _initFieldViewers() {
+    if (!window.CodeMirror) return;
+    if (this._cmViewers) {
+      Object.values(this._cmViewers).forEach(cm => { try { cm.toTextArea(); } catch(e){} });
+    }
+    this._cmViewers = {};
+    document.querySelectorAll('#gfsk-tab-body textarea[data-view-cm]').forEach(ta => {
+      const id   = ta.dataset.viewCm;
+      const mode = ta.dataset.viewMode || 'markdown';
+      const wrap = mode === 'markdown';
+      const cm = CodeMirror.fromTextArea(ta, {
+        mode,
+        theme:        'material-darker',
+        lineNumbers:  true,
+        lineWrapping: wrap,
+        readOnly:     true,
+        tabSize:      2
+      });
+      cm.setSize('100%', '540px');
+      this._cmViewers[id] = cm;
+    });
+  }
+
+  _copyViewerById(id, btn) {
+    const cm = this._cmViewers && this._cmViewers[id];
+    const text = cm ? cm.getValue() : '';
+    if (text) this._copyText(text, btn);
   }
 
   // ── CSS Viewer (CodeMirror read-only) ────────────
