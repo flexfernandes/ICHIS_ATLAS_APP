@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/markdown/markdown.min.js"></script>
 <style>
 /* ── Reset & base ─────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -221,7 +223,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 /* ── Action toolbar ───────────────────────────────── */
 .gfsk-toolbar{
   display:flex;align-items:center;gap:5px;flex-wrap:wrap;
-  padding:9px 20px;background:var(--surface);border-bottom:1px solid var(--border);
+  padding:9px 20px;background:var(--surface);
   flex-shrink:0
 }
 .gfsk-toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 4px;flex-shrink:0}
@@ -963,6 +965,7 @@ class GFSkillApp {
         : this._renderTabContent(idx);
       if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
       if (idx === 3 && (this.mode==='edit'||this.mode==='new')) this._initCssEditor();
+      if (idx === 8) this._initPromptViewer();
     }
   }
 
@@ -1203,16 +1206,11 @@ class GFSkillApp {
               <strong>${chars}</strong> caracteres</div>
             <div class="prompt-meta-item"><i data-lucide="zap" style="width:13px;height:13px"></i>
               <strong>v${this._esc(v('version')||'—')}</strong></div>
+            <button class="btn-copy" style="margin-left:auto" onclick="app._copyPrompt(this)">
+              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar Prompt
+            </button>
           </div>
-          <div class="code-block">
-            <div class="code-block-bar">
-              <span class="code-block-label">Full Prompt — Gerado Automaticamente</span>
-              <button class="btn-copy" onclick="app._copyText(\`${this._escJs(fp)}\`, this)">
-                <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar Prompt
-              </button>
-            </div>
-            <pre>${this._esc(fp)}</pre>
-          </div>`;
+          <textarea id="gfsk-prompt-viewer" style="display:none">${this._esc(fp)}</textarea>`;
       }
 
       default: return '';
@@ -1396,15 +1394,10 @@ class GFSkillApp {
             <div class="prompt-meta-item" style="color:#94a3b8;font-style:italic">
               Será regenerado ao salvar</div>
           </div>
-          <div class="code-block">
-            <div class="code-block-bar">
-              <span class="code-block-label">Full Prompt — Gerado Automaticamente</span>
-              <button class="btn-copy" onclick="app._copyText(\`${this._escJs(fp)}\`, this)">
-                <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar Prompt
-              </button>
-            </div>
-            <pre>${this._esc(fp)}</pre>
-          </div>`;
+          <button class="btn-copy" style="margin-left:auto;align-self:flex-start" onclick="app._copyPrompt(this)">
+            <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar Prompt
+          </button>
+          <textarea id="gfsk-prompt-viewer" style="display:none">${this._esc(fp)}</textarea>`;
       }
 
       default: return '';
@@ -1518,6 +1511,28 @@ class GFSkillApp {
     this._cmEditor.on('change', (cm) => { this._fd('css_script', cm.getValue()); });
   }
 
+  // ── Prompt Viewer (CodeMirror read-only) ─────────
+  _initPromptViewer() {
+    if (!window.CodeMirror) return;
+    const ta = document.getElementById('gfsk-prompt-viewer');
+    if (!ta) return;
+    if (this._cmPrompt) { try { this._cmPrompt.toTextArea(); } catch(e){} this._cmPrompt = null; }
+    this._cmPrompt = CodeMirror.fromTextArea(ta, {
+      mode: 'markdown',
+      theme: 'material-darker',
+      lineNumbers: true,
+      lineWrapping: true,
+      readOnly: true,
+      tabSize: 2
+    });
+    this._cmPrompt.setSize('100%', '540px');
+  }
+
+  _copyPrompt(btn) {
+    const text = this._cmPrompt ? this._cmPrompt.getValue() : '';
+    if (text) this._copyText(text, btn);
+  }
+
   // ── Cancel edit ───────────────────────────────────
   _cancelEdit() {
     if (this.selected) {
@@ -1575,6 +1590,7 @@ class GFSkillApp {
           if (r && r.message) {
             const saved = r.message;
             const finish = () => {
+              this._saving = false;
               this._loadSkills().then(() => {
                 this.selected  = saved;
                 this.mode      = 'view';
