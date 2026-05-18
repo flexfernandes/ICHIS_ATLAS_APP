@@ -591,9 +591,9 @@ select.form-control{cursor:pointer}
       </div>
 
       <div class="gfsk-sb-filters" id="gfsk-filters">
-        <span class="gfsk-sb-filter active" data-status="">Todos</span>
+        <span class="gfsk-sb-filter" data-status="">Todos</span>
         <span class="gfsk-sb-filter" data-status="Draft">Draft</span>
-        <span class="gfsk-sb-filter" data-status="Submetido">Submetidos</span>
+        <span class="gfsk-sb-filter active" data-status="Submetido">Submetidos</span>
         <span class="gfsk-sb-filter" data-status="Ativo">Ativos</span>
         <span class="gfsk-sb-filter" data-status="Obsoleto">Obsoletos</span>
       </div>
@@ -663,7 +663,7 @@ class GFSkillApp {
     this.activeTab  = 0;
     this.editData   = {};
     this.filterQ    = '';
-    this.filterSt   = '';
+    this.filterSt   = 'Submetido';
     this._saving    = false;
   }
 
@@ -890,7 +890,7 @@ class GFSkillApp {
           <button class="btn-act" onclick="app._duplicateSkill()">
             <i data-lucide="copy" style="width:13px;height:13px"></i> Duplicar
           </button>
-          ${s.status === 'Submetido' ? `
+          ${s.status === 'Submetido' && s.active ? `
           <button class="btn-act" onclick="app._newVersion()">
             <i data-lucide="git-branch" style="width:13px;height:13px"></i> Nova Versão
           </button>` : ''}
@@ -902,13 +902,6 @@ class GFSkillApp {
           <button class="btn-act btn-warn" onclick="app._markObsolete()">
             <i data-lucide="archive" style="width:13px;height:13px"></i> Marcar Obsoleto
           </button>
-          ${s.active ? `
-            <button class="btn-act btn-warn" onclick="app._inactivate()">
-              <i data-lucide="eye-off" style="width:13px;height:13px"></i> Inativar
-            </button>` : `
-            <button class="btn-act" onclick="app._activate()">
-              <i data-lucide="eye" style="width:13px;height:13px"></i> Ativar
-            </button>`}
           ${isDraft ? `
             <div class="gfsk-toolbar-sep"></div>
             <button class="btn-act btn-danger" onclick="app._deleteSkill()">
