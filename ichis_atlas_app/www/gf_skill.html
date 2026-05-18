@@ -1212,14 +1212,14 @@ class GFSkillApp {
           ${grp('Skill Name', inp('skill_name','Ex: Documentação Interna HTML'),
             'Nome amigável de identificação principal.', true)}
           ${grp('Internal Name',
-            this.mode === 'new'
+            (this.mode === 'new' && !d._isNewVersion)
               ? inp('internal_name','Ex: gf_internal_html_doc')
               : `<div class="form-control" style="background:#f1f5f9;color:#64748b;font-family:monospace;cursor:default;display:flex;align-items:center;gap:6px">
                    <i data-lucide="lock" style="width:12px;height:12px;flex-shrink:0"></i>${this._esc(d.internal_name||'')}
                  </div>`,
-            this.mode === 'new'
+            (this.mode === 'new' && !d._isNewVersion)
               ? 'Gerado automaticamente — não pode ser alterado após criação.'
-              : 'Identificador técnico bloqueado — usado como chave de localização da página.', true)}
+              : 'Identificador técnico bloqueado — não se altera entre versões.', true)}
           ${grp('Category', dd('category', CATEGORIES), 'Agrupamento funcional.', true)}
           ${grp('Status', dd('status', STATUSES), 'Situação atual do Skill.', true)}
           ${grp('Version',
@@ -1394,8 +1394,14 @@ class GFSkillApp {
 
   // ── Render edit/new mode ──────────────────────────
   _renderEditMode() {
-    const isNew = this.mode === 'new';
-    const title = isNew ? 'Novo Skill' : `Editando: ${this.editData.skill_name||this.editData.name||'—'}`;
+    const isNew       = this.mode === 'new';
+    const isNewVer    = isNew && !!this.editData._isNewVersion;
+    const title       = isNewVer
+      ? `Nova Versão — ${this.editData.skill_name || '—'} (v${this.editData.version || '—'})`
+      : isNew ? 'Novo Skill'
+      : `Editando: ${this.editData.skill_name || this.editData.name || '—'}`;
+    const saveLabel   = isNewVer ? 'Salvar Nova Versão' : 'Salvar Skill';
+    const saveIcon    = isNewVer ? 'git-branch' : 'save';
     const $main = document.getElementById('gfsk-main');
     $main.innerHTML = `
       <div class="gfsk-form-hdr">
@@ -1406,7 +1412,7 @@ class GFSkillApp {
       </div>
       <div class="gfsk-toolbar">
         <button class="btn-act btn-primary" id="gfsk-btn-save" onclick="app._save()">
-          <i data-lucide="save" style="width:13px;height:13px"></i> Salvar Skill
+          <i data-lucide="${saveIcon}" style="width:13px;height:13px"></i> ${saveLabel}
         </button>
         <button class="btn-act" onclick="app._cancelEdit()">
           <i data-lucide="x" style="width:13px;height:13px"></i> Cancelar
@@ -1424,8 +1430,8 @@ class GFSkillApp {
       <div class="gfsk-form-foot">
         <button class="btn-cancel" onclick="app._cancelEdit()">Cancelar</button>
         <button class="btn-save" onclick="app._save()">
-          <i data-lucide="save" style="width:14px;height:14px"></i>
-          Salvar Skill
+          <i data-lucide="${saveIcon}" style="width:14px;height:14px"></i>
+          ${saveLabel}
         </button>
       </div>`;
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
@@ -1617,7 +1623,8 @@ class GFSkillApp {
       version_notes:    `v${newVer} — Criado a partir de "${originRef}" v${ver} em ${today}.`,
       version_history:  newHistory,
       full_prompt:      '',
-      _originSkillName: s.name   // usado em _save() para desativar a versão anterior
+      _originSkillName: s.name,  // usado em _save() para desativar a versão anterior
+      _isNewVersion:    true     // diferencia "nova versão" de "novo skill do zero"
     });
     document.querySelectorAll('.sk-card').forEach(c => c.classList.remove('active'));
     this._renderEditMode();
