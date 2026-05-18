@@ -60,6 +60,7 @@
   "skill_priority",
   "sb_tech_review",
   "last_reviewed_on",
+  "previous_version",
   "review_notes",
   "cb_t2",
   "version_history",
@@ -381,7 +382,18 @@
    "fieldname": "last_reviewed_on",
    "fieldtype": "Date",
    "label": "Last Reviewed On",
-   "description": "Data da última validação técnica realizada."
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "description": "Preenchido automaticamente a cada salvamento."
+  },
+  {
+   "fieldname": "previous_version",
+   "fieldtype": "Link",
+   "label": "Referência da Versão Anterior",
+   "options": "GF Skill",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "description": "Skill de origem desta versão — preenchido automaticamente ao criar Nova Versão."
   },
   {
    "fieldname": "review_notes",

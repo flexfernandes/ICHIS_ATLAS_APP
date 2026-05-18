@@ -1140,7 +1140,19 @@ class GFSkillApp {
           ${fld('Related Module', v('related_module'))}
           ${fld('Related Doctype', v('related_doctype'))}
           ${fld('Skill Priority', v('skill_priority'))}
-          ${fld('Last Reviewed On', v('last_reviewed_on'))}
+          <div class="fld-box">
+            <div class="fld-lbl">Last Reviewed On <span style="font-size:9px;color:#94a3b8;font-weight:400;margin-left:4px">auto</span></div>
+            <div class="fld-val${!v('last_reviewed_on')?' empty':''}">${v('last_reviewed_on')||'—'}</div>
+          </div>
+          <div class="fld-box">
+            <div class="fld-lbl">Referência da Versão Anterior <span style="font-size:9px;color:#94a3b8;font-weight:400;margin-left:4px">auto</span></div>
+            ${v('previous_version')
+              ? `<div class="fld-val mono" style="display:flex;align-items:center;gap:6px">
+                   <i data-lucide="git-branch" style="width:12px;height:12px;color:#64748b;flex-shrink:0"></i>
+                   ${this._esc(v('previous_version'))}
+                 </div>`
+              : `<div class="fld-val empty">— Versão inicial</div>`}
+          </div>
           ${chk('Is System Skill', v('is_system_skill'))}
           ${chk('Allow Export', v('allow_export'))}
           ${chk('Allow API Usage', v('allow_api_usage'))}
@@ -1301,9 +1313,17 @@ class GFSkillApp {
           ${grp('Skill Priority', dd('skill_priority', PRIORITIES),
             'Prioridade operacional.')}
           ${grp('Last Reviewed On',
-            `<input class="form-control" type="date" value="${this._esc(d.last_reviewed_on||'')}"
-               onchange="app._fd('last_reviewed_on',this.value)">`,
-            'Data da última revisão técnica.')}
+            `<div class="form-control" style="background:#f1f5f9;color:#64748b;cursor:default;display:flex;align-items:center;gap:6px">
+               <i data-lucide="calendar" style="width:12px;height:12px;flex-shrink:0"></i>
+               ${d.last_reviewed_on ? this._esc(d.last_reviewed_on) : 'Preenchido automaticamente ao salvar'}
+             </div>`,
+            'Atualizado automaticamente a cada salvamento.')}
+          ${grp('Referência da Versão Anterior',
+            `<div class="form-control" style="background:#f1f5f9;color:#64748b;cursor:default;display:flex;align-items:center;gap:6px;font-family:monospace">
+               <i data-lucide="git-branch" style="width:12px;height:12px;flex-shrink:0"></i>
+               ${d.previous_version ? this._esc(d.previous_version) : '— Versão inicial (sem origem)'}
+             </div>`,
+            'Preenchido automaticamente ao criar Nova Versão — somente leitura.')}
         </div>
         <div class="form-grid full">
           ${grp('Review Notes', txt('review_notes',3), 'Comentários técnicos da última revisão.')}
@@ -1623,6 +1643,7 @@ class GFSkillApp {
       version_notes:    `v${newVer} — Criado a partir de "${originRef}" v${ver} em ${today}.`,
       version_history:  newHistory,
       full_prompt:      '',
+      previous_version: s.name,  // rastreabilidade: referência ao skill de origem
       _originSkillName: s.name,  // usado em _save() para desativar a versão anterior
       _isNewVersion:    true     // diferencia "nova versão" de "novo skill do zero"
     });
