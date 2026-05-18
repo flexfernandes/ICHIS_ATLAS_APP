@@ -496,11 +496,14 @@ class GFSkillApp {
   }
 
   async init() {
-    try { this._setupUser(); }    catch(e) { /* session not ready yet, skip */ }
+    try { this._setupUser(); }    catch(e) {}
     try { this._bindSidebar(); } catch(e) {}
-    await this._loadSkills();
-    this._renderEmpty();
-    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    try { await this._loadSkills(); } catch(e) { this.skills = []; try { this._renderList(); } catch(_) {} }
+    try { this._renderEmpty(); } catch(e) {
+      const $m = document.getElementById('gfsk-main');
+      if ($m) $m.innerHTML = `<div style="padding:40px;color:#dc2626">Erro ao inicializar: ${e.message}</div>`;
+    }
+    if (window.lucide) try { lucide.createIcons({ attrs:{ style:'display:block' } }); } catch(e) {}
   }
 
   // ── User ──────────────────────────────────────────
@@ -523,7 +526,7 @@ class GFSkillApp {
       const done = (data) => {
         clearTimeout(timer);
         this.skills = data || [];
-        this._renderList();
+        try { this._renderList(); } catch(e) {}
         resolve();
       };
       // 6-second safety timeout: resolves even if frappe.call never responds
@@ -567,7 +570,8 @@ class GFSkillApp {
   // ── Render list ───────────────────────────────────
   _renderList() {
     const $list = document.getElementById('gfsk-list');
-    let items = this.skills;
+    if (!$list) return;
+    let items = this.skills || [];
     if (this.filterQ) {
       items = items.filter(s =>
         (s.skill_name||'').toLowerCase().includes(this.filterQ) ||
