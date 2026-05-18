@@ -964,7 +964,10 @@ class GFSkillApp {
         ? this._renderTabForm(idx)
         : this._renderTabContent(idx);
       if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
-      if (idx === 3 && (this.mode==='edit'||this.mode==='new')) this._initCssEditor();
+      if (idx === 3) {
+        if (this.mode==='edit'||this.mode==='new') this._initCssEditor();
+        else this._initCssViewer();
+      }
       if (idx === 8) this._initPromptViewer();
     }
   }
@@ -1108,16 +1111,16 @@ class GFSkillApp {
           <i data-lucide="braces" style="width:28px;height:28px;color:#94a3b8"></i>
           <p style="margin-top:10px;color:#64748b">Nenhum Script CSS definido para este Skill.</p></div>`;
         return `
-          <div class="code-block">
-            <div class="code-block-bar">
-              <span class="code-block-label">Script CSS</span>
-              <span style="font-size:10px;color:#64748b;margin-left:4px">• ${css.split('\n').length} linhas</span>
-              <button class="btn-copy" onclick="app._copyText(\`${this._escJs(css)}\`, this)">
-                <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar CSS
-              </button>
-            </div>
-            <pre>${this._esc(css)}</pre>
-          </div>`;
+          <div class="prompt-meta">
+            <div class="prompt-meta-item"><i data-lucide="braces" style="width:13px;height:13px"></i>
+              <strong>${css.split('\n').length}</strong> linhas</div>
+            <div class="prompt-meta-item"><i data-lucide="hash" style="width:13px;height:13px"></i>
+              <strong>${css.length}</strong> caracteres</div>
+            <button class="btn-copy" style="margin-left:auto" onclick="app._copyCssView(this)">
+              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar CSS
+            </button>
+          </div>
+          <textarea id="gfsk-css-viewer" style="display:none">${this._esc(css)}</textarea>`;
       }
 
       case 4: return v('header_template') ? `
@@ -1509,6 +1512,28 @@ class GFSkillApp {
     });
     this._cmEditor.setSize('100%', '420px');
     this._cmEditor.on('change', (cm) => { this._fd('css_script', cm.getValue()); });
+  }
+
+  // ── CSS Viewer (CodeMirror read-only) ────────────
+  _initCssViewer() {
+    if (!window.CodeMirror) return;
+    const ta = document.getElementById('gfsk-css-viewer');
+    if (!ta) return;
+    if (this._cmCssView) { try { this._cmCssView.toTextArea(); } catch(e){} this._cmCssView = null; }
+    this._cmCssView = CodeMirror.fromTextArea(ta, {
+      mode: 'css',
+      theme: 'material-darker',
+      lineNumbers: true,
+      lineWrapping: false,
+      readOnly: true,
+      tabSize: 2
+    });
+    this._cmCssView.setSize('100%', '420px');
+  }
+
+  _copyCssView(btn) {
+    const text = this._cmCssView ? this._cmCssView.getValue() : '';
+    if (text) this._copyText(text, btn);
   }
 
   // ── Prompt Viewer (CodeMirror read-only) ─────────
