@@ -438,7 +438,7 @@ const GF = {
         fields: ['name','display_name','parent_group','is_group','icon','color','sort_order','active','description'],
         filters: [['active','=',1]],
         order_by: 'sort_order asc, display_name asc',
-        limit_page_length: 500
+        limit_page_length: 2000
       }
     });
     this.groups = r.message || [];

@@ -138,7 +138,7 @@ def create_access_groups():
 
 CONTENT_GROUPS = [
     # ── RAIZ
-    ("1",                "HUB",                                  "1_hub",                                          0, "layout-dashboard"),
+    ("1",                "HUB",                                  "1_hub",                                          1, "layout-dashboard"),
 
     # ── NÍVEL 1 — grupos principais
     ("1_0010",           "Financeiro",                           "1_0010_financeiro",                              1, "banknote"),
