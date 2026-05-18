@@ -94,7 +94,8 @@
    "fieldtype": "Data",
    "label": "Internal Name",
    "reqd": 1,
-   "description": "Identificador técnico único utilizado internamente pelo sistema. Ex: gf_internal_html_documentation"
+   "read_only_depends_on": "eval:!doc.__islocal",
+   "description": "Identificador técnico único. Gerado automaticamente na criação — não pode ser alterado após salvo."
   },
   {
    "fieldname": "short_description",
@@ -143,8 +144,9 @@
    "in_list_view": 1,
    "label": "Version",
    "reqd": 1,
+   "read_only": 1,
    "default": "1.0.0",
-   "description": "Versão atual seguindo padrão corporativo de versionamento. Ex: 1.0.0"
+   "description": "Gerada automaticamente — 1.0.0 na criação, incrementada a cada Nova Versão."
   },
   {
    "fieldname": "version_notes",

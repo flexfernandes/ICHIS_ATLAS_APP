@@ -822,9 +822,10 @@ class GFSkillApp {
           <button class="btn-act" onclick="app._duplicateSkill()">
             <i data-lucide="copy" style="width:13px;height:13px"></i> Duplicar
           </button>
+          ${s.status === 'Submetido' ? `
           <button class="btn-act" onclick="app._newVersion()">
             <i data-lucide="git-branch" style="width:13px;height:13px"></i> Nova Versão
-          </button>
+          </button>` : ''}
           ${!isDraft ? `
             <button class="btn-act" onclick="app._viewHistory()">
               <i data-lucide="history" style="width:13px;height:13px"></i> Histórico
@@ -1074,11 +1075,22 @@ class GFSkillApp {
         <div class="form-grid">
           ${grp('Skill Name', inp('skill_name','Ex: Documentação Interna HTML'),
             'Nome amigável de identificação principal.', true)}
-          ${grp('Internal Name', inp('internal_name','Ex: gf_internal_html_doc'),
-            'Identificador técnico único. Gerado automaticamente.', true)}
+          ${grp('Internal Name',
+            this.mode === 'new'
+              ? inp('internal_name','Ex: gf_internal_html_doc')
+              : `<div class="form-control" style="background:#f1f5f9;color:#64748b;font-family:monospace;cursor:default;display:flex;align-items:center;gap:6px">
+                   <i data-lucide="lock" style="width:12px;height:12px;flex-shrink:0"></i>${this._esc(d.internal_name||'')}
+                 </div>`,
+            this.mode === 'new'
+              ? 'Gerado automaticamente — não pode ser alterado após criação.'
+              : 'Identificador técnico bloqueado — usado como chave de localização da página.', true)}
           ${grp('Category', dd('category', CATEGORIES), 'Agrupamento funcional.', true)}
           ${grp('Status', dd('status', STATUSES), 'Situação atual do Skill.', true)}
-          ${grp('Version', inp('version','Ex: 1.0.0'), 'Ex: 1.0.0 → 1.1.0 → 2.0.0', true)}
+          ${grp('Version',
+            `<div class="form-control" style="background:#f1f5f9;color:#64748b;cursor:default;display:flex;align-items:center;gap:6px">
+               <i data-lucide="tag" style="width:12px;height:12px;flex-shrink:0"></i>${this._esc(d.version||'1.0.0')}
+             </div>`,
+            'Gerada automaticamente — 1.0.0 na criação, incrementada a cada Nova Versão.', true)}
           ${grp('Owner', inp('skill_owner','usuario@empresa.com'), 'Responsável pelo Skill.', true)}
           ${grp('Tags', inp('tags','Ex: html, documentação, interno'), 'Palavras-chave separadas por vírgula.')}
         </div>
@@ -1168,43 +1180,36 @@ class GFSkillApp {
           </div>
         </div>`;
 
-      case 7: return `
-        <div class="form-grid full" style="gap:12px">
-          <div style="grid-column:1/-1;background:var(--primary-bg);border:1px solid var(--primary-l);
-               border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px">
-            <i data-lucide="info" style="width:16px;height:16px;color:var(--primary);flex-shrink:0;margin-top:1px"></i>
-            <div>
-              <div style="font-size:13px;font-weight:600;color:var(--primary);margin-bottom:4px">Como o Prompt Completo é gerado</div>
-              <p style="font-size:12px;color:#475569;margin:0;line-height:1.6">
-                O campo <strong>Full Prompt</strong> é montado automaticamente ao salvar, combinando todos os campos
-                preenchidos nas abas anteriores. Abaixo estão as seções que compõem o prompt final e o que cada uma
-                ensina à IA.
-              </p>
-            </div>
+      case 7: {
+        const fp = d.full_prompt;
+        if (!fp) return `
+          <div class="gfsk-empty" style="flex:0;padding:40px 0">
+            <i data-lucide="zap" style="width:28px;height:28px;color:#94a3b8"></i>
+            <p style="margin-top:10px;color:#64748b">O Prompt Completo será gerado ao salvar o Skill.</p>
+          </div>`;
+        const lines = fp.split('\n').length;
+        const chars  = fp.length;
+        return `
+          <div class="prompt-meta">
+            <div class="prompt-meta-item"><i data-lucide="align-left" style="width:13px;height:13px"></i>
+              <strong>${lines}</strong> linhas</div>
+            <div class="prompt-meta-item"><i data-lucide="hash" style="width:13px;height:13px"></i>
+              <strong>${chars}</strong> caracteres</div>
+            <div class="prompt-meta-item"><i data-lucide="zap" style="width:13px;height:13px"></i>
+              <strong>v${this._esc(d.version||'—')}</strong></div>
+            <div class="prompt-meta-item" style="color:#94a3b8;font-style:italic">
+              Será regenerado ao salvar</div>
           </div>
-          ${[
-            ['PROPÓSITO', 'Aba: Informações Gerais', 'Explica para a IA qual é o objetivo central do Skill — o que deve ser produzido e qual valor entrega. É a primeira instrução que a IA lê e define o enquadramento geral.'],
-            ['QUANDO USAR / QUANDO NÃO USAR', 'Aba: Informações Gerais', 'Define o escopo de aplicação. Instrui a IA sobre os contextos adequados e os limites do Skill, evitando uso indevido ou resultados fora do padrão.'],
-            ['INSTRUÇÕES PRINCIPAIS', 'Aba: Instruções', 'O bloco mais importante do prompt. Contém as regras centrais de comportamento que a IA deve seguir durante toda a execução do Skill.'],
-            ['REGRAS OBRIGATÓRIAS', 'Aba: Instruções', 'Lista as regras críticas e não negociáveis. A IA deve obedecer a estas regras acima de qualquer outra instrução ou preferência do usuário.'],
-            ['AÇÕES PROIBIDAS', 'Aba: Instruções', 'Define explicitamente o que a IA jamais pode fazer ao executar este Skill, reduzindo risco de comportamentos indesejados ou saídas incorretas.'],
-            ['CHECKLIST DE VALIDAÇÃO', 'Aba: Instruções', 'Lista de verificações que a IA deve executar antes de finalizar a resposta, garantindo conformidade com todos os requisitos do Skill.'],
-            ['ESTILO DE ESCRITA / VISUAL / TOM DE VOZ', 'Aba: Estilo', 'Calibra o modo de comunicação da IA: vocabulário, nível de formalidade, densidade técnica e aparência visual do conteúdo gerado.'],
-            ['REGRAS DE FORMATAÇÃO', 'Aba: Estilo', 'Define padrões estruturais obrigatórios: uso de headers, listas, tabelas, blocos de código, indentação e demais convenções de formatação da saída.'],
-            ['CABEÇALHO / RODAPÉ — TEMPLATE', 'Abas: Cabeçalho e Rodapé', 'Fornece o template exato que a IA deve usar no início e no fim de cada documento gerado, garantindo consistência visual e identidade corporativa.'],
-            ['EXEMPLO COMPLETO', 'Aba: Exemplo Completo', 'Apresenta um modelo de referência real para a IA usar como âncora de qualidade. É o padrão-ouro contra o qual a saída gerada deve ser comparada.'],
-            ['INFORMAÇÕES TÉCNICAS', 'Aba: Campos Técnicos', 'Metadados técnicos do Skill: formato de saída, idioma, módulo relacionado, prioridade e flags de permissão. Contextualiza o ambiente de execução.'],
-          ].map(([sec, tab, desc]) => `
-            <div style="grid-column:1/-1;background:#fff;border:1px solid var(--border);border-radius:8px;
-                 padding:12px 16px;display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:start">
-              <div>
-                <div style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;
-                     letter-spacing:.5px;margin-bottom:3px">${sec}</div>
-                <div style="font-size:11px;color:#94a3b8">${tab}</div>
-              </div>
-              <div style="font-size:12px;color:#475569;line-height:1.6">${desc}</div>
-            </div>`).join('')}
-        </div>`;
+          <div class="code-block">
+            <div class="code-block-bar">
+              <span class="code-block-label">Full Prompt — Gerado Automaticamente</span>
+              <button class="btn-copy" onclick="app._copyText(\`${this._escJs(fp)}\`, this)">
+                <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar Prompt
+              </button>
+            </div>
+            <pre>${this._esc(fp)}</pre>
+          </div>`;
+      }
 
       default: return '';
     }
@@ -1359,11 +1364,20 @@ class GFSkillApp {
     const name = this.selected.name;
     frappe.confirm('Submeter o Skill? Após submetido, não poderá ser editado diretamente.',
       () => {
+        // Busca o doc mais recente para evitar erro de "modified after you opened it"
         frappe.call({
-          method: 'frappe.client.submit',
-          args: { doc: { doctype:'GF Skill', name } },
-          callback: () => { this._toast('Skill submetido!', 'success'); this.selectSkill(name); },
-          error:    () => { this._toast('Erro ao submeter o Skill.', 'error'); }
+          method: 'frappe.client.get',
+          args: { doctype: 'GF Skill', name },
+          callback: (r) => {
+            if (!r.message) { this._toast('Erro ao carregar o Skill.', 'error'); return; }
+            frappe.call({
+              method: 'frappe.client.submit',
+              args: { doc: r.message },
+              callback: () => { this._toast('Skill submetido!', 'success'); this.selectSkill(name); },
+              error:    () => { this._toast('Erro ao submeter o Skill.', 'error'); }
+            });
+          },
+          error: () => { this._toast('Erro ao carregar o Skill.', 'error'); }
         });
       }
     );
