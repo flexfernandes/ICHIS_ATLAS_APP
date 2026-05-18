@@ -964,10 +964,8 @@ class GFSkillApp {
         ? this._renderTabForm(idx)
         : this._renderTabContent(idx);
       if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
-      if (idx === 3) {
-        if (this.mode==='edit'||this.mode==='new') this._initCssEditor();
-        else this._initCssViewer();
-      }
+      if (this.mode==='edit'||this.mode==='new') this._initTabEditors();
+      else if (idx === 3) this._initCssViewer();
       if (idx === 8) this._initPromptViewer();
     }
   }
@@ -1224,9 +1222,10 @@ class GFSkillApp {
   _renderTabForm(idx) {
     const d   = this.editData;
     const sel = (opts, val) => opts.map(o=>`<option value="${this._esc(o)}"${o===val?' selected':''}>${this._esc(o||'—')}</option>`).join('');
-    const txt = (f, rows=4, mono=false) =>
-      `<textarea class="form-control${mono?' mono':''}" rows="${rows}"
-         oninput="app._fd('${f}',this.value)">${this._esc(d[f]||'')}</textarea>`;
+    const txt = (f, rows=4) => {
+      const h = (rows * 28 + 40) + 'px';
+      return `<textarea data-cm="${f}" data-height="${h}" style="display:none">${this._esc(d[f]||'')}</textarea>`;
+    };
     const inp = (f, ph='') =>
       `<input class="form-control" type="text" value="${this._esc(d[f]||'')}"
          placeholder="${ph}" oninput="app._fd('${f}',this.value)">`;
@@ -1312,7 +1311,7 @@ class GFSkillApp {
               Script CSS
               <span style="font-size:9px;background:#1e293b;color:#93c5fd;padding:2px 6px;border-radius:4px;font-family:monospace;font-weight:600">CSS</span>
             </label>
-            <textarea id="gfsk-css-editor">${this._esc(d.css_script||'')}</textarea>
+            <textarea data-cm="css_script" data-mode="css" data-height="420px" style="display:none">${this._esc(d.css_script||'')}</textarea>
             <div class="form-desc" style="margin-top:8px">CSS aplicado automaticamente ao HTML gerado por este Skill. Sobrescreve estilos padrão do GF Atlas.</div>
           </div>
         </div>`;
@@ -1491,27 +1490,29 @@ class GFSkillApp {
         </button>
       </div>`;
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
-    if (this.activeTab === 3) this._initCssEditor();
+    this._initTabEditors();
   }
 
-  // ── CSS Editor (CodeMirror) ───────────────────────
-  _initCssEditor() {
+  // ── Tab Editors (CodeMirror — todos os campos longos) ──
+  _initTabEditors() {
     if (!window.CodeMirror) return;
-    const ta = document.getElementById('gfsk-css-editor');
-    if (!ta) return;
-    if (this._cmEditor) { try { this._cmEditor.toTextArea(); } catch(e){} this._cmEditor = null; }
-    this._cmEditor = CodeMirror.fromTextArea(ta, {
-      mode: 'css',
-      theme: 'material-darker',
-      lineNumbers: true,
-      lineWrapping: false,
-      tabSize: 2,
-      indentWithTabs: false,
-      autofocus: false,
-      extraKeys: { Tab: cm => cm.execCommand('indentMore'), 'Shift-Tab': cm => cm.execCommand('indentLess') }
+    document.querySelectorAll('#gfsk-tab-body textarea[data-cm]').forEach(ta => {
+      const field  = ta.dataset.cm;
+      const mode   = ta.dataset.mode || null;
+      const height = ta.dataset.height || '140px';
+      const wrap   = !mode; // texto puro quebra linha; código não
+      const cm = CodeMirror.fromTextArea(ta, {
+        mode:           mode || null,
+        theme:          'material-darker',
+        lineNumbers:    true,
+        lineWrapping:   wrap,
+        tabSize:        2,
+        indentWithTabs: false,
+        extraKeys: { Tab: cm => cm.execCommand('indentMore'), 'Shift-Tab': cm => cm.execCommand('indentLess') }
+      });
+      cm.setSize('100%', height);
+      cm.on('change', (cm) => { this._fd(field, cm.getValue()); });
     });
-    this._cmEditor.setSize('100%', '420px');
-    this._cmEditor.on('change', (cm) => { this._fd('css_script', cm.getValue()); });
   }
 
   // ── CSS Viewer (CodeMirror read-only) ────────────
