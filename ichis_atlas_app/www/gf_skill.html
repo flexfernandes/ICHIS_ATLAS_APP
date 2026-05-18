@@ -540,8 +540,7 @@ class GFSkillApp {
                      'short_description','skill_owner','active','output_type','skill_priority',
                      'tags','docstatus'],
             order_by: 'modified desc',
-            limit_page_length: 2000,
-            freeze: false
+            limit_page_length: 2000
           },
           callback: (r) => done((r && r.message) ? r.message : []),
           error:    ()  => done([])
