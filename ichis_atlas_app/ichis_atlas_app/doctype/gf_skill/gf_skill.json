@@ -123,7 +123,7 @@
    "label": "Status",
    "reqd": 1,
    "default": "Draft",
-   "options": "Draft\nEm Desenvolvimento\nEm Teste\nAtivo\nObsoleto\nArquivado",
+   "options": "Draft\nEm Desenvolvimento\nEm Teste\nSubmetido\nAtivo\nInativo\nObsoleto\nArquivado",
    "description": "Define a situação atual do Skill dentro do sistema."
   },
   {
@@ -506,8 +506,16 @@
    "title": "Em Teste"
   },
   {
+   "color": "Purple",
+   "title": "Submetido"
+  },
+  {
    "color": "Green",
    "title": "Ativo"
+  },
+  {
+   "color": "Gray",
+   "title": "Inativo"
   },
   {
    "color": "Yellow",

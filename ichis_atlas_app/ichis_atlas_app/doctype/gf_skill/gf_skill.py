@@ -9,6 +9,7 @@ class GFSkill(Document):
 
     def before_submit(self):
         self.full_prompt = self._build_prompt()
+        self.status = 'Submetido'
 
     # ──────────────────────────────────────────────
     def _build_prompt(self):

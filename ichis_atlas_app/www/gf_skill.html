@@ -6,14 +6,16 @@
 /* ── Reset & base ─────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --primary:#166534;--primary-h:#14532d;--primary-l:#16a34a;
-  --primary-pale:#dcfce7;--primary-bg:#f0fdf4;
-  --bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;
+  /* Slate/grafite enterprise — verde apenas como detalhe */
+  --primary:#1e293b;--primary-h:#0f172a;--primary-l:#334155;
+  --primary-pale:#f1f5f9;--primary-bg:#f8fafc;
+  --accent:#059669;--accent-h:#047857;--accent-l:#10b981;--accent-pale:#d1fae5;
+  --bg:#f1f5f9;--surface:#ffffff;--surface2:#f8fafc;
   --border:#e2e8f0;--border-h:#cbd5e1;
   --text:#0f172a;--text-m:#475569;--text-l:#94a3b8;
-  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
-  --shadow-md:0 4px 12px rgba(0,0,0,.10);
-  --shadow-lg:0 8px 24px rgba(0,0,0,.12);
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.09);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.11);
   --radius:10px;--radius-sm:6px;
   --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   --mono:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,monospace;
@@ -29,32 +31,32 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   height:var(--header);min-height:var(--header);
   display:flex;align-items:center;gap:12px;padding:0 20px;
   background:var(--primary);color:#fff;
-  box-shadow:0 2px 8px rgba(22,101,52,.4);
+  box-shadow:0 2px 8px rgba(15,23,42,.22);
   z-index:100;flex-shrink:0
 }
 .gfsk-hdr-logo{
   width:34px;height:34px;border-radius:8px;
-  background:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);
   display:flex;align-items:center;justify-content:center;
   font-weight:700;font-size:13px;letter-spacing:.5px;flex-shrink:0
 }
 .gfsk-hdr-title{font-weight:600;font-size:15px;letter-spacing:-.2px}
-.gfsk-hdr-sub{font-size:11px;opacity:.7;margin-left:2px}
+.gfsk-hdr-sub{font-size:11px;opacity:.55;margin-left:2px}
 .gfsk-hdr-sep{flex:1}
-.gfsk-hdr-user{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.85}
+.gfsk-hdr-user{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.8}
 .gfsk-hdr-avatar{
   width:28px;height:28px;border-radius:50%;
-  background:rgba(255,255,255,.25);
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.2);
   display:flex;align-items:center;justify-content:center;
   font-size:10px;font-weight:700
 }
 .gfsk-hdr-atlas{
   display:flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
   border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;
   transition:background 150ms;text-decoration:none;color:#fff
 }
-.gfsk-hdr-atlas:hover{background:rgba(255,255,255,.25)}
+.gfsk-hdr-atlas:hover{background:rgba(255,255,255,.2)}
 
 /* ── Body ─────────────────────────────────────────── */
 .gfsk-body{display:flex;flex:1;overflow:hidden}
@@ -72,7 +74,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   border-radius:8px;padding:7px 10px;
   transition:border-color 150ms
 }
-.gfsk-sb-search:focus-within{border-color:var(--primary-l)}
+.gfsk-sb-search:focus-within{border-color:var(--border-h)}
 .gfsk-sb-search input{
   border:none;outline:none;background:transparent;
   font-size:13px;color:var(--text);flex:1;min-width:0
@@ -90,10 +92,10 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   background:var(--surface);color:var(--text-m);
   transition:all 150ms;white-space:nowrap
 }
-.gfsk-sb-filter.active{background:var(--primary-pale);border-color:var(--primary-l);color:var(--primary)}
+.gfsk-sb-filter.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 .gfsk-sb-filter:hover:not(.active){background:var(--surface2)}
 
-.gfsk-sb-list{flex:1;overflow-y:auto;padding:8px 8px}
+.gfsk-sb-list{flex:1;overflow-y:auto;padding:8px}
 .gfsk-sb-list::-webkit-scrollbar{width:4px}
 .gfsk-sb-list::-webkit-scrollbar-track{background:transparent}
 .gfsk-sb-list::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
@@ -108,20 +110,18 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   border:1.5px solid transparent;transition:all 150ms;
   background:var(--surface)
 }
-.sk-card:hover{background:var(--primary-bg);border-color:var(--primary-pale)}
+.sk-card:hover{background:var(--primary-bg);border-color:var(--border)}
 .sk-card.active{background:var(--primary-pale);border-color:var(--primary-l)}
 .sk-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:5px}
 .sk-card-name{font-weight:600;font-size:12.5px;color:var(--text);line-height:1.3}
 .sk-card.active .sk-card-name{color:var(--primary)}
 .sk-card-ver{font-size:10px;color:var(--text-l);white-space:nowrap;margin-top:1px}
-.sk-card.active .sk-card-ver{color:var(--primary)}
+.sk-card.active .sk-card-ver{color:var(--text-m)}
 .sk-card-badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
 .sk-card-desc{font-size:11px;color:var(--text-m);line-height:1.4;
   overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
-.gfsk-sb-foot{
-  padding:12px;border-top:1px solid var(--border);flex-shrink:0
-}
+.gfsk-sb-foot{padding:12px;border-top:1px solid var(--border);flex-shrink:0}
 .btn-new-skill{
   width:100%;display:flex;align-items:center;justify-content:center;gap:6px;
   background:var(--primary);color:#fff;border:none;
@@ -137,17 +137,19 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   border-radius:20px;line-height:1.4;white-space:nowrap
 }
 .badge-cat{background:#ede9fe;color:#5b21b6}
-.badge-draft{background:#f1f5f9;color:#475569}
+.badge-draft{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
 .badge-dev{background:#dbeafe;color:#1d4ed8}
 .badge-test{background:#fed7aa;color:#c2410c}
-.badge-ativo{background:#dcfce7;color:#166534}
+.badge-submetido{background:#e0e7ff;color:#3730a3}
+.badge-ativo{background:#d1fae5;color:#065f46}
+.badge-inativo{background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0}
 .badge-obsoleto{background:#fef9c3;color:#854d0e}
 .badge-arquivado{background:#fee2e2;color:#dc2626}
 .badge-prio-baixa{background:#f1f5f9;color:#64748b}
 .badge-prio-normal{background:#dbeafe;color:#1d4ed8}
 .badge-prio-alta{background:#fed7aa;color:#c2410c}
 .badge-prio-critica{background:#fee2e2;color:#dc2626}
-.badge-out{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.badge-out{background:#f8fafc;color:#374151;border:1px solid #e2e8f0}
 
 /* ── Main content ─────────────────────────────────── */
 .gfsk-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
@@ -162,7 +164,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   width:72px;height:72px;border-radius:20px;
   background:var(--primary-pale);
   display:flex;align-items:center;justify-content:center;
-  color:var(--primary)
+  color:var(--text-m)
 }
 .gfsk-empty h2{font-size:20px;font-weight:700;color:var(--text)}
 .gfsk-empty p{color:var(--text-m);font-size:13px;max-width:320px;line-height:1.6}
@@ -184,7 +186,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   width:44px;height:44px;border-radius:12px;
   background:var(--primary-pale);
   display:flex;align-items:center;justify-content:center;
-  color:var(--primary);flex-shrink:0
+  color:var(--text-m);flex-shrink:0
 }
 .gfsk-det-hdr-info{flex:1;min-width:0}
 .gfsk-det-hdr-name{font-size:20px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:4px}
@@ -192,6 +194,10 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .gfsk-det-hdr-meta span{font-size:12px;color:var(--text-m)}
 .gfsk-det-hdr-meta .sep{color:var(--border-h)}
 .gfsk-det-hdr-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.gfsk-det-hdr-desc{
+  font-size:13px;color:var(--text-m);line-height:1.5;
+  padding-top:8px;border-top:1px solid var(--border)
+}
 
 .btn-edit{
   display:flex;align-items:center;gap:5px;
@@ -200,14 +206,6 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   cursor:pointer;transition:background 150ms
 }
 .btn-edit:hover{background:var(--primary-h)}
-.btn-submit{
-  display:flex;align-items:center;gap:5px;
-  background:var(--surface);color:var(--primary);
-  border:1.5px solid var(--primary-l);
-  border-radius:7px;padding:7px 14px;font-size:12.5px;font-weight:600;
-  cursor:pointer;transition:all 150ms
-}
-.btn-submit:hover{background:var(--primary-bg)}
 .btn-del{
   display:flex;align-items:center;justify-content:center;
   background:var(--surface);color:var(--text-m);
@@ -219,39 +217,43 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 /* ── Action toolbar ───────────────────────────────── */
 .gfsk-toolbar{
   display:flex;align-items:center;gap:5px;flex-wrap:wrap;
-  padding:10px 20px;background:#fff;border-bottom:1px solid var(--border);
+  padding:9px 20px;background:var(--surface);border-bottom:1px solid var(--border);
   flex-shrink:0
 }
-.gfsk-toolbar-sep{width:1px;height:22px;background:var(--border);margin:0 3px;flex-shrink:0}
+.gfsk-toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 4px;flex-shrink:0}
 .btn-act{
   display:inline-flex;align-items:center;gap:5px;
   padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;
-  cursor:pointer;border:1px solid var(--border);background:#fff;
-  color:#475569;transition:all 150ms;white-space:nowrap
+  cursor:pointer;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-m);transition:all 150ms;white-space:nowrap
 }
 .btn-act:hover{background:var(--surface2);border-color:var(--border-h)}
+.btn-act:disabled{opacity:.45;cursor:not-allowed}
 .btn-act.btn-primary{background:var(--primary);color:#fff;border-color:transparent}
 .btn-act.btn-primary:hover{background:var(--primary-h)}
-.btn-act.btn-outline{background:#fff;color:var(--primary);border-color:var(--primary-l)}
-.btn-act.btn-outline:hover{background:var(--primary-bg)}
+.btn-act.btn-accent{background:var(--accent);color:#fff;border-color:transparent}
+.btn-act.btn-accent:hover{background:var(--accent-h)}
+.btn-act.btn-outline{background:var(--surface);color:var(--primary);border-color:var(--primary-l)}
+.btn-act.btn-outline:hover{background:var(--primary-pale)}
 .btn-act.btn-danger{color:#dc2626}
 .btn-act.btn-danger:hover{background:#fee2e2;border-color:#fca5a5}
-.btn-act.btn-warn{color:#d97706}
+.btn-act.btn-warn{color:#b45309}
 .btn-act.btn-warn:hover{background:#fef3c7;border-color:#fde68a}
 
 /* ── Version panel ────────────────────────────────── */
 .ver-panel{
   display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  padding:10px 20px;background:var(--primary-bg);border-bottom:1px solid var(--primary-pale);
+  padding:8px 20px;background:var(--surface);border-bottom:1px solid var(--border);
   flex-shrink:0;font-size:12px
 }
-.ver-panel-item{display:flex;align-items:center;gap:5px;color:var(--primary)}
-.ver-panel-item strong{font-weight:700}
-.ver-panel-item span{color:var(--text-m)}
-
-.gfsk-det-hdr-desc{
-  font-size:13px;color:var(--text-m);line-height:1.5;
-  padding-top:8px;border-top:1px solid var(--border)
+.ver-panel-item{display:flex;align-items:center;gap:5px;color:var(--text-m)}
+.ver-panel-item strong{font-weight:600;color:var(--text)}
+.ver-panel-item svg{color:var(--text-l)}
+.ver-panel-submitted{
+  margin-left:auto;display:flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:600;color:var(--accent);
+  background:var(--accent-pale);border:1px solid rgba(16,185,129,.3);
+  border-radius:20px;padding:3px 10px
 }
 
 /* ── Tabs ─────────────────────────────────────────── */
@@ -268,11 +270,11 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   border-bottom:2.5px solid transparent;margin-bottom:-1px;
   transition:all 150ms
 }
-.gfsk-tab:hover{color:var(--primary);background:var(--primary-bg)}
+.gfsk-tab:hover{color:var(--text);background:var(--primary-pale)}
 .gfsk-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
 .gfsk-tab-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--primary);opacity:0;transition:opacity 150ms
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent);opacity:0;transition:opacity 150ms
 }
 .gfsk-tab.has-content .gfsk-tab-dot{opacity:1}
 
@@ -291,7 +293,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .fld-val.empty{color:var(--text-l);font-style:italic;font-size:12px}
 .fld-val.mono{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap}
 .fld-val.check{display:flex;align-items:center;gap:5px}
-.fld-check-yes{color:var(--primary-l)}
+.fld-check-yes{color:var(--accent)}
 .fld-check-no{color:var(--text-l)}
 
 /* ── Code block ───────────────────────────────────── */
@@ -313,7 +315,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   cursor:pointer;transition:all 150ms
 }
 .btn-copy:hover{background:rgba(255,255,255,.15)}
-.btn-copy.copied{background:rgba(22,163,74,.2);border-color:rgba(22,163,74,.4);color:#86efac}
+.btn-copy.copied{background:rgba(5,150,105,.2);border-color:rgba(16,185,129,.4);color:#6ee7b7}
 
 .prompt-meta{
   display:flex;align-items:center;gap:10px;margin-bottom:10px;
@@ -330,7 +332,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
   margin-bottom:14px;padding-bottom:10px;
   border-bottom:1px solid var(--border)
 }
-.sec-heading svg{color:var(--primary)}
+.sec-heading svg{color:var(--accent)}
 .sec-sep{margin:20px 0}
 
 /* ── Form (edit/new) ──────────────────────────────── */
@@ -345,28 +347,27 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:14px}
 .form-grid.full{grid-template-columns:1fr}
 .form-group{display:flex;flex-direction:column;gap:5px}
-.form-label{font-size:11px;font-weight:600;color:var(--text-m);letter-spacing:.3px}
+.form-label{font-size:11px;font-weight:600;color:#374151 !important;letter-spacing:.3px}
 .form-label .req{color:#dc2626;margin-left:2px}
 .form-desc{font-size:10.5px;color:var(--text-l);line-height:1.4;margin-top:1px}
 .form-control{
-  background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;
+  background:#f8fafc !important;border:1px solid #e2e8f0 !important;
   border-radius:7px;padding:8px 11px;font-size:13px;color:#0f172a !important;
   outline:none;transition:border-color 150ms,box-shadow 150ms;font-family:var(--font);
   width:100%
 }
 .form-control:focus{
-  background:#ffffff !important;border-color:#16a34a !important;
-  box-shadow:0 0 0 3px rgba(22,163,74,.12) !important
+  background:#ffffff !important;border-color:#94a3b8 !important;
+  box-shadow:0 0 0 3px rgba(71,85,105,.10) !important
 }
 textarea.form-control{
   resize:vertical;min-height:90px;line-height:1.6;
-  background:#f7fef9 !important
+  background:#f8fafc !important
 }
 textarea.form-control.mono{font-family:var(--mono);font-size:12.5px}
 select.form-control{cursor:pointer}
-.form-label{font-size:11px;font-weight:600;color:#166534 !important;letter-spacing:.3px}
 .form-check{display:flex;align-items:center;gap:8px;padding:8px 0}
-.form-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
+.form-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
 .form-check label{font-size:13px;color:var(--text);cursor:pointer}
 
 .gfsk-form-foot{
@@ -395,16 +396,28 @@ select.form-control{cursor:pointer}
   display:flex;flex-direction:column;gap:8px;pointer-events:none
 }
 .toast{
-  display:flex;align-items:center;gap:9px;
-  background:var(--text);color:#fff;
-  border-radius:9px;padding:10px 16px;font-size:13px;font-weight:500;
-  box-shadow:var(--shadow-lg);pointer-events:auto;
-  animation:toastIn 250ms ease
+  display:flex;align-items:center;gap:10px;
+  background:#fff;color:var(--text);
+  border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;font-size:13px;font-weight:500;
+  box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.07);
+  pointer-events:auto;min-width:270px;max-width:380px;
+  animation:toastIn 220ms ease
 }
-.toast.success{background:#166534}
-.toast.error{background:#dc2626}
-.toast.info{background:#1d4ed8}
-@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.toast.success{background:#f0fdf4;color:#065f46;border-color:#a7f3d0}
+.toast.error{background:#fef2f2;color:#991b1b;border-color:#fca5a5}
+.toast.info{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
+.toast-icon{flex-shrink:0}
+.toast-msg{flex:1;line-height:1.4}
+.toast-close{
+  flex-shrink:0;background:none;border:none;cursor:pointer;
+  color:inherit;opacity:.4;padding:2px;display:flex;align-items:center;
+  border-radius:4px;transition:opacity 150ms
+}
+.toast-close:hover{opacity:.8}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(6px)}}
+.toast.leaving{animation:toastOut 180ms ease forwards}
 
 /* ── Loading ──────────────────────────────────────── */
 .gfsk-loading{
@@ -463,6 +476,7 @@ select.form-control{cursor:pointer}
       <div class="gfsk-sb-filters" id="gfsk-filters">
         <span class="gfsk-sb-filter active" data-status="">Todos</span>
         <span class="gfsk-sb-filter" data-status="Draft">Draft</span>
+        <span class="gfsk-sb-filter" data-status="Submetido">Submetidos</span>
         <span class="gfsk-sb-filter" data-status="Ativo">Ativos</span>
         <span class="gfsk-sb-filter" data-status="Obsoleto">Obsoletos</span>
       </div>
@@ -510,7 +524,8 @@ const TABS = [
 
 const STATUS_COLORS = {
   'Draft':'draft','Em Desenvolvimento':'dev','Em Teste':'test',
-  'Ativo':'ativo','Obsoleto':'obsoleto','Arquivado':'arquivado'
+  'Submetido':'submetido','Ativo':'ativo','Inativo':'inativo',
+  'Obsoleto':'obsoleto','Arquivado':'arquivado'
 };
 
 const CATEGORIES = [
@@ -519,7 +534,7 @@ const CATEGORIES = [
   'Frontend','Backend','DevOps e Cloud','Segurança','Comercial','Engenharia',
   'Industrial','Qualidade','Financeiro','Jurídico','RH','Templates','Padrões Corporativos','Outros'
 ];
-const STATUSES = ['Draft','Em Desenvolvimento','Em Teste','Ativo','Obsoleto','Arquivado'];
+const STATUSES = ['Draft','Em Desenvolvimento','Em Teste','Submetido','Ativo','Inativo','Obsoleto','Arquivado'];
 const OUTPUT_TYPES = ['HTML','Markdown','Texto','JSON','SQL','Python','JavaScript','CSS','XML','YAML','Relatório','Prompt','Documentação','API','Workflow','Outro'];
 const PRIORITIES = ['','Baixa','Normal','Alta','Crítica'];
 
@@ -731,27 +746,31 @@ class GFSkillApp {
         <div class="ver-panel-item"><i data-lucide="activity" style="width:12px;height:12px"></i><span>Status</span><strong>${this._esc(s.status||'—')}</strong></div>
         <div class="ver-panel-item"><i data-lucide="clock" style="width:12px;height:12px"></i><span>Modificado</span><strong>${modified}</strong></div>
         ${s.skill_owner ? `<div class="ver-panel-item"><i data-lucide="user" style="width:12px;height:12px"></i><span>Responsável</span><strong>${this._esc(s.skill_owner)}</strong></div>` : ''}
-        ${s.docstatus===1 ? '<div class="ver-panel-item" style="margin-left:auto"><span style="color:#166534;font-weight:600">✓ Submetido</span></div>' : ''}
+        ${s.docstatus===1 ? `<div class="ver-panel-submitted"><i data-lucide="check-circle" style="width:12px;height:12px"></i> Submetido</div>` : ''}
       </div>
 
-      <!-- Action toolbar -->
+      <!-- Action toolbar — botões variam por docstatus e status -->
       <div class="gfsk-toolbar">
         ${isDraft ? `
           <button class="btn-act btn-primary" onclick="app._startEdit()">
             <i data-lucide="edit-2" style="width:13px;height:13px"></i> Editar
           </button>
-          <button class="btn-act btn-outline" onclick="app._submitSkill()">
+          <button class="btn-act btn-accent" onclick="app._submitSkill()">
             <i data-lucide="send" style="width:13px;height:13px"></i> Submeter
           </button>
-        ` : ''}
+          <div class="gfsk-toolbar-sep"></div>` : ''}
         <button class="btn-act" onclick="app._duplicateSkill()">
           <i data-lucide="copy" style="width:13px;height:13px"></i> Duplicar
         </button>
         <button class="btn-act" onclick="app._newVersion()">
           <i data-lucide="git-branch" style="width:13px;height:13px"></i> Nova Versão
         </button>
+        ${!isDraft ? `
+          <button class="btn-act" onclick="app._viewHistory()">
+            <i data-lucide="history" style="width:13px;height:13px"></i> Histórico
+          </button>` : ''}
         <div class="gfsk-toolbar-sep"></div>
-        ${s.status !== 'Obsoleto' ? `
+        ${s.status !== 'Obsoleto' && s.status !== 'Arquivado' ? `
           <button class="btn-act btn-warn" onclick="app._markObsolete()">
             <i data-lucide="archive" style="width:13px;height:13px"></i> Marcar Obsoleto
           </button>` : ''}
@@ -762,14 +781,15 @@ class GFSkillApp {
           <button class="btn-act" onclick="app._activate()">
             <i data-lucide="eye" style="width:13px;height:13px"></i> Ativar
           </button>`}
-        <div class="gfsk-toolbar-sep"></div>
-        <button class="btn-act btn-danger" onclick="app._deleteSkill()">
-          <i data-lucide="trash-2" style="width:13px;height:13px"></i> Excluir
-        </button>
-        <div class="gfsk-toolbar-sep"></div>
-        <button class="btn-act btn-outline" onclick="app._startNew()">
-          <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Skill
-        </button>
+        ${isDraft ? `
+          <div class="gfsk-toolbar-sep"></div>
+          <button class="btn-act btn-danger" onclick="app._deleteSkill()">
+            <i data-lucide="trash-2" style="width:13px;height:13px"></i> Excluir
+          </button>
+          <div class="gfsk-toolbar-sep"></div>
+          <button class="btn-act btn-outline" onclick="app._startNew()">
+            <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Skill
+          </button>` : ''}
       </div>
 
       <!-- Tabs -->
@@ -1025,17 +1045,15 @@ class GFSkillApp {
         </div>`;
 
       case 2: return `
-        <div class="form-grid">
-          ${grp('Writing Style', txt('writing_style',3),
-            'Ex: Objetivo, técnico, corporativo.', true)}
-          ${grp('Visual Style', txt('visual_style',3),
-            'Ex: Clean, moderno, enterprise.', true)}
-          ${grp('Tone of Voice', txt('tone_of_voice',3),
-            'Ex: Profissional e confiável.')}
-        </div>
         <div class="form-grid full">
-          ${grp('Formatting Rules', txt('formatting_rules',5,true),
-            'Padrões estruturais obrigatórios de formatação.')}
+          ${grp('Writing Style', txt('writing_style',4),
+            'Define como os textos devem ser escritos. Ex: Objetivo, técnico, corporativo e didático.', true)}
+          ${grp('Visual Style', txt('visual_style',4),
+            'Define aparência visual geral do conteúdo. Ex: Clean, moderno, enterprise e minimalista.', true)}
+          ${grp('Tone of Voice', txt('tone_of_voice',4),
+            'Define o tom geral da comunicação. Ex: Profissional, técnico e confiável.')}
+          ${grp('Formatting Rules', txt('formatting_rules',6,true),
+            'Padrões estruturais obrigatórios de formatação: headers, listas, tabelas, blocos de código.')}
         </div>`;
 
       case 3: return `
@@ -1186,10 +1204,11 @@ class GFSkillApp {
         <button class="btn-act" onclick="app._cancelEdit()">
           <i data-lucide="x" style="width:13px;height:13px"></i> Cancelar
         </button>
+        ${this.mode !== 'new' ? `
         <div class="gfsk-toolbar-sep"></div>
         <button class="btn-act btn-outline" onclick="app._startNew()">
           <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Skill
-        </button>
+        </button>` : ''}
       </div>
       ${this._buildTabBar()}
       <div class="gfsk-tab-body" id="gfsk-tab-body" style="flex:1;overflow-y:auto">
@@ -1374,24 +1393,51 @@ class GFSkillApp {
   // ── Inactivate / Activate ─────────────────────────
   _inactivate() {
     if (!this.selected) return;
-    frappe.confirm('Inativar este Skill?', () => {
+    const name = this.selected.name;
+    frappe.confirm('Inativar este Skill? O status será alterado para Inativo.', () => {
       frappe.call({
         method: 'frappe.client.set_value',
-        args: { doctype:'GF Skill', name:this.selected.name, fieldname:'active', value:0 },
-        callback: () => { this._toast('Skill inativado.', 'info'); this.selectSkill(this.selected.name); },
-        error:    () => { this._toast('Erro ao inativar.', 'error'); }
+        args: { doctype:'GF Skill', name, fieldname:'active', value:0 },
+        callback: () => {
+          frappe.call({
+            method: 'frappe.client.set_value',
+            args: { doctype:'GF Skill', name, fieldname:'status', value:'Inativo' },
+            callback: () => { this._toast('Skill inativado.', 'info'); this.selectSkill(name); },
+            error:    () => { this._toast('Erro ao atualizar status.', 'error'); }
+          });
+        },
+        error: () => { this._toast('Erro ao inativar.', 'error'); }
       });
     });
   }
 
   _activate() {
     if (!this.selected) return;
+    const name = this.selected.name;
     frappe.call({
       method: 'frappe.client.set_value',
-      args: { doctype:'GF Skill', name:this.selected.name, fieldname:'active', value:1 },
-      callback: () => { this._toast('Skill ativado.', 'success'); this.selectSkill(this.selected.name); },
-      error:    () => { this._toast('Erro ao ativar.', 'error'); }
+      args: { doctype:'GF Skill', name, fieldname:'active', value:1 },
+      callback: () => {
+        frappe.call({
+          method: 'frappe.client.set_value',
+          args: { doctype:'GF Skill', name, fieldname:'status', value:'Ativo' },
+          callback: () => { this._toast('Skill ativado com sucesso.', 'success'); this.selectSkill(name); },
+          error:    () => { this._toast('Erro ao atualizar status.', 'error'); }
+        });
+      },
+      error: () => { this._toast('Erro ao ativar.', 'error'); }
     });
+  }
+
+  // ── View History ──────────────────────────────────
+  _viewHistory() {
+    this.activeTab = 6;
+    document.querySelectorAll('.gfsk-tab').forEach((el,i) => el.classList.toggle('active', i===6));
+    const $body = document.getElementById('gfsk-tab-body');
+    if ($body) {
+      $body.innerHTML = this._renderTabContent(6);
+      if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    }
   }
 
   // ── Copy helper ───────────────────────────────────
@@ -1416,12 +1462,23 @@ class GFSkillApp {
 
   // ── Toast ─────────────────────────────────────────
   _toast(msg, type='info') {
+    const icons = { success:'check-circle', error:'x-circle', info:'info' };
     const $t = document.getElementById('gfsk-toast');
     const el = document.createElement('div');
     el.className = `toast ${type}`;
-    el.textContent = msg;
+    el.innerHTML = `
+      <i data-lucide="${icons[type]||'info'}" class="toast-icon" style="width:16px;height:16px;flex-shrink:0"></i>
+      <span class="toast-msg">${this._esc(msg)}</span>
+      <button class="toast-close" onclick="this.closest('.toast').remove()" title="Fechar">
+        <i data-lucide="x" style="width:14px;height:14px"></i>
+      </button>`;
     $t.appendChild(el);
-    setTimeout(() => el.remove(), 3500);
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    const dismiss = () => {
+      el.classList.add('leaving');
+      setTimeout(() => el.remove(), 200);
+    };
+    setTimeout(dismiss, 5000);
   }
 
   // ── Escape helpers ────────────────────────────────
