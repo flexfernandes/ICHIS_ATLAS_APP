@@ -259,27 +259,27 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 /* ── Tabs ─────────────────────────────────────────── */
 .gfsk-tabs{
   display:flex;gap:0;background:var(--surface);
-  border-bottom:1px solid var(--border);
-  padding:0 24px;flex-shrink:0;overflow-x:auto
+  border-bottom:1px solid #eef0f4;
+  padding:0 18px;flex-shrink:0;overflow-x:auto
 }
 .gfsk-tabs::-webkit-scrollbar{height:0}
 .gfsk-tab{
-  display:flex;align-items:center;gap:5px;
-  padding:10px 14px;font-size:12.5px;font-weight:500;
+  display:flex;align-items:center;gap:4px;
+  padding:8px 10px;font-size:11.5px;font-weight:500;
   color:var(--text-m);cursor:pointer;white-space:nowrap;
-  border-bottom:2.5px solid transparent;margin-bottom:-1px;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
   transition:all 150ms
 }
 .gfsk-tab:hover{color:var(--text);background:var(--primary-pale)}
 .gfsk-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
 .gfsk-tab-dot{
-  width:5px;height:5px;border-radius:50%;
+  width:4px;height:4px;border-radius:50%;
   background:var(--accent);opacity:0;transition:opacity 150ms
 }
 .gfsk-tab.has-content .gfsk-tab-dot{opacity:1}
 
 /* ── Tab content ──────────────────────────────────── */
-.gfsk-tab-body{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+.gfsk-tab-body{flex:1;overflow-y:auto;padding:20px 24px;background:var(--bg)}
 .gfsk-tab-body::-webkit-scrollbar{width:5px}
 .gfsk-tab-body::-webkit-scrollbar-track{background:transparent}
 .gfsk-tab-body::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
@@ -936,7 +936,7 @@ class GFSkillApp {
   _buildTabBar() {
     return `<div class="gfsk-tabs">${TABS.map((t,i)=>`
       <div class="gfsk-tab${i===this.activeTab?' active':''}" onclick="app._switchTab(${i})">
-        <i data-lucide="${t.icon}" style="width:13px;height:13px"></i>
+        <i data-lucide="${t.icon}" style="width:11px;height:11px"></i>
         ${t.label}
         <div class="gfsk-tab-dot"></div>
       </div>`).join('')}</div>`;
@@ -1477,20 +1477,41 @@ class GFSkillApp {
       ? Object.assign({ doctype:'GF Skill' }, d)
       : Object.assign({ doctype:'GF Skill', name:this.selected.name }, d);
 
+    const originToDeactivate = (this.mode === 'new') ? (d._originSkillName || null) : null;
+
     frappe.call({
       method,
       args: { doc },
       callback: (r) => {
         if (r && r.message) {
-          this._toast('Skill salvo com sucesso!', 'success');
           const saved = r.message;
-          this._loadSkills().then(() => {
-            this.selected  = saved;
-            this.mode      = 'view';
-            this.activeTab = 0;
-            this._renderView();
-            this._markActive(saved.name);
-          });
+          const finish = () => {
+            this._loadSkills().then(() => {
+              this.selected  = saved;
+              this.mode      = 'view';
+              this.activeTab = 0;
+              this._renderView();
+              this._markActive(saved.name);
+            });
+          };
+          if (originToDeactivate) {
+            // Desativa a versão anterior (active=0) ao salvar uma nova versão
+            frappe.call({
+              method: 'frappe.client.set_value',
+              args: { doctype:'GF Skill', name:originToDeactivate, fieldname:'active', value:0 },
+              callback: () => {
+                this._toast('Skill salvo! Versão anterior desativada.', 'success');
+                finish();
+              },
+              error: () => {
+                this._toast('Skill salvo, mas não foi possível desativar a versão anterior.', 'info');
+                finish();
+              }
+            });
+          } else {
+            this._toast('Skill salvo com sucesso!', 'success');
+            finish();
+          }
         } else {
           this._toast('Erro ao salvar o Skill.', 'error');
           resetBtn();
@@ -1588,14 +1609,15 @@ class GFSkillApp {
     this.activeTab = 0;
     this.selected  = null;
     this.editData  = Object.assign({}, s, {
-      name:            undefined,
-      internal_name:   (s.internal_name || '') + '_v' + newVer.replace(/\./g,'_'),
-      status:          'Draft',
-      docstatus:       0,
-      version:         newVer,
-      version_notes:   `v${newVer} — Criado a partir de "${originRef}" v${ver} em ${today}.`,
-      version_history: newHistory,
-      full_prompt:     ''
+      name:             undefined,
+      internal_name:    (s.internal_name || '') + '_v' + newVer.replace(/\./g,'_'),
+      status:           'Draft',
+      docstatus:        0,
+      version:          newVer,
+      version_notes:    `v${newVer} — Criado a partir de "${originRef}" v${ver} em ${today}.`,
+      version_history:  newHistory,
+      full_prompt:      '',
+      _originSkillName: s.name   // usado em _save() para desativar a versão anterior
     });
     document.querySelectorAll('.sk-card').forEach(c => c.classList.remove('active'));
     this._renderEditMode();
