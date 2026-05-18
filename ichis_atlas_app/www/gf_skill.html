@@ -766,6 +766,10 @@ class GFSkillApp {
         <button class="btn-act btn-danger" onclick="app._deleteSkill()">
           <i data-lucide="trash-2" style="width:13px;height:13px"></i> Excluir
         </button>
+        <div class="gfsk-toolbar-sep"></div>
+        <button class="btn-act btn-outline" onclick="app._startNew()">
+          <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Skill
+        </button>
       </div>
 
       <!-- Tabs -->
@@ -1087,12 +1091,41 @@ class GFSkillApp {
         </div>`;
 
       case 7: return `
-        <div class="fld-box" style="grid-column:1/-1">
-          <div class="fld-lbl">Full Prompt</div>
-          <div class="fld-val empty">
-            O Prompt Completo é gerado automaticamente ao salvar.<br>
-            Preencha os campos nas outras abas e clique em Salvar.
+        <div class="form-grid full" style="gap:12px">
+          <div style="grid-column:1/-1;background:var(--primary-bg);border:1px solid var(--primary-l);
+               border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px">
+            <i data-lucide="info" style="width:16px;height:16px;color:var(--primary);flex-shrink:0;margin-top:1px"></i>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--primary);margin-bottom:4px">Como o Prompt Completo é gerado</div>
+              <p style="font-size:12px;color:#475569;margin:0;line-height:1.6">
+                O campo <strong>Full Prompt</strong> é montado automaticamente ao salvar, combinando todos os campos
+                preenchidos nas abas anteriores. Abaixo estão as seções que compõem o prompt final e o que cada uma
+                ensina à IA.
+              </p>
+            </div>
           </div>
+          ${[
+            ['PROPÓSITO', 'Aba: Informações Gerais', 'Explica para a IA qual é o objetivo central do Skill — o que deve ser produzido e qual valor entrega. É a primeira instrução que a IA lê e define o enquadramento geral.'],
+            ['QUANDO USAR / QUANDO NÃO USAR', 'Aba: Informações Gerais', 'Define o escopo de aplicação. Instrui a IA sobre os contextos adequados e os limites do Skill, evitando uso indevido ou resultados fora do padrão.'],
+            ['INSTRUÇÕES PRINCIPAIS', 'Aba: Instruções', 'O bloco mais importante do prompt. Contém as regras centrais de comportamento que a IA deve seguir durante toda a execução do Skill.'],
+            ['REGRAS OBRIGATÓRIAS', 'Aba: Instruções', 'Lista as regras críticas e não negociáveis. A IA deve obedecer a estas regras acima de qualquer outra instrução ou preferência do usuário.'],
+            ['AÇÕES PROIBIDAS', 'Aba: Instruções', 'Define explicitamente o que a IA jamais pode fazer ao executar este Skill, reduzindo risco de comportamentos indesejados ou saídas incorretas.'],
+            ['CHECKLIST DE VALIDAÇÃO', 'Aba: Instruções', 'Lista de verificações que a IA deve executar antes de finalizar a resposta, garantindo conformidade com todos os requisitos do Skill.'],
+            ['ESTILO DE ESCRITA / VISUAL / TOM DE VOZ', 'Aba: Estilo', 'Calibra o modo de comunicação da IA: vocabulário, nível de formalidade, densidade técnica e aparência visual do conteúdo gerado.'],
+            ['REGRAS DE FORMATAÇÃO', 'Aba: Estilo', 'Define padrões estruturais obrigatórios: uso de headers, listas, tabelas, blocos de código, indentação e demais convenções de formatação da saída.'],
+            ['CABEÇALHO / RODAPÉ — TEMPLATE', 'Abas: Cabeçalho e Rodapé', 'Fornece o template exato que a IA deve usar no início e no fim de cada documento gerado, garantindo consistência visual e identidade corporativa.'],
+            ['EXEMPLO COMPLETO', 'Aba: Exemplo Completo', 'Apresenta um modelo de referência real para a IA usar como âncora de qualidade. É o padrão-ouro contra o qual a saída gerada deve ser comparada.'],
+            ['INFORMAÇÕES TÉCNICAS', 'Aba: Campos Técnicos', 'Metadados técnicos do Skill: formato de saída, idioma, módulo relacionado, prioridade e flags de permissão. Contextualiza o ambiente de execução.'],
+          ].map(([sec, tab, desc]) => `
+            <div style="grid-column:1/-1;background:#fff;border:1px solid var(--border);border-radius:8px;
+                 padding:12px 16px;display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:start">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;
+                     letter-spacing:.5px;margin-bottom:3px">${sec}</div>
+                <div style="font-size:11px;color:#94a3b8">${tab}</div>
+              </div>
+              <div style="font-size:12px;color:#475569;line-height:1.6">${desc}</div>
+            </div>`).join('')}
         </div>`;
 
       default: return '';
@@ -1146,13 +1179,25 @@ class GFSkillApp {
           <div class="gfsk-form-hdr-sub">Preencha as abas e clique em Salvar para gerar o Prompt Completo.</div>
         </div>
       </div>
+      <div class="gfsk-toolbar">
+        <button class="btn-act btn-primary" id="gfsk-btn-save" onclick="app._save()">
+          <i data-lucide="save" style="width:13px;height:13px"></i> Salvar Skill
+        </button>
+        <button class="btn-act" onclick="app._cancelEdit()">
+          <i data-lucide="x" style="width:13px;height:13px"></i> Cancelar
+        </button>
+        <div class="gfsk-toolbar-sep"></div>
+        <button class="btn-act btn-outline" onclick="app._startNew()">
+          <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Skill
+        </button>
+      </div>
       ${this._buildTabBar()}
       <div class="gfsk-tab-body" id="gfsk-tab-body" style="flex:1;overflow-y:auto">
         ${this._renderTabForm(this.activeTab)}
       </div>
       <div class="gfsk-form-foot">
         <button class="btn-cancel" onclick="app._cancelEdit()">Cancelar</button>
-        <button class="btn-save" id="gfsk-btn-save" onclick="app._save()">
+        <button class="btn-save" onclick="app._save()">
           <i data-lucide="save" style="width:14px;height:14px"></i>
           Salvar Skill
         </button>

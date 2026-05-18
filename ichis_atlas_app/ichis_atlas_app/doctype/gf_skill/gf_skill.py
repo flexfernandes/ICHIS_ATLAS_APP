@@ -14,17 +14,18 @@ class GFSkill(Document):
     def _build_prompt(self):
         parts = []
 
-        def sec(title, content):
+        def sec(title, content, note=None):
             if content and str(content).strip():
-                parts.append(f"\n## {title}\n{str(content).strip()}")
+                if note:
+                    parts.append(f"\n## {title}\n> {note}\n\n{str(content).strip()}")
+                else:
+                    parts.append(f"\n## {title}\n{str(content).strip()}")
 
         def flag(label, value):
             return f"- {label}: {'Sim' if value else 'Não'}"
 
-        # Header
-        parts.append(
-            f"# {self.skill_name or '—'} — v{self.version or '1.0.0'}"
-        )
+        # ── Cabeçalho ────────────────────────────────────────────────────────
+        parts.append(f"# {self.skill_name or '—'} — v{self.version or '1.0.0'}")
 
         meta = []
         if self.category:      meta.append(f"Categoria: {self.category}")
@@ -39,45 +40,79 @@ class GFSkill(Document):
 
         parts.append("\n---")
 
-        # Propósito
-        sec("PROPÓSITO", self.purpose)
+        # ── Propósito ────────────────────────────────────────────────────────
+        sec("PROPÓSITO",
+            self.purpose,
+            "Este bloco define o objetivo central do Skill. "
+            "Leia com atenção para compreender o que deve ser produzido e qual valor este Skill entrega.")
 
         if self.when_to_use or self.when_not_to_use:
             parts.append("\n---")
-            sec("QUANDO USAR", self.when_to_use)
-            sec("QUANDO NÃO USAR", self.when_not_to_use)
+            sec("QUANDO USAR",
+                self.when_to_use,
+                "Utilize este Skill apenas nos cenários descritos abaixo.")
+            sec("QUANDO NÃO USAR",
+                self.when_not_to_use,
+                "Nos cenários abaixo este Skill NÃO deve ser utilizado. Respeite estas limitações.")
 
         parts.append("\n---")
 
-        # Instruções
-        sec("INSTRUÇÕES PRINCIPAIS", self.main_instructions)
-        sec("REGRAS OBRIGATÓRIAS", self.mandatory_rules)
-        sec("AÇÕES PROIBIDAS", self.forbidden_actions)
-        sec("CHECKLIST DE VALIDAÇÃO", self.validation_checklist)
+        # ── Instruções ───────────────────────────────────────────────────────
+        sec("INSTRUÇÕES PRINCIPAIS",
+            self.main_instructions,
+            "Estas são as regras centrais de comportamento. "
+            "Siga-as rigorosamente durante toda a execução deste Skill.")
+        sec("REGRAS OBRIGATÓRIAS",
+            self.mandatory_rules,
+            "Regras críticas e não negociáveis. "
+            "Devem ser obedecidas acima de qualquer outra instrução ou preferência do usuário.")
+        sec("AÇÕES PROIBIDAS",
+            self.forbidden_actions,
+            "Os comportamentos listados abaixo são estritamente proibidos neste Skill.")
+        sec("CHECKLIST DE VALIDAÇÃO",
+            self.validation_checklist,
+            "Antes de finalizar a resposta, verifique cada item desta lista. "
+            "Só conclua quando todos os critérios estiverem atendidos.")
 
         parts.append("\n---")
 
-        # Estilo
-        sec("ESTILO DE ESCRITA", self.writing_style)
-        sec("ESTILO VISUAL", self.visual_style)
-        sec("TOM DE VOZ", self.tone_of_voice)
-        sec("REGRAS DE FORMATAÇÃO", self.formatting_rules)
+        # ── Estilo ───────────────────────────────────────────────────────────
+        sec("ESTILO DE ESCRITA",
+            self.writing_style,
+            "Adote este estilo de escrita em todo o conteúdo gerado.")
+        sec("ESTILO VISUAL",
+            self.visual_style,
+            "A aparência visual do conteúdo gerado deve seguir estas diretrizes.")
+        sec("TOM DE VOZ",
+            self.tone_of_voice,
+            "Mantenha este tom em toda a comunicação gerada pelo Skill.")
+        sec("REGRAS DE FORMATAÇÃO",
+            self.formatting_rules,
+            "Padrões estruturais obrigatórios. "
+            "Aplique-os em todos os elementos do conteúdo gerado.")
 
-        # Cabeçalho / Rodapé
+        # ── Cabeçalho / Rodapé ───────────────────────────────────────────────
         if self.header_template or self.footer_template:
             parts.append("\n---")
-            sec("CABEÇALHO — TEMPLATE", self.header_template)
+            sec("CABEÇALHO — TEMPLATE",
+                self.header_template,
+                "Use exatamente este template como cabeçalho de cada documento gerado.")
             sec("Observações do Cabeçalho", self.header_notes)
-            sec("RODAPÉ — TEMPLATE", self.footer_template)
+            sec("RODAPÉ — TEMPLATE",
+                self.footer_template,
+                "Use exatamente este template como rodapé de cada documento gerado.")
             sec("Observações do Rodapé", self.footer_notes)
 
-        # Exemplo
+        # ── Exemplo completo ─────────────────────────────────────────────────
         if self.full_example:
             parts.append("\n---")
-            sec("EXEMPLO COMPLETO", self.full_example)
+            sec("EXEMPLO COMPLETO",
+                self.full_example,
+                "Este é o modelo de referência de qualidade. "
+                "O conteúdo gerado deve ser comparado a este padrão antes de ser entregue.")
             sec("Observações do Exemplo", self.example_notes)
 
-        # Técnico
+        # ── Informações técnicas ─────────────────────────────────────────────
         tech = []
         if self.prompt_file_name: tech.append(f"- Arquivo: `{self.prompt_file_name}`")
         if self.related_module:   tech.append(f"- Módulo: {self.related_module}")
@@ -90,7 +125,10 @@ class GFSkill(Document):
         tech.append(flag("Skill de Sistema", self.is_system_skill))
 
         parts.append("\n---")
-        parts.append("\n## INFORMAÇÕES TÉCNICAS")
+        parts.append(
+            "\n## INFORMAÇÕES TÉCNICAS\n"
+            "> Metadados de configuração e controle operacional deste Skill.\n"
+        )
         parts.append("\n".join(tech))
 
         sec("HISTÓRICO DE VERSÕES", self.version_history)
