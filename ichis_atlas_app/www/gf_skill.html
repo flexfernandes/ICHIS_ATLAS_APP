@@ -1237,7 +1237,7 @@ class GFSkillApp {
 
 // ── Boot ───────────────────────────────────────────
 let app;
-$(function() {
+frappe.ready(function() {
   app = new GFSkillApp();
   app.init();
 });
