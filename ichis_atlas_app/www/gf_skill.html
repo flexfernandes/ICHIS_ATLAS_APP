@@ -2,6 +2,10 @@
 
 {% block head_include %}
 <script src="/assets/ichis_atlas_app/js/lucide.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
 <style>
 /* ── Reset & base ─────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -554,6 +558,16 @@ select.form-control{cursor:pointer}
   .gfsk-sb.open{transform:translateX(0)}
   :root{--sidebar:100%}
 }
+
+/* ── CodeMirror CSS Editor ────────────────────────── */
+.CodeMirror{
+  font-family:var(--mono);font-size:13px;line-height:1.65;
+  border-radius:6px;height:auto;border:1px solid #1e293b
+}
+.CodeMirror-scroll{min-height:380px}
+.CodeMirror-gutters{border-right:1px solid #1e293b}
+.CodeMirror-linenumber{color:#4a5568;font-size:11px;padding:0 8px}
+.CodeMirror-cursor{border-left:2px solid #93c5fd}
 </style>
 {% endblock %}
 
@@ -948,6 +962,7 @@ class GFSkillApp {
         ? this._renderTabForm(idx)
         : this._renderTabContent(idx);
       if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+      if (idx === 3 && (this.mode==='edit'||this.mode==='new')) this._initCssEditor();
     }
   }
 
@@ -1291,18 +1306,13 @@ class GFSkillApp {
       case 3: return `
         <div class="form-grid full">
           <div class="form-group" style="grid-column:1/-1">
-            <label class="form-label" style="display:flex;align-items:center;gap:6px">
+            <label class="form-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
               <i data-lucide="braces" style="width:12px;height:12px"></i>
               Script CSS
               <span style="font-size:9px;background:#1e293b;color:#93c5fd;padding:2px 6px;border-radius:4px;font-family:monospace;font-weight:600">CSS</span>
             </label>
-            <textarea class="form-control mono" rows="22"
-              style="background:#0f172a !important;color:#e2e8f0 !important;border-color:#1e293b !important;
-                     font-size:12.5px;line-height:1.7;tab-size:2;resize:vertical;min-height:360px;
-                     caret-color:#93c5fd;letter-spacing:0.01em"
-              placeholder="/* CSS personalizado para este Skill */&#10;&#10;:root {&#10;  --primary: #1e293b;&#10;}&#10;&#10;.container { ... }"
-              oninput="app._fd('css_script',this.value)">${this._esc(d.css_script||'')}</textarea>
-            <div class="form-desc">CSS aplicado automaticamente ao HTML gerado por este Skill. Sobrescreve estilos padrão do GF Atlas.</div>
+            <textarea id="gfsk-css-editor">${this._esc(d.css_script||'')}</textarea>
+            <div class="form-desc" style="margin-top:8px">CSS aplicado automaticamente ao HTML gerado por este Skill. Sobrescreve estilos padrão do GF Atlas.</div>
           </div>
         </div>`;
 
@@ -1485,6 +1495,27 @@ class GFSkillApp {
         </button>
       </div>`;
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    if (this.activeTab === 3) this._initCssEditor();
+  }
+
+  // ── CSS Editor (CodeMirror) ───────────────────────
+  _initCssEditor() {
+    if (!window.CodeMirror) return;
+    const ta = document.getElementById('gfsk-css-editor');
+    if (!ta) return;
+    if (this._cmEditor) { try { this._cmEditor.toTextArea(); } catch(e){} this._cmEditor = null; }
+    this._cmEditor = CodeMirror.fromTextArea(ta, {
+      mode: 'css',
+      theme: 'material-darker',
+      lineNumbers: true,
+      lineWrapping: false,
+      tabSize: 2,
+      indentWithTabs: false,
+      autofocus: false,
+      extraKeys: { Tab: cm => cm.execCommand('indentMore'), 'Shift-Tab': cm => cm.execCommand('indentLess') }
+    });
+    this._cmEditor.setSize('100%', '420px');
+    this._cmEditor.on('change', (cm) => { this._fd('css_script', cm.getValue()); });
   }
 
   // ── Cancel edit ───────────────────────────────────
@@ -1535,7 +1566,7 @@ class GFSkillApp {
       const method = this.mode === 'new' ? 'frappe.client.insert' : 'frappe.client.save';
       const doc    = this.mode === 'new'
         ? Object.assign({ doctype:'GF Skill' }, d)
-        : Object.assign({}, baseDoc, d, { doctype:'GF Skill', name:this.selected.name });
+        : Object.assign({}, baseDoc, d, { doctype:'GF Skill', name:this.selected.name, modified:baseDoc.modified });
 
       frappe.call({
         method,
