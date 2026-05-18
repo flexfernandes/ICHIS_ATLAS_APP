@@ -5,6 +5,8 @@ from frappe.model.document import Document
 class GFSkill(Document):
 
     def before_save(self):
+        if self.status in ('Inativo', 'Obsoleto', 'Arquivado'):
+            self.active = 0
         self.full_prompt = self._build_prompt()
 
     def before_submit(self):

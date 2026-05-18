@@ -64,71 +64,71 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 /* ── Sidebar ──────────────────────────────────────── */
 .gfsk-sb{
   width:var(--sidebar);min-width:var(--sidebar);
-  background:var(--surface);border-right:1px solid var(--border);
+  background:#0f172a;border-right:1px solid rgba(255,255,255,.06);
   display:flex;flex-direction:column;overflow:hidden
 }
 .gfsk-sb-top{padding:14px 14px 10px;flex-shrink:0}
 .gfsk-sb-search{
   display:flex;align-items:center;gap:7px;
-  background:var(--bg);border:1px solid var(--border);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
   border-radius:8px;padding:7px 10px;
   transition:border-color 150ms
 }
-.gfsk-sb-search:focus-within{border-color:var(--border-h)}
+.gfsk-sb-search:focus-within{border-color:rgba(255,255,255,.25)}
 .gfsk-sb-search input{
   border:none;outline:none;background:transparent;
-  font-size:13px;color:var(--text);flex:1;min-width:0
+  font-size:13px;color:#e2e8f0;flex:1;min-width:0
 }
-.gfsk-sb-search input::placeholder{color:var(--text-l)}
-.gfsk-sb-search svg{flex-shrink:0;color:var(--text-l)}
+.gfsk-sb-search input::placeholder{color:#475569}
+.gfsk-sb-search svg{flex-shrink:0;color:#475569}
 
 .gfsk-sb-filters{
   display:flex;gap:5px;padding:8px 14px;flex-wrap:wrap;flex-shrink:0;
-  border-bottom:1px solid var(--border)
+  border-bottom:1px solid rgba(255,255,255,.06)
 }
 .gfsk-sb-filter{
   font-size:10px;padding:3px 8px;border-radius:20px;
-  border:1px solid var(--border);cursor:pointer;
-  background:var(--surface);color:var(--text-m);
+  border:1px solid rgba(255,255,255,.12);cursor:pointer;
+  background:transparent;color:#94a3b8;
   transition:all 150ms;white-space:nowrap
 }
-.gfsk-sb-filter.active{background:var(--primary);color:#fff;border-color:var(--primary)}
-.gfsk-sb-filter:hover:not(.active){background:var(--surface2)}
+.gfsk-sb-filter.active{background:#334155;color:#e2e8f0;border-color:#475569}
+.gfsk-sb-filter:hover:not(.active){background:rgba(255,255,255,.07);color:#cbd5e1}
 
 .gfsk-sb-list{flex:1;overflow-y:auto;padding:8px}
 .gfsk-sb-list::-webkit-scrollbar{width:4px}
 .gfsk-sb-list::-webkit-scrollbar-track{background:transparent}
-.gfsk-sb-list::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
+.gfsk-sb-list::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
 
 .gfsk-sb-empty{
-  text-align:center;color:var(--text-l);font-size:12px;
+  text-align:center;color:#475569;font-size:12px;
   padding:32px 16px;line-height:1.6
 }
 
 .sk-card{
-  border-radius:8px;padding:10px 11px;margin-bottom:5px;cursor:pointer;
+  border-radius:8px;padding:10px 11px;margin-bottom:4px;cursor:pointer;
   border:1.5px solid transparent;transition:all 150ms;
-  background:var(--surface)
+  background:transparent
 }
-.sk-card:hover{background:var(--primary-bg);border-color:var(--border)}
-.sk-card.active{background:var(--primary-pale);border-color:var(--primary-l)}
+.sk-card:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.09)}
+.sk-card.active{background:#1e293b;border-color:#334155}
 .sk-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:5px}
-.sk-card-name{font-weight:600;font-size:12.5px;color:var(--text);line-height:1.3}
-.sk-card.active .sk-card-name{color:var(--primary)}
-.sk-card-ver{font-size:10px;color:var(--text-l);white-space:nowrap;margin-top:1px}
-.sk-card.active .sk-card-ver{color:var(--text-m)}
+.sk-card-name{font-weight:600;font-size:12.5px;color:#cbd5e1;line-height:1.3}
+.sk-card.active .sk-card-name{color:#93c5fd}
+.sk-card-ver{font-size:10px;color:#475569;white-space:nowrap;margin-top:1px}
+.sk-card.active .sk-card-ver{color:#64748b}
 .sk-card-badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
-.sk-card-desc{font-size:11px;color:var(--text-m);line-height:1.4;
+.sk-card-desc{font-size:11px;color:#64748b;line-height:1.4;
   overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
-.gfsk-sb-foot{padding:12px;border-top:1px solid var(--border);flex-shrink:0}
+.gfsk-sb-foot{padding:12px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
 .btn-new-skill{
   width:100%;display:flex;align-items:center;justify-content:center;gap:6px;
-  background:var(--primary);color:#fff;border:none;
+  background:#059669;color:#fff;border:none;
   border-radius:8px;padding:9px;font-size:13px;font-weight:600;
   cursor:pointer;transition:background 150ms
 }
-.btn-new-skill:hover{background:var(--primary-h)}
+.btn-new-skill:hover{background:#047857}
 
 /* ── Badges ───────────────────────────────────────── */
 .badge{
@@ -470,6 +470,74 @@ select.form-control{cursor:pointer}
 .modal .modal-footer .btn-default,
 .modal .modal-footer .btn-secondary{
   background:#fff !important;border-color:#e2e8f0 !important;color:#475569 !important
+}
+
+/* ── Skill detail view layout ────────────────────── */
+.skill-view-body{display:flex;flex-direction:column;gap:12px;padding:18px 24px;overflow-y:auto;flex:1}
+
+.skill-tech-strip{
+  display:flex;align-items:center;flex-wrap:wrap;gap:8px;
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;
+  padding:10px 14px
+}
+.skill-tech-id{
+  display:flex;align-items:center;gap:6px;
+  background:#1e293b;color:#93c5fd;
+  border-radius:6px;padding:4px 10px;font-family:var(--mono);font-size:11.5px
+}
+.skill-tech-id-copy{
+  background:none;border:none;cursor:pointer;padding:0 2px;
+  color:#64748b;display:flex;align-items:center;transition:color 150ms
+}
+.skill-tech-id-copy:hover{color:#93c5fd}
+.skill-tech-sep{width:1px;height:14px;background:#e2e8f0;flex-shrink:0}
+.skill-tech-chip{
+  display:flex;align-items:center;gap:4px;
+  font-size:11.5px;color:#475569;
+  background:#fff;border:1px solid #e2e8f0;
+  border-radius:5px;padding:3px 9px
+}
+.skill-tech-chip.active-yes{color:#065f46;background:#f0fdf4;border-color:#a7f3d0}
+.skill-tech-chip.active-no{color:#92400e;background:#fffbeb;border-color:#fde68a}
+
+.skill-purpose-card{
+  background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden
+}
+.skill-purpose-hdr{
+  display:flex;align-items:center;gap:7px;
+  background:#1e293b;color:#f1f5f9;
+  font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:9px 16px
+}
+.skill-purpose-body{
+  padding:14px 16px;font-size:13px;color:#374151;line-height:1.7;white-space:pre-wrap
+}
+
+.skill-when-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.skill-when-grid{grid-template-columns:1fr}}
+.skill-when-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
+.skill-when-hdr{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+  padding:8px 14px
+}
+.skill-when-hdr.yes{background:#f0fdf4;color:#065f46;border-bottom:1px solid #a7f3d0}
+.skill-when-hdr.no{background:#fef2f2;color:#991b1b;border-bottom:1px solid #fca5a5}
+.skill-when-body{padding:12px 14px;font-size:12.5px;color:#475569;line-height:1.7;white-space:pre-wrap}
+
+.skill-bottom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.skill-bottom-card{
+  background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden
+}
+.skill-bottom-hdr{
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:#94a3b8;padding:8px 14px;border-bottom:1px solid #f1f5f9
+}
+.skill-bottom-body{padding:10px 14px;font-size:12.5px;color:#475569;line-height:1.6;white-space:pre-wrap}
+.skill-tag-list{display:flex;flex-wrap:wrap;gap:5px;padding:10px 14px}
+.skill-tag{
+  font-size:11px;background:#ede9fe;color:#5b21b6;
+  border-radius:20px;padding:2px 9px;font-weight:500
 }
 
 /* ── Skill locked notice ─────────────────────────── */
@@ -916,25 +984,93 @@ class GFSkillApp {
     </div>`;
 
     switch(idx) {
-      case 0: return `
-        <div class="fld-grid">
-          ${fld('Skill Name', v('skill_name'))}
-          ${fld('Internal Name', v('internal_name'), true)}
-          ${fld('Category', v('category'))}
-          ${fld('Status', v('status'))}
-          ${fld('Version', v('version'))}
-          ${fld('Owner', v('skill_owner'))}
-          ${fld('Output Type', v('output_type'))}
-          ${fld('Tags', v('tags'))}
-          ${fld('Active', v('active')?'Sim':'Não')}
-        </div>
-        <div class="fld-grid">
-          ${fldFull('Short Description', v('short_description'))}
-          ${fldFull('Version Notes', v('version_notes'))}
-          ${fldFull('Purpose', v('purpose'))}
-          ${fldFull('When to Use', v('when_to_use'))}
-          ${fldFull('When Not to Use', v('when_not_to_use'))}
+      case 0: {
+        const tags = (v('tags')||'').split(',').map(t=>t.trim()).filter(Boolean);
+        return `<div class="skill-view-body">
+
+          <!-- Strip técnico: ID interno + chips de metadados -->
+          <div class="skill-tech-strip">
+            <div class="skill-tech-id">
+              <i data-lucide="terminal" style="width:12px;height:12px;flex-shrink:0"></i>
+              ${this._esc(v('internal_name')||'—')}
+              <button class="skill-tech-id-copy" title="Copiar ID"
+                onclick="app._copyText('${this._escJs(v('internal_name'))}', this)">
+                <i data-lucide="copy" style="width:11px;height:11px"></i>
+              </button>
+            </div>
+            <div class="skill-tech-sep"></div>
+            ${v('output_type') ? `
+              <div class="skill-tech-chip">
+                <i data-lucide="file-code" style="width:11px;height:11px"></i>
+                ${this._esc(v('output_type'))}
+              </div>` : ''}
+            ${v('default_language') ? `
+              <div class="skill-tech-chip">
+                <i data-lucide="globe" style="width:11px;height:11px"></i>
+                ${this._esc(v('default_language'))}
+              </div>` : ''}
+            ${v('skill_priority') ? `
+              <div class="skill-tech-chip">
+                <i data-lucide="zap" style="width:11px;height:11px"></i>
+                ${this._esc(v('skill_priority'))}
+              </div>` : ''}
+            <div class="skill-tech-chip ${v('active') ? 'active-yes' : 'active-no'}">
+              <i data-lucide="${v('active') ? 'check-circle' : 'x-circle'}" style="width:11px;height:11px"></i>
+              ${v('active') ? 'Ativo' : 'Inativo'}
+            </div>
+          </div>
+
+          <!-- Propósito -->
+          ${v('purpose') ? `
+            <div class="skill-purpose-card">
+              <div class="skill-purpose-hdr">
+                <i data-lucide="target" style="width:13px;height:13px"></i> Propósito
+              </div>
+              <div class="skill-purpose-body">${this._esc(v('purpose'))}</div>
+            </div>` : ''}
+
+          <!-- Quando usar / Quando NÃO usar -->
+          ${(v('when_to_use') || v('when_not_to_use')) ? `
+            <div class="skill-when-grid">
+              ${v('when_to_use') ? `
+                <div class="skill-when-card">
+                  <div class="skill-when-hdr yes">
+                    <i data-lucide="check" style="width:12px;height:12px"></i> Quando Usar
+                  </div>
+                  <div class="skill-when-body">${this._esc(v('when_to_use'))}</div>
+                </div>` : '<div></div>'}
+              ${v('when_not_to_use') ? `
+                <div class="skill-when-card">
+                  <div class="skill-when-hdr no">
+                    <i data-lucide="x" style="width:12px;height:12px"></i> Quando NÃO Usar
+                  </div>
+                  <div class="skill-when-body">${this._esc(v('when_not_to_use'))}</div>
+                </div>` : '<div></div>'}
+            </div>` : ''}
+
+          <!-- Bottom: descrição · notas · tags -->
+          <div class="skill-bottom-grid">
+            ${v('short_description') ? `
+              <div class="skill-bottom-card">
+                <div class="skill-bottom-hdr">Descrição Resumida</div>
+                <div class="skill-bottom-body">${this._esc(v('short_description'))}</div>
+              </div>` : ''}
+            ${v('version_notes') ? `
+              <div class="skill-bottom-card">
+                <div class="skill-bottom-hdr">Notas da Versão</div>
+                <div class="skill-bottom-body">${this._esc(v('version_notes'))}</div>
+              </div>` : ''}
+            ${tags.length ? `
+              <div class="skill-bottom-card">
+                <div class="skill-bottom-hdr">Tags</div>
+                <div class="skill-tag-list">
+                  ${tags.map(t=>`<span class="skill-tag">${this._esc(t)}</span>`).join('')}
+                </div>
+              </div>` : ''}
+          </div>
+
         </div>`;
+      }
 
       case 1: return `
         <div class="fld-grid full">
@@ -1218,7 +1354,7 @@ class GFSkillApp {
   // ── Field data helper ─────────────────────────────
   _fd(field, val) {
     this.editData[field] = val;
-    // Auto-fill internal_name from skill_name
+    // Auto-fill internal_name from skill_name (new mode only)
     if (field === 'skill_name' && (!this.editData.internal_name || this.mode === 'new')) {
       const slug = val.toLowerCase()
         .normalize('NFD').replace(/[̀-ͯ]/g,'')
@@ -1226,6 +1362,12 @@ class GFSkillApp {
       this.editData.internal_name = slug;
       const inp = document.querySelector('[oninput*="internal_name"]');
       if (inp) inp.value = slug;
+    }
+    // Auto-desativa quando status bloqueado
+    if (field === 'status' && ['Inativo','Obsoleto','Arquivado'].includes(val)) {
+      this.editData.active = 0;
+      const chk = document.getElementById('chk_active');
+      if (chk) chk.checked = false;
     }
   }
 
@@ -1463,12 +1605,20 @@ class GFSkillApp {
   // ── Mark Obsolete ─────────────────────────────────
   _markObsolete() {
     if (!this.selected) return;
-    frappe.confirm('Marcar este Skill como Obsoleto?', () => {
+    const name = this.selected.name;
+    frappe.confirm('Marcar este Skill como Obsoleto? O campo Ativo será desativado automaticamente.', () => {
       frappe.call({
         method: 'frappe.client.set_value',
-        args: { doctype:'GF Skill', name:this.selected.name, fieldname:'status', value:'Obsoleto' },
-        callback: () => { this._toast('Skill marcado como Obsoleto.', 'info'); this.selectSkill(this.selected.name); },
-        error:    () => { this._toast('Erro ao atualizar o status.', 'error'); }
+        args: { doctype:'GF Skill', name, fieldname:'active', value:0 },
+        callback: () => {
+          frappe.call({
+            method: 'frappe.client.set_value',
+            args: { doctype:'GF Skill', name, fieldname:'status', value:'Obsoleto' },
+            callback: () => { this._toast('Skill marcado como Obsoleto.', 'info'); this.selectSkill(name); },
+            error:    () => { this._toast('Erro ao atualizar status.', 'error'); }
+          });
+        },
+        error: () => { this._toast('Erro ao atualizar.', 'error'); }
       });
     });
   }
