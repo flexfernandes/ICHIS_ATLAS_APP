@@ -906,11 +906,11 @@ class GFSkillApp {
             <div class="gfsk-toolbar-sep"></div>
             <button class="btn-act btn-danger" onclick="app._deleteSkill()">
               <i data-lucide="trash-2" style="width:13px;height:13px"></i> Excluir
-            </button>
-            <div class="gfsk-toolbar-sep"></div>
-            <button class="btn-act btn-outline" onclick="app._startNew()">
-              <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Skill
             </button>` : ''}
+          <div class="gfsk-toolbar-sep"></div>
+          <button class="btn-act btn-outline" onclick="app._startNew()">
+            <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Skill
+          </button>
         `}
       </div>
 
@@ -1491,53 +1491,64 @@ class GFSkillApp {
     };
     if ($btn) { $btn.disabled = true; $btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px"></div> Salvando...'; }
 
-    const method = this.mode === 'new' ? 'frappe.client.insert' : 'frappe.client.save';
-    const doc    = this.mode === 'new'
-      ? Object.assign({ doctype:'GF Skill' }, d)
-      : Object.assign({ doctype:'GF Skill', name:this.selected.name }, d);
-
     const originToDeactivate = (this.mode === 'new') ? (d._originSkillName || null) : null;
 
-    frappe.call({
-      method,
-      args: { doc },
-      callback: (r) => {
-        if (r && r.message) {
-          const saved = r.message;
-          const finish = () => {
-            this._loadSkills().then(() => {
-              this.selected  = saved;
-              this.mode      = 'view';
-              this.activeTab = 0;
-              this._renderView();
-              this._markActive(saved.name);
-            });
-          };
-          if (originToDeactivate) {
-            // Desativa a versão anterior (active=0) ao salvar uma nova versão
-            frappe.call({
-              method: 'frappe.client.set_value',
-              args: { doctype:'GF Skill', name:originToDeactivate, fieldname:'active', value:0 },
-              callback: () => {
-                this._toast('Skill salvo! Versão anterior desativada.', 'success');
-                finish();
-              },
-              error: () => {
-                this._toast('Skill salvo, mas não foi possível desativar a versão anterior.', 'info');
-                finish();
-              }
-            });
+    // Em modo edição, busca o doc mais recente para evitar erro de timestamp desatualizado
+    const buildAndSave = (baseDoc) => {
+      const method = this.mode === 'new' ? 'frappe.client.insert' : 'frappe.client.save';
+      const doc    = this.mode === 'new'
+        ? Object.assign({ doctype:'GF Skill' }, d)
+        : Object.assign({}, baseDoc, d, { doctype:'GF Skill', name:this.selected.name });
+
+      frappe.call({
+        method,
+        args: { doc },
+        callback: (r) => {
+          if (r && r.message) {
+            const saved = r.message;
+            const finish = () => {
+              this._loadSkills().then(() => {
+                this.selected  = saved;
+                this.mode      = 'view';
+                this.activeTab = 0;
+                this._renderView();
+                this._markActive(saved.name);
+              });
+            };
+            if (originToDeactivate) {
+              frappe.call({
+                method: 'frappe.client.set_value',
+                args: { doctype:'GF Skill', name:originToDeactivate, fieldname:'active', value:0 },
+                callback: () => { this._toast('Skill salvo! Versão anterior desativada.', 'success'); finish(); },
+                error:    () => { this._toast('Skill salvo, mas não foi possível desativar a versão anterior.', 'info'); finish(); }
+              });
+            } else {
+              this._toast('Skill salvo com sucesso!', 'success');
+              finish();
+            }
           } else {
-            this._toast('Skill salvo com sucesso!', 'success');
-            finish();
+            this._toast('Erro ao salvar o Skill.', 'error');
+            resetBtn();
           }
-        } else {
-          this._toast('Erro ao salvar o Skill.', 'error');
-          resetBtn();
-        }
-      },
-      error: () => { this._toast('Erro ao salvar o Skill.', 'error'); resetBtn(); }
-    });
+        },
+        error: () => { this._toast('Erro ao salvar o Skill.', 'error'); resetBtn(); }
+      });
+    };
+
+    if (this.mode === 'edit') {
+      // Busca doc fresco para garantir modified timestamp atualizado
+      frappe.call({
+        method: 'frappe.client.get',
+        args: { doctype: 'GF Skill', name: this.selected.name },
+        callback: (r) => {
+          if (!r.message) { this._toast('Erro ao carregar o Skill.', 'error'); resetBtn(); return; }
+          buildAndSave(r.message);
+        },
+        error: () => { this._toast('Erro ao carregar o Skill.', 'error'); resetBtn(); }
+      });
+    } else {
+      buildAndSave(null);
+    }
   }
 
   // ── Submit ────────────────────────────────────────
