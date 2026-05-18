@@ -632,6 +632,7 @@ const TABS = [
   { id:'general',      label:'Informações Gerais', icon:'info' },
   { id:'instructions', label:'Instruções',         icon:'list' },
   { id:'style',        label:'Estilo',             icon:'type' },
+  { id:'css',          label:'Script CSS',         icon:'braces' },
   { id:'header',       label:'Cabeçalho',          icon:'layout' },
   { id:'footer',       label:'Rodapé',             icon:'layout' },
   { id:'example',      label:'Exemplo Completo',   icon:'code-2' },
@@ -1083,7 +1084,25 @@ class GFSkillApp {
           ${fldFull('Formatting Rules', v('formatting_rules'), true)}
         </div>`;
 
-      case 3: return v('header_template') ? `
+      case 3: {
+        const css = v('css_script');
+        if (!css) return `<div class="gfsk-empty" style="flex:0;padding:40px 0">
+          <i data-lucide="braces" style="width:28px;height:28px;color:#94a3b8"></i>
+          <p style="margin-top:10px;color:#64748b">Nenhum Script CSS definido para este Skill.</p></div>`;
+        return `
+          <div class="code-block">
+            <div class="code-block-bar">
+              <span class="code-block-label">Script CSS</span>
+              <span style="font-size:10px;color:#64748b;margin-left:4px">• ${css.split('\n').length} linhas</span>
+              <button class="btn-copy" onclick="app._copyText(\`${this._escJs(css)}\`, this)">
+                <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar CSS
+              </button>
+            </div>
+            <pre>${this._esc(css)}</pre>
+          </div>`;
+      }
+
+      case 4: return v('header_template') ? `
         <div class="code-block" style="margin-bottom:14px">
           <div class="code-block-bar">
             <span class="code-block-label">Header Template</span>
@@ -1097,7 +1116,7 @@ class GFSkillApp {
       ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
         <p>Nenhum template de cabeçalho definido.</p></div>`;
 
-      case 4: return v('footer_template') ? `
+      case 5: return v('footer_template') ? `
         <div class="code-block" style="margin-bottom:14px">
           <div class="code-block-bar">
             <span class="code-block-label">Footer Template</span>
@@ -1111,7 +1130,7 @@ class GFSkillApp {
       ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
         <p>Nenhum template de rodapé definido.</p></div>`;
 
-      case 5: return v('full_example') ? `
+      case 6: return v('full_example') ? `
         <div class="code-block" style="margin-bottom:14px">
           <div class="code-block-bar">
             <span class="code-block-label">Full Example</span>
@@ -1125,7 +1144,7 @@ class GFSkillApp {
       ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
         <p>Nenhum exemplo completo definido.</p></div>`;
 
-      case 6: return `
+      case 7: return `
         <div class="fld-grid">
           ${fld('Output Type', v('output_type'))}
           ${fld('Prompt File Name', v('prompt_file_name'), true)}
@@ -1155,7 +1174,7 @@ class GFSkillApp {
           ${fldFull('Version History', v('version_history'), true)}
         </div>`;
 
-      case 7: {
+      case 8: {
         const fp = v('full_prompt');
         if (!fp) return `<div class="gfsk-empty" style="flex:0;padding:40px 0">
           <p>O Full Prompt será gerado automaticamente ao salvar.</p></div>`;
@@ -1271,13 +1290,31 @@ class GFSkillApp {
 
       case 3: return `
         <div class="form-grid full">
+          <div class="form-group" style="grid-column:1/-1">
+            <label class="form-label" style="display:flex;align-items:center;gap:6px">
+              <i data-lucide="braces" style="width:12px;height:12px"></i>
+              Script CSS
+              <span style="font-size:9px;background:#1e293b;color:#93c5fd;padding:2px 6px;border-radius:4px;font-family:monospace;font-weight:600">CSS</span>
+            </label>
+            <textarea class="form-control mono" rows="22"
+              style="background:#0f172a !important;color:#e2e8f0 !important;border-color:#1e293b !important;
+                     font-size:12.5px;line-height:1.7;tab-size:2;resize:vertical;min-height:360px;
+                     caret-color:#93c5fd;letter-spacing:0.01em"
+              placeholder="/* CSS personalizado para este Skill */&#10;&#10;:root {&#10;  --primary: #1e293b;&#10;}&#10;&#10;.container { ... }"
+              oninput="app._fd('css_script',this.value)">${this._esc(d.css_script||'')}</textarea>
+            <div class="form-desc">CSS aplicado automaticamente ao HTML gerado por este Skill. Sobrescreve estilos padrão do GF Atlas.</div>
+          </div>
+        </div>`;
+
+      case 4: return `
+        <div class="form-grid full">
           ${grp('Header Template', txt('header_template',8,true),
             'Estrutura visual e textual do cabeçalho.')}
           ${grp('Header Notes', txt('header_notes',3),
             'Regras adicionais relacionadas ao cabeçalho.')}
         </div>`;
 
-      case 4: return `
+      case 5: return `
         <div class="form-grid full">
           ${grp('Footer Template', txt('footer_template',8,true),
             'Estrutura visual e textual do rodapé.')}
@@ -1285,7 +1322,7 @@ class GFSkillApp {
             'Regras adicionais relacionadas ao rodapé.')}
         </div>`;
 
-      case 5: return `
+      case 6: return `
         <div class="form-grid full">
           ${grp('Full Example', txt('full_example',10,true),
             'Modelo completo de referência operacional.')}
@@ -1293,7 +1330,7 @@ class GFSkillApp {
             'Observações complementares sobre o exemplo.')}
         </div>`;
 
-      case 6: return `
+      case 7: return `
         <div class="form-grid">
           ${grp('Output Type', dd('output_type', OUTPUT_TYPES),
             'Formato principal esperado da saída.', true)}
@@ -1329,7 +1366,7 @@ class GFSkillApp {
           </div>
         </div>`;
 
-      case 7: {
+      case 8: {
         const fp = d.full_prompt;
         if (!fp) return `
           <div class="gfsk-empty" style="flex:0;padding:40px 0">
@@ -1718,8 +1755,8 @@ class GFSkillApp {
 
   // ── View History ──────────────────────────────────
   _viewHistory() {
-    this.activeTab = 6;
-    document.querySelectorAll('.gfsk-tab').forEach((el,i) => el.classList.toggle('active', i===6));
+    this.activeTab = 7;
+    document.querySelectorAll('.gfsk-tab').forEach((el,i) => el.classList.toggle('active', i===7));
     const $body = document.getElementById('gfsk-tab-body');
     if ($body) {
       $body.innerHTML = this._renderTabContent(6);

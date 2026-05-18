@@ -40,6 +40,8 @@
   "cb_s1",
   "tone_of_voice",
   "formatting_rules",
+  "tab_css",
+  "css_script",
   "tab_header",
   "header_template",
   "header_notes",
@@ -267,6 +269,19 @@
    "fieldtype": "Long Text",
    "label": "Formatting Rules",
    "description": "Define padrões estruturais obrigatórios de formatação."
+  },
+  {
+   "fieldname": "tab_css",
+   "fieldtype": "Tab Break",
+   "label": "Script CSS"
+  },
+  {
+   "fieldname": "css_script",
+   "fieldtype": "Code",
+   "options": "CSS",
+   "label": "CSS Script",
+   "allow_on_submit": 1,
+   "description": "CSS personalizado aplicado ao HTML gerado por este Skill. Sobrescreve estilos padrão do GF Atlas."
   },
   {
    "fieldname": "tab_header",

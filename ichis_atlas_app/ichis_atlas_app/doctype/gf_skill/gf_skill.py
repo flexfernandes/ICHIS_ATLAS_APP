@@ -95,6 +95,13 @@ class GFSkill(Document):
             "Padrões estruturais obrigatórios. "
             "Aplique-os em todos os elementos do conteúdo gerado.")
 
+        # ── Script CSS ───────────────────────────────────────────────────────
+        if self.css_script and str(self.css_script).strip():
+            parts.append("\n---")
+            sec("SCRIPT CSS",
+                f"```css\n{str(self.css_script).strip()}\n```",
+                "CSS personalizado a ser aplicado ao HTML gerado por este Skill.")
+
         # ── Cabeçalho / Rodapé ───────────────────────────────────────────────
         if self.header_template or self.footer_template:
             parts.append("\n---")
