@@ -6,6 +6,7 @@ def after_install():
     create_access_groups()
     create_content_groups()
     create_web_page_custom_fields()
+    create_sample_skills()
     frappe.db.commit()
     print("GF Atlas App: instalação concluída com sucesso.")
 
@@ -708,5 +709,492 @@ def create_web_page_custom_fields():
                 "dt": "Web Page",
                 **f
             }).insert(ignore_permissions=True)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SAMPLE SKILLS
+# ─────────────────────────────────────────────────────────────────────────────
+def create_sample_skills():
+    admin = "Administrator"
+
+    skills = [
+        # ── 1. Documentação de Contratos ─────────────────────────────────────
+        {
+            "doctype": "GF Skill",
+            "internal_name": "gf_skill_juridico_contratos",
+            "skill_name": "Documentação de Contratos",
+            "short_description": "Estrutura e redige cláusulas contratuais com linguagem jurídica precisa, cobertura de riscos e conformidade com a legislação brasileira.",
+            "category": "Jurídico",
+            "status": "Ativo",
+            "active": 1,
+            "version": "1.0.0",
+            "version_notes": "Versão inicial — cobre contratos comerciais, de serviço e de fornecimento.",
+            "skill_owner": admin,
+            "tags": "contrato, jurídico, cláusulas, legislação, conformidade",
+            "output_type": "Documentação",
+            "default_language": "Português (BR)",
+            "skill_priority": "Alta",
+            "allow_export": 1,
+            "allow_api_usage": 0,
+            "is_system_skill": 0,
+            "purpose": (
+                "Estruturar, redigir e revisar documentos contratuais com linguagem jurídica precisa "
+                "e em conformidade com o Código Civil Brasileiro, CLT e legislação setorial aplicável. "
+                "O Skill garante que cada contrato contenha todas as cláusulas obrigatórias, cubra os "
+                "principais cenários de risco e use terminologia consistente com a jurisprudência nacional."
+            ),
+            "when_to_use": (
+                "- Elaboração de novos contratos comerciais, de prestação de serviço ou de fornecimento\n"
+                "- Revisão e atualização de minutas contratuais existentes\n"
+                "- Adaptação de templates padrão para situações específicas\n"
+                "- Geração de adendos e termos aditivos"
+            ),
+            "when_not_to_use": (
+                "- Contratos que exijam assinatura de advogado habilitado (petições, contratos judiciais)\n"
+                "- Documentos sujeitos a registro em cartório sem revisão humana prévia\n"
+                "- Situações envolvendo direito internacional ou legislação estrangeira"
+            ),
+            "main_instructions": (
+                "1. Identificar as partes: razão social, CNPJ/CPF, endereço completo e representantes legais.\n"
+                "2. Definir o objeto do contrato com precisão — evitar termos vagos como 'serviços gerais'.\n"
+                "3. Estabelecer prazo, forma de pagamento, reajuste (IPCA/INPC) e condições de rescisão.\n"
+                "4. Incluir cláusulas de: confidencialidade, propriedade intelectual, limitação de responsabilidade e foro.\n"
+                "5. Verificar conformidade com a legislação aplicável ao setor (ex.: LGPD para dados pessoais).\n"
+                "6. Usar numeração sequencial de cláusulas e parágrafos (ex.: Cláusula 1ª, §1º, §2º).\n"
+                "7. Finalizar com espaço para assinatura, data, local e testemunhas."
+            ),
+            "mandatory_rules": (
+                "- Toda menção a valor monetário deve incluir o valor por extenso entre parênteses.\n"
+                "- Foro de eleição obrigatório ao final do documento.\n"
+                "- Nunca omitir cláusula de rescisão — deve cobrir rescisão unilateral e por inadimplemento.\n"
+                "- Referências legais devem citar artigo e lei específicos (ex.: Art. 421, Código Civil/2002)."
+            ),
+            "forbidden_actions": (
+                "- Não usar linguagem coloquial ou abreviações informais.\n"
+                "- Não omitir CNPJ/CPF das partes.\n"
+                "- Não incluir cláusulas que violem direitos trabalhistas ou do consumidor.\n"
+                "- Não referenciar leis revogadas."
+            ),
+            "validation_checklist": (
+                "[ ] Todas as partes identificadas com razão social, CNPJ e representante legal\n"
+                "[ ] Objeto do contrato definido com precisão\n"
+                "[ ] Valor por extenso em todas as menções financeiras\n"
+                "[ ] Prazo, reajuste e condições de pagamento presentes\n"
+                "[ ] Cláusula de rescisão (unilateral e por inadimplemento)\n"
+                "[ ] Cláusula de confidencialidade\n"
+                "[ ] Foro de eleição definido\n"
+                "[ ] Referências legais corretas e vigentes"
+            ),
+            "writing_style": "Jurídico-formal, preciso, impessoal. Frases completas sem ambiguidade. Voz ativa preferida.",
+            "visual_style": "Documento estruturado com numeração de cláusulas e parágrafos. Sem tabelas decorativas.",
+            "tone_of_voice": "Formal, neutro, institucional. Nenhuma expressão coloquial.",
+            "formatting_rules": (
+                "- Título centralizado em maiúsculas\n"
+                "- Cláusulas numeradas: Cláusula 1ª, Cláusula 2ª…\n"
+                "- Parágrafos: §1º, §2º…\n"
+                "- Incisos: I —, II —, III —\n"
+                "- Assinaturas ao final com linha, nome, cargo e data"
+            ),
+            "version_history": "v1.0.0 → criação inicial em 2026-05-18",
+        },
+
+        # ── 2. Documentação Técnica de Peças ─────────────────────────────────
+        {
+            "doctype": "GF Skill",
+            "internal_name": "gf_skill_eng_pecas_tecnicas",
+            "skill_name": "Documentação Técnica de Peças",
+            "short_description": "Gera fichas técnicas completas de peças industriais com especificações, materiais, tolerâncias e instruções de manutenção.",
+            "category": "Engenharia",
+            "status": "Ativo",
+            "active": 1,
+            "version": "1.0.0",
+            "version_notes": "Versão inicial — cobre peças mecânicas, eletromecânicas e de reposição.",
+            "skill_owner": admin,
+            "tags": "peças, engenharia, ficha técnica, industrial, manutenção, tolerâncias",
+            "output_type": "Documentação",
+            "default_language": "Português (BR)",
+            "skill_priority": "Normal",
+            "allow_export": 1,
+            "allow_api_usage": 0,
+            "is_system_skill": 0,
+            "purpose": (
+                "Produzir fichas técnicas padronizadas para peças industriais, contendo todas as informações "
+                "necessárias para fabricação, inspeção, manutenção e reposição. O Skill garante rastreabilidade, "
+                "consistência de formato e conformidade com normas técnicas (ABNT, ISO) aplicáveis."
+            ),
+            "when_to_use": (
+                "- Criação de ficha técnica para peça nova no catálogo\n"
+                "- Atualização de especificações após revisão de engenharia\n"
+                "- Geração de documentação para peças de reposição críticas\n"
+                "- Padronização de fichas existentes em formatos diversos"
+            ),
+            "when_not_to_use": (
+                "- Projetos que exijam cálculos estruturais ou simulação FEA\n"
+                "- Documentação de software embarcado ou firmware\n"
+                "- Desenhos técnicos CAD (use ferramentas específicas)"
+            ),
+            "main_instructions": (
+                "1. Registrar código da peça, descrição, família e equipamento de aplicação.\n"
+                "2. Listar materiais com norma técnica (ex.: AISI 1045, NBR 6656).\n"
+                "3. Especificar dimensões nominais com tolerâncias (ex.: Ø 50 ±0,02 mm).\n"
+                "4. Indicar tratamento superficial, dureza e acabamento quando aplicável.\n"
+                "5. Definir vida útil esperada, intervalo de manutenção e critério de descarte.\n"
+                "6. Incluir fornecedores homologados e código de pedido.\n"
+                "7. Registrar histórico de revisões com data, responsável e motivo."
+            ),
+            "mandatory_rules": (
+                "- Todas as dimensões devem estar em milímetros (mm) salvo indicação explícita.\n"
+                "- Materiais devem referenciar norma técnica aplicável.\n"
+                "- Revisão deve ser registrada no cabeçalho (Rev. 00, Rev. 01…).\n"
+                "- Código da peça deve seguir o padrão corporativo definido."
+            ),
+            "forbidden_actions": (
+                "- Não usar denominações genéricas como 'parafuso comum' sem especificação.\n"
+                "- Não omitir tolerâncias em dimensões funcionais críticas.\n"
+                "- Não referenciar fornecedores não homologados como única opção."
+            ),
+            "validation_checklist": (
+                "[ ] Código e descrição da peça preenchidos\n"
+                "[ ] Material com norma técnica\n"
+                "[ ] Dimensões com tolerâncias\n"
+                "[ ] Tratamento superficial informado (ou 'N/A' justificado)\n"
+                "[ ] Vida útil e intervalo de manutenção\n"
+                "[ ] Fornecedor homologado\n"
+                "[ ] Revisão registrada no cabeçalho"
+            ),
+            "writing_style": "Técnico, objetivo, sem ambiguidade. Substantivos precisos. Evitar adjetivos subjetivos.",
+            "visual_style": "Tabela estruturada com seções claramente delimitadas. Cabeçalho com código, revisão e data.",
+            "tone_of_voice": "Técnico, neutro, informativo.",
+            "formatting_rules": (
+                "- Cabeçalho: Código | Descrição | Revisão | Data | Responsável\n"
+                "- Seções: Identificação, Material, Dimensões, Acabamento, Manutenção, Fornecedores, Histórico\n"
+                "- Unidades sempre explícitas (mm, kg, HRC, °C)\n"
+                "- Tolerâncias no formato ±X,XX"
+            ),
+            "version_history": "v1.0.0 → criação inicial em 2026-05-18",
+        },
+
+        # ── 3. Relatórios ERPNext ─────────────────────────────────────────────
+        {
+            "doctype": "GF Skill",
+            "internal_name": "gf_skill_erpnext_relatorios",
+            "skill_name": "Relatórios ERPNext",
+            "short_description": "Gera relatórios HTML responsivos para ERPNext com tabelas de dados, KPIs, gráficos e seção de análise gerencial.",
+            "category": "ERPNext",
+            "status": "Ativo",
+            "active": 1,
+            "version": "1.0.0",
+            "version_notes": "Versão inicial — cobre relatórios gerenciais, operacionais e de auditoria.",
+            "skill_owner": admin,
+            "tags": "erpnext, relatório, html, dashboard, kpi, gerencial",
+            "output_type": "HTML",
+            "default_language": "Português (BR)",
+            "skill_priority": "Alta",
+            "allow_export": 1,
+            "allow_api_usage": 1,
+            "is_system_skill": 0,
+            "purpose": (
+                "Produzir relatórios HTML completos e responsivos compatíveis com o ambiente ERPNext/Frappe, "
+                "contendo cabeçalho corporativo, seção de KPIs, tabelas de dados formatadas, gráficos descritivos "
+                "e análise gerencial. O output deve ser renderizável diretamente no campo HTML do ERPNext."
+            ),
+            "when_to_use": (
+                "- Geração de relatórios gerenciais periódicos (mensal, trimestral, anual)\n"
+                "- Relatórios de auditoria e conformidade\n"
+                "- Dashboards estáticos para apresentação executiva\n"
+                "- Exportação de dados operacionais com contexto analítico"
+            ),
+            "when_not_to_use": (
+                "- Relatórios que exijam dados em tempo real via WebSocket\n"
+                "- Integrações que precisem de saída JSON pura sem formatação\n"
+                "- Análises estatísticas complexas (use Python/pandas)"
+            ),
+            "main_instructions": (
+                "1. Iniciar com cabeçalho contendo logo, título do relatório, período e data de geração.\n"
+                "2. Exibir bloco de KPIs com cards destacados para métricas principais.\n"
+                "3. Apresentar tabela de dados com cabeçalho fixo, linhas alternadas e totalizadores.\n"
+                "4. Incluir seção de análise textual com destaques positivos, pontos de atenção e recomendações.\n"
+                "5. Finalizar com rodapé: gerado por, sistema, data/hora e versão do relatório.\n"
+                "6. Garantir que todo o HTML seja inline (sem dependências externas) e responsivo."
+            ),
+            "mandatory_rules": (
+                "- Todo CSS deve ser inline ou em <style> no próprio documento.\n"
+                "- Nenhuma dependência de CDN externo — o relatório deve funcionar offline.\n"
+                "- Tabelas devem sempre ter cabeçalho <thead> e rodapé <tfoot> com totais.\n"
+                "- KPIs com variação devem indicar tendência (↑ verde / ↓ vermelho)."
+            ),
+            "forbidden_actions": (
+                "- Não usar frameworks externos (Bootstrap CDN, jQuery CDN).\n"
+                "- Não omitir período de referência dos dados.\n"
+                "- Não misturar moedas sem conversão explícita."
+            ),
+            "validation_checklist": (
+                "[ ] Cabeçalho com título, período e data de geração\n"
+                "[ ] KPIs com valores e variação de tendência\n"
+                "[ ] Tabela com thead, tbody e tfoot\n"
+                "[ ] CSS 100% inline/interno\n"
+                "[ ] Análise textual com destaques e recomendações\n"
+                "[ ] Rodapé com metadados do relatório\n"
+                "[ ] Testado em modo de impressão"
+            ),
+            "writing_style": "Gerencial, objetivo, analítico. Bullet points para destaques. Sem jargão técnico desnecessário.",
+            "visual_style": "Clean, corporativo. Paleta neutra (branco/cinza) com destaques em verde/vermelho para variações.",
+            "tone_of_voice": "Profissional, informativo, orientado a decisões.",
+            "formatting_rules": (
+                "- Largura máxima: 1200px centralizado\n"
+                "- Cards KPI: grid de 4 colunas, borda esquerda colorida\n"
+                "- Tabelas: linhas zebradas, cabeçalho escuro\n"
+                "- Fonte: system-ui ou Arial, 14px base\n"
+                "- Sem bordas externas pesadas — usar sombra sutil"
+            ),
+            "version_history": "v1.0.0 → criação inicial em 2026-05-18",
+        },
+
+        # ── 4. Prompt de Automação Industrial — CLP/Altus ────────────────────
+        {
+            "doctype": "GF Skill",
+            "internal_name": "gf_skill_industrial_clp_altus",
+            "skill_name": "Automação Industrial — CLP/Altus",
+            "short_description": "Gera lógica ladder, ST e documentação técnica para CLPs Altus série Nexto, com foco em segurança, rastreabilidade e boas práticas IEC 61131-3.",
+            "category": "Industrial",
+            "status": "Ativo",
+            "active": 1,
+            "version": "1.0.0",
+            "version_notes": "Versão inicial — cobre programação Nexto MX e NX, comunicação MODBUS e documentação de blocos funcionais.",
+            "skill_owner": admin,
+            "tags": "clp, altus, nexto, ladder, ST, IEC61131, automação, industrial",
+            "output_type": "Documentação",
+            "default_language": "Português (BR)",
+            "skill_priority": "Alta",
+            "allow_export": 1,
+            "allow_api_usage": 0,
+            "is_system_skill": 0,
+            "purpose": (
+                "Auxiliar engenheiros de automação na criação, documentação e revisão de programas para CLPs "
+                "Altus série Nexto, seguindo a norma IEC 61131-3. O Skill cobre lógica ladder, texto estruturado (ST), "
+                "mapeamento de tags, configuração de comunicação MODBUS/TCP e documentação de blocos funcionais (FB)."
+            ),
+            "when_to_use": (
+                "- Criação de lógica ladder ou ST para automação de processos industriais\n"
+                "- Documentação de programas existentes para manutenção e auditoria\n"
+                "- Mapeamento de endereços MODBUS e tags do processo\n"
+                "- Geração de blocos funcionais reutilizáveis (FB)\n"
+                "- Revisão de segurança de programas (fail-safe, interlocks)"
+            ),
+            "when_not_to_use": (
+                "- CLPs de outros fabricantes sem confirmação de compatibilidade sintática\n"
+                "- Programação de sistemas de segurança SIL sem validação por engenheiro certificado\n"
+                "- Simulações em tempo real sem ambiente de teste configurado"
+            ),
+            "main_instructions": (
+                "1. Sempre iniciar com a declaração de variáveis (VAR, VAR_INPUT, VAR_OUTPUT, VAR_GLOBAL).\n"
+                "2. Nomear tags seguindo o padrão: [ÁREA]_[INSTRUMENTO]_[NÚMERO] (ex.: FORNO1_TC_001).\n"
+                "3. Comentar cada rung/bloco com propósito, condição de ativação e saída esperada.\n"
+                "4. Implementar interlocks de segurança antes de ações de acionamento.\n"
+                "5. Incluir lógica de alarme (AL_) para cada condição crítica.\n"
+                "6. Documentar endereço MODBUS de cada variável mapeada externamente.\n"
+                "7. Finalizar com tabela de tags: Nome | Tipo | Endereço | Descrição | Unidade."
+            ),
+            "mandatory_rules": (
+                "- Interlocks de segurança devem preceder SEMPRE qualquer acionamento de atuador.\n"
+                "- Variáveis globais devem ser declaradas em GVL separada.\n"
+                "- Toda FB deve ter bloco de documentação com: Autor, Data, Versão, Descrição.\n"
+                "- Endereços MODBUS devem ser registrados na tabela de mapeamento."
+            ),
+            "forbidden_actions": (
+                "- Não usar endereços de memória absolutos sem declaração de tag associada.\n"
+                "- Não omitir condição de reset em lógicas set/reset.\n"
+                "- Não implementar acionamento direto sem interlock de segurança.\n"
+                "- Não deixar entradas analógicas sem tratamento de valor fora de faixa."
+            ),
+            "validation_checklist": (
+                "[ ] Declaração completa de variáveis (VAR / GVL)\n"
+                "[ ] Tags nomeadas no padrão [ÁREA]_[INSTRUMENTO]_[NÚM]\n"
+                "[ ] Todos os rungs/blocos comentados\n"
+                "[ ] Interlocks de segurança implementados\n"
+                "[ ] Lógica de alarme para condições críticas\n"
+                "[ ] Tabela de mapeamento de tags com endereço MODBUS\n"
+                "[ ] FB documentadas com autor, data e versão"
+            ),
+            "writing_style": "Técnico, preciso, estruturado. Comentários concisos no código. Documentação em prosa técnica.",
+            "visual_style": "Código formatado com indentação consistente. Tabelas de mapeamento com bordas claras.",
+            "tone_of_voice": "Técnico, direto, orientado à segurança operacional.",
+            "formatting_rules": (
+                "- Código ST: indentação 4 espaços, palavras-chave em MAIÚSCULAS\n"
+                "- Comentários de rung: (* Propósito: ... | Condição: ... | Saída: ... *)\n"
+                "- Tabela de tags: Nome | Tipo | Endereço | Descrição | Unidade\n"
+                "- Blocos FB: cabeçalho padronizado com 5 campos obrigatórios"
+            ),
+            "version_history": "v1.0.0 → criação inicial em 2026-05-18",
+        },
+
+        # ── 5. Documentação HTML Corporativa GF Atlas ─────────────────────────
+        {
+            "doctype": "GF Skill",
+            "internal_name": "gf_skill_html_corporativo_gf",
+            "skill_name": "Documentação HTML Corporativa GF Atlas",
+            "short_description": "Gera documentação HTML inline completa no padrão visual GF Atlas: cabeçalho, metadados, cards de seção, blocos de código, alertas e rodapé corporativo.",
+            "category": "HTML",
+            "status": "Ativo",
+            "active": 1,
+            "version": "1.0.0",
+            "version_notes": "Versão inicial — padrão oficial GF Atlas para documentação interna no ERPNext.",
+            "skill_owner": admin,
+            "tags": "html, documentação, gf atlas, corporativo, erpnext, inline",
+            "output_type": "HTML",
+            "default_language": "Português (BR)",
+            "skill_priority": "Crítica",
+            "allow_export": 1,
+            "allow_api_usage": 1,
+            "is_system_skill": 1,
+            "purpose": (
+                "Gerar documentação técnica e operacional em HTML inline, compatível com o campo de texto rico "
+                "do ERPNext/Frappe, seguindo o padrão visual GF Atlas. O output deve ser auto-contido, "
+                "responsivo e renderizável sem dependências externas, mantendo identidade visual corporativa "
+                "consistente em todos os documentos do sistema."
+            ),
+            "when_to_use": (
+                "- Criação de documentação técnica para DocTypes, módulos e processos\n"
+                "- Manuais de uso interno para usuários do ERPNext\n"
+                "- Documentação de APIs e integrações no padrão corporativo\n"
+                "- Relatórios e guias de onboarding"
+            ),
+            "when_not_to_use": (
+                "- Documentação destinada a publicação externa (use formato diferente)\n"
+                "- Conteúdo que precise de interatividade JavaScript avançada\n"
+                "- Documentos com imagens pesadas que não possam ser base64"
+            ),
+            "main_instructions": (
+                "1. Abrir com <div class='gf-doc'> contendo todo o CSS inline em <style> dedicada.\n"
+                "2. Cabeçalho: faixa escura (#1e293b) com título, subtítulo e metadados (versão, data, responsável).\n"
+                "3. Cada seção principal deve ser um card com título em faixa destacada e conteúdo em área branca.\n"
+                "4. Blocos de código: fundo #0f172a, fonte monospace, syntax highlight manual com <span>.\n"
+                "5. Alertas: 4 tipos — info (azul), sucesso (verde), aviso (amarelo), perigo (vermelho).\n"
+                "6. Tabelas: cabeçalho #1e293b branco, linhas zebradas #f8fafc/#ffffff.\n"
+                "7. Rodapé: faixa cinza com sistema, versão, data de geração e gerado por."
+            ),
+            "mandatory_rules": (
+                "- Todo CSS deve ser inline no documento — absolutamente nenhuma dependência externa.\n"
+                "- Paleta principal: #1e293b (primário), #059669 (acento), #f8fafc (fundo).\n"
+                "- Fonte: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif.\n"
+                "- Largura máxima do documento: 960px, centralizado.\n"
+                "- Versão do documento sempre visível no cabeçalho."
+            ),
+            "forbidden_actions": (
+                "- Não usar links para CSS externos (Bootstrap CDN, Google Fonts etc.).\n"
+                "- Não usar JavaScript no documento.\n"
+                "- Não usar cores fora da paleta corporativa sem justificativa.\n"
+                "- Não omitir seção de rodapé."
+            ),
+            "validation_checklist": (
+                "[ ] CSS 100% inline — zero dependências externas\n"
+                "[ ] Cabeçalho com título, versão e metadados\n"
+                "[ ] Todas as seções em cards padronizados\n"
+                "[ ] Blocos de código com fundo escuro e monospace\n"
+                "[ ] Alertas nos 4 tipos quando aplicável\n"
+                "[ ] Tabelas com cabeçalho escuro e linhas zebradas\n"
+                "[ ] Rodapé corporativo presente\n"
+                "[ ] Paleta de cores em conformidade com padrão GF Atlas"
+            ),
+            "writing_style": "Técnico, claro, didático. Parágrafos curtos. Bullet points para listas operacionais.",
+            "visual_style": "Enterprise clean. Paleta slate/verde. Cards com sombra sutil. Tipografia system-ui.",
+            "tone_of_voice": "Profissional, técnico, confiável.",
+            "formatting_rules": (
+                "- Largura máx.: 960px, margin: 0 auto\n"
+                "- Cards: border-radius 8px, box-shadow 0 1px 3px rgba(0,0,0,.08)\n"
+                "- Cabeçalho card: background #1e293b, color #f8fafc, padding 14px 20px\n"
+                "- Corpo card: background #fff, padding 20px\n"
+                "- Alertas: border-left 4px solid [cor-tipo], background [cor-tipo-pale]"
+            ),
+            "version_history": "v1.0.0 → criação inicial em 2026-05-18",
+        },
+
+        # ── 6. Gestão de Knowledge Hub ────────────────────────────────────────
+        {
+            "doctype": "GF Skill",
+            "internal_name": "gf_skill_ia_knowledge_hub",
+            "skill_name": "Gestão de Knowledge Hub",
+            "short_description": "Estrutura, organiza e mantém bases de conhecimento corporativo para uso por agentes de IA, incluindo indexação, metadados e políticas de atualização.",
+            "category": "IA e Agentes",
+            "status": "Ativo",
+            "active": 1,
+            "version": "1.0.0",
+            "version_notes": "Versão inicial — cobre estruturação de KB para RAG, agentes e automação corporativa.",
+            "skill_owner": admin,
+            "tags": "knowledge hub, IA, RAG, agentes, base de conhecimento, indexação, corporativo",
+            "output_type": "Documentação",
+            "default_language": "Português (BR)",
+            "skill_priority": "Alta",
+            "allow_export": 1,
+            "allow_api_usage": 1,
+            "is_system_skill": 0,
+            "purpose": (
+                "Estruturar e manter bases de conhecimento corporativo otimizadas para recuperação por agentes de IA "
+                "(RAG — Retrieval-Augmented Generation), garantindo que cada documento contenha metadados adequados, "
+                "seja redigido para maximizar relevância semântica e siga políticas de revisão e versionamento "
+                "que mantenham a base atualizada e confiável."
+            ),
+            "when_to_use": (
+                "- Criação de novos documentos para a base de conhecimento corporativo\n"
+                "- Revisão e atualização de documentos existentes no Knowledge Hub\n"
+                "- Estruturação de metadados para indexação em sistemas RAG\n"
+                "- Definição de políticas de atualização e descarte de conhecimento obsoleto\n"
+                "- Onboarding de novos domínios de conhecimento ao sistema de IA"
+            ),
+            "when_not_to_use": (
+                "- Documentos confidenciais que não devem ser acessados por agentes\n"
+                "- Conhecimento altamente volátil sem processo de atualização definido\n"
+                "- Dados estruturados que pertencem a banco de dados (use queries, não KB)"
+            ),
+            "main_instructions": (
+                "1. Definir metadados obrigatórios: título, domínio, palavras-chave, versão, data de revisão e owner.\n"
+                "2. Estruturar o documento em chunks semânticos de 200-500 palavras para otimizar recuperação.\n"
+                "3. Iniciar cada chunk com uma pergunta ou afirmação que o documento responde (anchor semântico).\n"
+                "4. Evitar pronomes ambíguos — cada chunk deve ser compreensível isoladamente.\n"
+                "5. Incluir seção de 'Termos Relacionados' para ampliar cobertura semântica.\n"
+                "6. Definir data de revisão obrigatória (máximo 6 meses para conhecimento operacional).\n"
+                "7. Marcar explicitamente informações que podem mudar com frequência."
+            ),
+            "mandatory_rules": (
+                "- Cada documento deve ter metadados completos no cabeçalho (YAML ou bloco estruturado).\n"
+                "- Chunks de máximo 500 palavras — dividir documentos longos em múltiplos chunks.\n"
+                "- Data de revisão obrigatória — documentos sem revisão nos últimos 6 meses são automaticamente marcados como 'Pendente de Revisão'.\n"
+                "- Nomenclatura de arquivos: [domínio]_[assunto]_[versão].md"
+            ),
+            "forbidden_actions": (
+                "- Não incluir dados pessoais (LGPD) sem processo de anonimização.\n"
+                "- Não criar chunks com menos de 100 palavras — perdem contexto semântico.\n"
+                "- Não referenciar sistemas ou processos sem indicar se são vigentes ou legados.\n"
+                "- Não deixar documentos sem owner responsável pela manutenção."
+            ),
+            "validation_checklist": (
+                "[ ] Metadados completos (título, domínio, keywords, versão, data, owner)\n"
+                "[ ] Chunks entre 100-500 palavras\n"
+                "[ ] Cada chunk compreensível isoladamente\n"
+                "[ ] Anchor semântico no início de cada chunk\n"
+                "[ ] Seção 'Termos Relacionados' presente\n"
+                "[ ] Data de revisão definida (máx. 6 meses)\n"
+                "[ ] Nenhum dado pessoal sem anonimização\n"
+                "[ ] Owner responsável identificado"
+            ),
+            "writing_style": "Claro, direto, sem ambiguidade. Frases curtas. Vocabulário consistente em todo o documento.",
+            "visual_style": "Estruturado com seções claras. Metadados em bloco destacado. Termos técnicos em destaque.",
+            "tone_of_voice": "Informativo, confiável, orientado ao uso por sistemas automatizados.",
+            "formatting_rules": (
+                "- Cabeçalho YAML: título, domínio, keywords, versão, revisão, owner\n"
+                "- Seções: H2 para domínios, H3 para chunks\n"
+                "- Termos técnicos: **negrito** na primeira ocorrência\n"
+                "- Seção final obrigatória: 'Termos Relacionados' e 'Data da Próxima Revisão'"
+            ),
+            "version_history": "v1.0.0 → criação inicial em 2026-05-18",
+        },
+    ]
+
+    for skill_data in skills:
+        if frappe.db.exists("GF Skill", skill_data["internal_name"]):
+            continue
+        doc = frappe.get_doc(skill_data)
+        doc.insert(ignore_permissions=True)
+        print(f"GF Atlas App: Skill '{skill_data['skill_name']}' criado.")
 
     print("GF Atlas App: campos Auxiliary Block 1 e 2 criados em Web Page.")
