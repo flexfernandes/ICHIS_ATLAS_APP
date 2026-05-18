@@ -1,0 +1,1226 @@
+{% extends "templates/web.html" %}
+
+{% block head_include %}
+<script src="/assets/ichis_atlas_app/js/lucide.min.js"></script>
+<style>
+/* ── Reset & base ─────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#166534;--primary-h:#14532d;--primary-l:#16a34a;
+  --primary-pale:#dcfce7;--primary-bg:#f0fdf4;
+  --bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;
+  --border:#e2e8f0;--border-h:#cbd5e1;
+  --text:#0f172a;--text-m:#475569;--text-l:#94a3b8;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 4px 12px rgba(0,0,0,.10);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.12);
+  --radius:10px;--radius-sm:6px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,monospace;
+  --sidebar:272px;--header:56px
+}
+html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+
+/* ── Layout ───────────────────────────────────────── */
+#gfsk{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ── Header ───────────────────────────────────────── */
+.gfsk-hdr{
+  height:var(--header);min-height:var(--header);
+  display:flex;align-items:center;gap:12px;padding:0 20px;
+  background:var(--primary);color:#fff;
+  box-shadow:0 2px 8px rgba(22,101,52,.4);
+  z-index:100;flex-shrink:0
+}
+.gfsk-hdr-logo{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:13px;letter-spacing:.5px;flex-shrink:0
+}
+.gfsk-hdr-title{font-weight:600;font-size:15px;letter-spacing:-.2px}
+.gfsk-hdr-sub{font-size:11px;opacity:.7;margin-left:2px}
+.gfsk-hdr-sep{flex:1}
+.gfsk-hdr-user{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.85}
+.gfsk-hdr-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700
+}
+.gfsk-hdr-atlas{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;
+  transition:background 150ms;text-decoration:none;color:#fff
+}
+.gfsk-hdr-atlas:hover{background:rgba(255,255,255,.25)}
+
+/* ── Body ─────────────────────────────────────────── */
+.gfsk-body{display:flex;flex:1;overflow:hidden}
+
+/* ── Sidebar ──────────────────────────────────────── */
+.gfsk-sb{
+  width:var(--sidebar);min-width:var(--sidebar);
+  background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden
+}
+.gfsk-sb-top{padding:14px 14px 10px;flex-shrink:0}
+.gfsk-sb-search{
+  display:flex;align-items:center;gap:7px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;padding:7px 10px;
+  transition:border-color 150ms
+}
+.gfsk-sb-search:focus-within{border-color:var(--primary-l)}
+.gfsk-sb-search input{
+  border:none;outline:none;background:transparent;
+  font-size:13px;color:var(--text);flex:1;min-width:0
+}
+.gfsk-sb-search input::placeholder{color:var(--text-l)}
+.gfsk-sb-search svg{flex-shrink:0;color:var(--text-l)}
+
+.gfsk-sb-filters{
+  display:flex;gap:5px;padding:8px 14px;flex-wrap:wrap;flex-shrink:0;
+  border-bottom:1px solid var(--border)
+}
+.gfsk-sb-filter{
+  font-size:10px;padding:3px 8px;border-radius:20px;
+  border:1px solid var(--border);cursor:pointer;
+  background:var(--surface);color:var(--text-m);
+  transition:all 150ms;white-space:nowrap
+}
+.gfsk-sb-filter.active{background:var(--primary-pale);border-color:var(--primary-l);color:var(--primary)}
+.gfsk-sb-filter:hover:not(.active){background:var(--surface2)}
+
+.gfsk-sb-list{flex:1;overflow-y:auto;padding:8px 8px}
+.gfsk-sb-list::-webkit-scrollbar{width:4px}
+.gfsk-sb-list::-webkit-scrollbar-track{background:transparent}
+.gfsk-sb-list::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
+
+.gfsk-sb-empty{
+  text-align:center;color:var(--text-l);font-size:12px;
+  padding:32px 16px;line-height:1.6
+}
+
+.sk-card{
+  border-radius:8px;padding:10px 11px;margin-bottom:5px;cursor:pointer;
+  border:1.5px solid transparent;transition:all 150ms;
+  background:var(--surface)
+}
+.sk-card:hover{background:var(--primary-bg);border-color:var(--primary-pale)}
+.sk-card.active{background:var(--primary-pale);border-color:var(--primary-l)}
+.sk-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:5px}
+.sk-card-name{font-weight:600;font-size:12.5px;color:var(--text);line-height:1.3}
+.sk-card.active .sk-card-name{color:var(--primary)}
+.sk-card-ver{font-size:10px;color:var(--text-l);white-space:nowrap;margin-top:1px}
+.sk-card.active .sk-card-ver{color:var(--primary)}
+.sk-card-badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
+.sk-card-desc{font-size:11px;color:var(--text-m);line-height:1.4;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+.gfsk-sb-foot{
+  padding:12px;border-top:1px solid var(--border);flex-shrink:0
+}
+.btn-new-skill{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:8px;padding:9px;font-size:13px;font-weight:600;
+  cursor:pointer;transition:background 150ms
+}
+.btn-new-skill:hover{background:var(--primary-h)}
+
+/* ── Badges ───────────────────────────────────────── */
+.badge{
+  display:inline-flex;align-items:center;
+  font-size:10px;font-weight:600;padding:2px 7px;
+  border-radius:20px;line-height:1.4;white-space:nowrap
+}
+.badge-cat{background:#ede9fe;color:#5b21b6}
+.badge-draft{background:#f1f5f9;color:#475569}
+.badge-dev{background:#dbeafe;color:#1d4ed8}
+.badge-test{background:#fed7aa;color:#c2410c}
+.badge-ativo{background:#dcfce7;color:#166534}
+.badge-obsoleto{background:#fef9c3;color:#854d0e}
+.badge-arquivado{background:#fee2e2;color:#dc2626}
+.badge-prio-baixa{background:#f1f5f9;color:#64748b}
+.badge-prio-normal{background:#dbeafe;color:#1d4ed8}
+.badge-prio-alta{background:#fed7aa;color:#c2410c}
+.badge-prio-critica{background:#fee2e2;color:#dc2626}
+.badge-out{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+
+/* ── Main content ─────────────────────────────────── */
+.gfsk-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── Empty / Welcome ──────────────────────────────── */
+.gfsk-empty{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:16px;padding:40px;text-align:center
+}
+.gfsk-empty-icon{
+  width:72px;height:72px;border-radius:20px;
+  background:var(--primary-pale);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--primary)
+}
+.gfsk-empty h2{font-size:20px;font-weight:700;color:var(--text)}
+.gfsk-empty p{color:var(--text-m);font-size:13px;max-width:320px;line-height:1.6}
+.gfsk-empty .btn-primary{
+  display:flex;align-items:center;gap:6px;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;
+  cursor:pointer;transition:background 150ms
+}
+.gfsk-empty .btn-primary:hover{background:var(--primary-h)}
+
+/* ── Detail header ────────────────────────────────── */
+.gfsk-det-hdr{
+  padding:18px 24px 14px;border-bottom:1px solid var(--border);
+  background:var(--surface);flex-shrink:0
+}
+.gfsk-det-hdr-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.gfsk-det-hdr-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:var(--primary-pale);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--primary);flex-shrink:0
+}
+.gfsk-det-hdr-info{flex:1;min-width:0}
+.gfsk-det-hdr-name{font-size:20px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:4px}
+.gfsk-det-hdr-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gfsk-det-hdr-meta span{font-size:12px;color:var(--text-m)}
+.gfsk-det-hdr-meta .sep{color:var(--border-h)}
+.gfsk-det-hdr-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+
+.btn-edit{
+  display:flex;align-items:center;gap:5px;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:7px;padding:7px 14px;font-size:12.5px;font-weight:600;
+  cursor:pointer;transition:background 150ms
+}
+.btn-edit:hover{background:var(--primary-h)}
+.btn-submit{
+  display:flex;align-items:center;gap:5px;
+  background:var(--surface);color:var(--primary);
+  border:1.5px solid var(--primary-l);
+  border-radius:7px;padding:7px 14px;font-size:12.5px;font-weight:600;
+  cursor:pointer;transition:all 150ms
+}
+.btn-submit:hover{background:var(--primary-bg)}
+.btn-del{
+  display:flex;align-items:center;justify-content:center;
+  background:var(--surface);color:var(--text-m);
+  border:1px solid var(--border);border-radius:7px;padding:7px 10px;
+  cursor:pointer;transition:all 150ms
+}
+.btn-del:hover{background:#fee2e2;border-color:#fca5a5;color:#dc2626}
+
+.gfsk-det-hdr-desc{
+  font-size:13px;color:var(--text-m);line-height:1.5;
+  padding-top:8px;border-top:1px solid var(--border)
+}
+
+/* ── Tabs ─────────────────────────────────────────── */
+.gfsk-tabs{
+  display:flex;gap:0;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;flex-shrink:0;overflow-x:auto
+}
+.gfsk-tabs::-webkit-scrollbar{height:0}
+.gfsk-tab{
+  display:flex;align-items:center;gap:5px;
+  padding:10px 14px;font-size:12.5px;font-weight:500;
+  color:var(--text-m);cursor:pointer;white-space:nowrap;
+  border-bottom:2.5px solid transparent;margin-bottom:-1px;
+  transition:all 150ms
+}
+.gfsk-tab:hover{color:var(--primary);background:var(--primary-bg)}
+.gfsk-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.gfsk-tab-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--primary);opacity:0;transition:opacity 150ms
+}
+.gfsk-tab.has-content .gfsk-tab-dot{opacity:1}
+
+/* ── Tab content ──────────────────────────────────── */
+.gfsk-tab-body{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+.gfsk-tab-body::-webkit-scrollbar{width:5px}
+.gfsk-tab-body::-webkit-scrollbar-track{background:transparent}
+.gfsk-tab-body::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
+
+/* ── Field display (view mode) ────────────────────── */
+.fld-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:16px}
+.fld-grid.full{grid-template-columns:1fr}
+.fld-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.fld-lbl{font-size:10.5px;font-weight:600;color:var(--text-l);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.fld-val{font-size:13.5px;color:var(--text);line-height:1.5;word-break:break-word}
+.fld-val.empty{color:var(--text-l);font-style:italic;font-size:12px}
+.fld-val.mono{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap}
+.fld-val.check{display:flex;align-items:center;gap:5px}
+.fld-check-yes{color:var(--primary-l)}
+.fld-check-no{color:var(--text-l)}
+
+/* ── Code block ───────────────────────────────────── */
+.code-block{position:relative;background:#0f172a;border-radius:var(--radius);overflow:hidden}
+.code-block pre{
+  padding:16px;margin:0;overflow-x:auto;
+  font-family:var(--mono);font-size:12.5px;line-height:1.6;
+  color:#e2e8f0;white-space:pre-wrap;word-break:break-word
+}
+.code-block-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px;background:#1e293b;border-bottom:1px solid #334155
+}
+.code-block-label{font-size:10.5px;color:#94a3b8;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.btn-copy{
+  display:flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  border-radius:5px;padding:4px 9px;font-size:11px;color:#cbd5e1;
+  cursor:pointer;transition:all 150ms
+}
+.btn-copy:hover{background:rgba(255,255,255,.15)}
+.btn-copy.copied{background:rgba(22,163,74,.2);border-color:rgba(22,163,74,.4);color:#86efac}
+
+.prompt-meta{
+  display:flex;align-items:center;gap:10px;margin-bottom:10px;
+  padding:10px 14px;background:var(--surface);border:1px solid var(--border);
+  border-radius:8px
+}
+.prompt-meta-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-m)}
+.prompt-meta-item strong{color:var(--text);font-weight:600}
+
+/* ── Section heading ──────────────────────────────── */
+.sec-heading{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700;color:var(--text);
+  margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid var(--border)
+}
+.sec-heading svg{color:var(--primary)}
+.sec-sep{margin:20px 0}
+
+/* ── Form (edit/new) ──────────────────────────────── */
+.gfsk-form-hdr{
+  padding:16px 24px;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;flex-shrink:0
+}
+.gfsk-form-hdr-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
+.gfsk-form-hdr-sub{font-size:12px;color:var(--text-m)}
+
+.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+.form-grid.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:11px;font-weight:600;color:var(--text-m);letter-spacing:.3px}
+.form-label .req{color:#dc2626;margin-left:2px}
+.form-desc{font-size:10.5px;color:var(--text-l);line-height:1.4;margin-top:1px}
+.form-control{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:7px;padding:8px 11px;font-size:13px;color:var(--text);
+  outline:none;transition:border-color 150ms;font-family:var(--font);
+  width:100%
+}
+.form-control:focus{border-color:var(--primary-l);box-shadow:0 0 0 3px rgba(22,163,74,.1)}
+textarea.form-control{resize:vertical;min-height:90px;line-height:1.5}
+textarea.form-control.mono{font-family:var(--mono);font-size:12.5px}
+select.form-control{cursor:pointer}
+.form-check{display:flex;align-items:center;gap:8px;padding:8px 0}
+.form-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
+.form-check label{font-size:13px;color:var(--text);cursor:pointer}
+
+.gfsk-form-foot{
+  padding:12px 24px;background:var(--surface);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-shrink:0
+}
+.btn-cancel{
+  background:var(--surface);color:var(--text-m);
+  border:1px solid var(--border);border-radius:7px;
+  padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;transition:all 150ms
+}
+.btn-cancel:hover{background:var(--surface2)}
+.btn-save{
+  display:flex;align-items:center;gap:6px;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:7px;padding:8px 20px;font-size:13px;font-weight:600;
+  cursor:pointer;transition:background 150ms
+}
+.btn-save:hover{background:var(--primary-h)}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── Toast ────────────────────────────────────────── */
+#gfsk-toast{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none
+}
+.toast{
+  display:flex;align-items:center;gap:9px;
+  background:var(--text);color:#fff;
+  border-radius:9px;padding:10px 16px;font-size:13px;font-weight:500;
+  box-shadow:var(--shadow-lg);pointer-events:auto;
+  animation:toastIn 250ms ease
+}
+.toast.success{background:#166534}
+.toast.error{background:#dc2626}
+.toast.info{background:#1d4ed8}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Loading ──────────────────────────────────────── */
+.gfsk-loading{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;color:var(--text-l)
+}
+.spinner{
+  width:32px;height:32px;border:3px solid var(--border);
+  border-top-color:var(--primary);border-radius:50%;
+  animation:spin 700ms linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Responsive ───────────────────────────────────── */
+@media(max-width:700px){
+  .gfsk-sb{width:100%;position:absolute;z-index:50;top:var(--header);bottom:0;transform:translateX(-100%);transition:transform 200ms}
+  .gfsk-sb.open{transform:translateX(0)}
+  :root{--sidebar:100%}
+}
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div id="gfsk">
+
+  <!-- Header -->
+  <header class="gfsk-hdr">
+    <div class="gfsk-hdr-logo">GF</div>
+    <div>
+      <div class="gfsk-hdr-title">GF Skill</div>
+    </div>
+    <div class="gfsk-hdr-sub">Central de Skills Corporativos</div>
+    <div class="gfsk-hdr-sep"></div>
+    <a class="gfsk-hdr-atlas" href="/gf-atlas">
+      <i data-lucide="layout-dashboard" style="width:13px;height:13px"></i>
+      Wiki Hub
+    </a>
+    <div class="gfsk-hdr-user">
+      <div class="gfsk-hdr-avatar" id="gfsk-avatar">GF</div>
+      <span id="gfsk-username">...</span>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="gfsk-body">
+
+    <!-- Sidebar -->
+    <aside class="gfsk-sb" id="gfsk-sb">
+      <div class="gfsk-sb-top">
+        <div class="gfsk-sb-search">
+          <i data-lucide="search" style="width:14px;height:14px"></i>
+          <input type="text" placeholder="Buscar Skills..." id="gfsk-search" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="gfsk-sb-filters" id="gfsk-filters">
+        <span class="gfsk-sb-filter active" data-status="">Todos</span>
+        <span class="gfsk-sb-filter" data-status="Draft">Draft</span>
+        <span class="gfsk-sb-filter" data-status="Ativo">Ativos</span>
+        <span class="gfsk-sb-filter" data-status="Obsoleto">Obsoletos</span>
+      </div>
+
+      <div class="gfsk-sb-list" id="gfsk-list">
+        <div class="gfsk-loading"><div class="spinner"></div><span>Carregando...</span></div>
+      </div>
+
+      <div class="gfsk-sb-foot">
+        <button class="btn-new-skill" id="btn-new-skill">
+          <i data-lucide="plus" style="width:15px;height:15px"></i>
+          Novo Skill
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="gfsk-main" id="gfsk-main">
+      <div class="gfsk-loading" style="flex:1">
+        <div class="spinner"></div>
+        <span>Inicializando...</span>
+      </div>
+    </main>
+
+  </div><!-- /body -->
+</div><!-- /gfsk -->
+
+<div id="gfsk-toast"></div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   GF Skill App
+   ════════════════════════════════════════════════════ */
+
+const TABS = [
+  { id:'general',      label:'Informações Gerais', icon:'info' },
+  { id:'instructions', label:'Instruções',         icon:'list' },
+  { id:'style',        label:'Estilo',             icon:'type' },
+  { id:'header',       label:'Cabeçalho',          icon:'layout' },
+  { id:'footer',       label:'Rodapé',             icon:'layout' },
+  { id:'example',      label:'Exemplo Completo',   icon:'code-2' },
+  { id:'technical',    label:'Campos Técnicos',    icon:'settings' },
+  { id:'prompt',       label:'Prompt Completo',    icon:'zap' },
+];
+
+const STATUS_COLORS = {
+  'Draft':'draft','Em Desenvolvimento':'dev','Em Teste':'test',
+  'Ativo':'ativo','Obsoleto':'obsoleto','Arquivado':'arquivado'
+};
+
+const CATEGORIES = [
+  'Documentação','HTML','ERPNext','Relatórios','Prompt Engineering','Automação',
+  'IA e Agentes','Programação','SQL e Banco de Dados','APIs e Integrações',
+  'Frontend','Backend','DevOps e Cloud','Segurança','Comercial','Engenharia',
+  'Industrial','Qualidade','Financeiro','Jurídico','RH','Templates','Padrões Corporativos','Outros'
+];
+const STATUSES = ['Draft','Em Desenvolvimento','Em Teste','Ativo','Obsoleto','Arquivado'];
+const OUTPUT_TYPES = ['HTML','Markdown','Texto','JSON','SQL','Python','JavaScript','CSS','XML','YAML','Relatório','Prompt','Documentação','API','Workflow','Outro'];
+const PRIORITIES = ['','Baixa','Normal','Alta','Crítica'];
+
+class GFSkillApp {
+  constructor() {
+    this.skills     = [];
+    this.selected   = null;
+    this.mode       = 'empty'; // empty | view | edit | new
+    this.activeTab  = 0;
+    this.editData   = {};
+    this.filterQ    = '';
+    this.filterSt   = '';
+    this._saving    = false;
+  }
+
+  async init() {
+    this._setupUser();
+    this._bindSidebar();
+    await this._loadSkills();
+    this._renderEmpty();
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+  }
+
+  // ── User ──────────────────────────────────────────
+  _setupUser() {
+    const full = frappe.session.user_fullname || frappe.session.user || 'Usuário';
+    const init = full.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase() || 'GF';
+    const $av  = document.getElementById('gfsk-avatar');
+    const $un  = document.getElementById('gfsk-username');
+    if ($av) $av.textContent = init;
+    if ($un) $un.textContent = full.split(' ')[0];
+  }
+
+  // ── Load Skills ───────────────────────────────────
+  async _loadSkills() {
+    try {
+      const r = await frappe.call({
+        method: 'frappe.client.get_list',
+        args: {
+          doctype: 'GF Skill',
+          fields: ['name','skill_name','internal_name','category','status','version',
+                   'short_description','skill_owner','active','output_type','skill_priority',
+                   'tags','docstatus'],
+          order_by: 'modified desc',
+          limit_page_length: 2000
+        }
+      });
+      this.skills = r.message || [];
+    } catch(e) {
+      this._toast('Erro ao carregar Skills.','error');
+      this.skills = [];
+    }
+    this._renderList();
+  }
+
+  // ── Sidebar bindings ──────────────────────────────
+  _bindSidebar() {
+    document.getElementById('gfsk-search').addEventListener('input', e => {
+      this.filterQ = e.target.value.toLowerCase().trim();
+      this._renderList();
+    });
+    document.getElementById('gfsk-filters').addEventListener('click', e => {
+      const f = e.target.closest('.gfsk-sb-filter');
+      if (!f) return;
+      document.querySelectorAll('.gfsk-sb-filter').forEach(x=>x.classList.remove('active'));
+      f.classList.add('active');
+      this.filterSt = f.dataset.status;
+      this._renderList();
+    });
+    document.getElementById('btn-new-skill').addEventListener('click', () => this._startNew());
+  }
+
+  // ── Render list ───────────────────────────────────
+  _renderList() {
+    const $list = document.getElementById('gfsk-list');
+    let items = this.skills;
+    if (this.filterQ) {
+      items = items.filter(s =>
+        (s.skill_name||'').toLowerCase().includes(this.filterQ) ||
+        (s.category||'').toLowerCase().includes(this.filterQ) ||
+        (s.tags||'').toLowerCase().includes(this.filterQ) ||
+        (s.short_description||'').toLowerCase().includes(this.filterQ)
+      );
+    }
+    if (this.filterSt) {
+      items = items.filter(s => s.status === this.filterSt);
+    }
+    if (!items.length) {
+      $list.innerHTML = `<div class="gfsk-sb-empty">Nenhum Skill encontrado.</div>`;
+      return;
+    }
+    $list.innerHTML = items.map(s => {
+      const stCls  = STATUS_COLORS[s.status] || 'draft';
+      const active = this.selected && this.selected.name === s.name ? ' active' : '';
+      return `<div class="sk-card${active}" data-name="${this._esc(s.name)}"
+                   onclick="app.selectSkill('${this._esc(s.name)}')">
+        <div class="sk-card-top">
+          <div class="sk-card-name">${this._esc(s.skill_name||s.name)}</div>
+          <div class="sk-card-ver">v${this._esc(s.version||'—')}</div>
+        </div>
+        <div class="sk-card-badges">
+          ${s.category ? `<span class="badge badge-cat">${this._esc(s.category)}</span>` : ''}
+          ${s.status   ? `<span class="badge badge-${stCls}">${this._esc(s.status)}</span>` : ''}
+        </div>
+        <div class="sk-card-desc">${this._esc(s.short_description||'')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Select skill ──────────────────────────────────
+  async selectSkill(name) {
+    const $main = document.getElementById('gfsk-main');
+    $main.innerHTML = `<div class="gfsk-loading" style="flex:1"><div class="spinner"></div><span>Carregando...</span></div>`;
+    try {
+      const r = await frappe.call({
+        method: 'frappe.client.get',
+        args: { doctype:'GF Skill', name }
+      });
+      this.selected  = r.message;
+      this.activeTab = 0;
+      this.mode      = 'view';
+      this._renderView();
+      this._markActive(name);
+    } catch(e) {
+      this._toast('Erro ao carregar o Skill.','error');
+      this._renderEmpty();
+    }
+  }
+
+  _markActive(name) {
+    document.querySelectorAll('.sk-card').forEach(c => {
+      c.classList.toggle('active', c.dataset.name === name);
+    });
+  }
+
+  // ── Render empty ──────────────────────────────────
+  _renderEmpty() {
+    const $main = document.getElementById('gfsk-main');
+    $main.innerHTML = `
+      <div class="gfsk-empty">
+        <div class="gfsk-empty-icon">
+          <i data-lucide="zap" style="width:32px;height:32px"></i>
+        </div>
+        <h2>Central de Skills</h2>
+        <p>Selecione um Skill na lista ou crie um novo para começar.</p>
+        <button class="btn-primary" onclick="app._startNew()">
+          <i data-lucide="plus" style="width:15px;height:15px"></i>
+          Criar Novo Skill
+        </button>
+      </div>`;
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    this.selected = null;
+    document.querySelectorAll('.sk-card').forEach(c=>c.classList.remove('active'));
+  }
+
+  // ── Render view ───────────────────────────────────
+  _renderView() {
+    const s = this.selected;
+    const $main = document.getElementById('gfsk-main');
+    const isDraft = s.docstatus === 0;
+    const stCls   = STATUS_COLORS[s.status] || 'draft';
+
+    $main.innerHTML = `
+      <!-- Detail Header -->
+      <div class="gfsk-det-hdr">
+        <div class="gfsk-det-hdr-top">
+          <div class="gfsk-det-hdr-icon">
+            <i data-lucide="zap" style="width:22px;height:22px"></i>
+          </div>
+          <div class="gfsk-det-hdr-info">
+            <div class="gfsk-det-hdr-name">${this._esc(s.skill_name||s.name)}</div>
+            <div class="gfsk-det-hdr-meta">
+              <span class="badge badge-${stCls}">${this._esc(s.status||'Draft')}</span>
+              ${s.category ? `<span class="badge badge-cat">${this._esc(s.category)}</span>` : ''}
+              ${s.output_type ? `<span class="badge badge-out">${this._esc(s.output_type)}</span>` : ''}
+              <span class="sep">·</span>
+              <span>v${this._esc(s.version||'1.0.0')}</span>
+              ${s.skill_owner ? `<span class="sep">·</span><span>${this._esc(s.skill_owner)}</span>` : ''}
+            </div>
+          </div>
+          <div class="gfsk-det-hdr-actions">
+            ${isDraft ? `
+              <button class="btn-submit" onclick="app._submitSkill()">
+                <i data-lucide="send" style="width:13px;height:13px"></i> Submeter
+              </button>
+              <button class="btn-edit" onclick="app._startEdit()">
+                <i data-lucide="edit-2" style="width:13px;height:13px"></i> Editar
+              </button>` : ''}
+            <button class="btn-del" onclick="app._deleteSkill()" title="Excluir">
+              <i data-lucide="trash-2" style="width:14px;height:14px"></i>
+            </button>
+          </div>
+        </div>
+        ${s.short_description ? `<div class="gfsk-det-hdr-desc">${this._esc(s.short_description)}</div>` : ''}
+      </div>
+
+      <!-- Tabs -->
+      ${this._buildTabBar()}
+
+      <!-- Tab body -->
+      <div class="gfsk-tab-body" id="gfsk-tab-body">
+        ${this._renderTabContent(this.activeTab)}
+      </div>`;
+
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+  }
+
+  // ── Tab bar ───────────────────────────────────────
+  _buildTabBar() {
+    return `<div class="gfsk-tabs">${TABS.map((t,i)=>`
+      <div class="gfsk-tab${i===this.activeTab?' active':''}" onclick="app._switchTab(${i})">
+        <i data-lucide="${t.icon}" style="width:13px;height:13px"></i>
+        ${t.label}
+        <div class="gfsk-tab-dot"></div>
+      </div>`).join('')}</div>`;
+  }
+
+  _switchTab(idx) {
+    this.activeTab = idx;
+    // Re-render tabs bar active state
+    document.querySelectorAll('.gfsk-tab').forEach((el,i)=>{
+      el.classList.toggle('active', i===idx);
+    });
+    const $body = document.getElementById('gfsk-tab-body');
+    if ($body) {
+      $body.innerHTML = this.mode==='edit' || this.mode==='new'
+        ? this._renderTabForm(idx)
+        : this._renderTabContent(idx);
+      if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    }
+  }
+
+  // ── Tab content (view) ────────────────────────────
+  _renderTabContent(idx) {
+    const s = this.selected || {};
+    const v = (f) => s[f] || '';
+    const fld = (label, val, mono=false) => {
+      const empty = !val;
+      return `<div class="fld-box">
+        <div class="fld-lbl">${label}</div>
+        <div class="fld-val${mono?' mono':''}${empty?' empty':''}">${empty?'—':this._esc(val)}</div>
+      </div>`;
+    };
+    const fldFull = (label, val, mono=false) => {
+      if (!val) return `<div class="fld-box"><div class="fld-lbl">${label}</div><div class="fld-val empty">—</div></div>`;
+      return `<div class="fld-box" style="grid-column:1/-1">
+        <div class="fld-lbl">${label}</div>
+        <div class="fld-val${mono?' mono':''}">${this._esc(val)}</div>
+      </div>`;
+    };
+    const chk = (label, val) => `<div class="fld-box">
+      <div class="fld-lbl">${label}</div>
+      <div class="fld-val check">
+        ${val ? `<i data-lucide="check-circle" style="width:14px;height:14px" class="fld-check-yes"></i><span>Sim</span>`
+              : `<i data-lucide="x-circle" style="width:14px;height:14px" class="fld-check-no"></i><span>Não</span>`}
+      </div>
+    </div>`;
+
+    switch(idx) {
+      case 0: return `
+        <div class="fld-grid">
+          ${fld('Skill Name', v('skill_name'))}
+          ${fld('Internal Name', v('internal_name'), true)}
+          ${fld('Category', v('category'))}
+          ${fld('Status', v('status'))}
+          ${fld('Version', v('version'))}
+          ${fld('Owner', v('skill_owner'))}
+          ${fld('Output Type', v('output_type'))}
+          ${fld('Tags', v('tags'))}
+          ${fld('Active', v('active')?'Sim':'Não')}
+        </div>
+        <div class="fld-grid">
+          ${fldFull('Short Description', v('short_description'))}
+          ${fldFull('Version Notes', v('version_notes'))}
+          ${fldFull('Purpose', v('purpose'))}
+          ${fldFull('When to Use', v('when_to_use'))}
+          ${fldFull('When Not to Use', v('when_not_to_use'))}
+        </div>`;
+
+      case 1: return `
+        <div class="fld-grid full">
+          ${fldFull('Main Instructions', v('main_instructions'), true)}
+          ${fldFull('Mandatory Rules', v('mandatory_rules'), true)}
+          ${fldFull('Forbidden Actions', v('forbidden_actions'), true)}
+          ${fldFull('Validation Checklist', v('validation_checklist'), true)}
+        </div>`;
+
+      case 2: return `
+        <div class="fld-grid">
+          ${fld('Writing Style', v('writing_style'))}
+          ${fld('Visual Style', v('visual_style'))}
+          ${fld('Tone of Voice', v('tone_of_voice'))}
+        </div>
+        <div class="fld-grid full">
+          ${fldFull('Formatting Rules', v('formatting_rules'), true)}
+        </div>`;
+
+      case 3: return v('header_template') ? `
+        <div class="code-block" style="margin-bottom:14px">
+          <div class="code-block-bar">
+            <span class="code-block-label">Header Template</span>
+            <button class="btn-copy" onclick="app._copyText(\`${this._escJs(v('header_template'))}\`, this)">
+              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar
+            </button>
+          </div>
+          <pre>${this._esc(v('header_template'))}</pre>
+        </div>
+        ${v('header_notes') ? fldFull('Header Notes', v('header_notes')) : ''}
+      ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
+        <p>Nenhum template de cabeçalho definido.</p></div>`;
+
+      case 4: return v('footer_template') ? `
+        <div class="code-block" style="margin-bottom:14px">
+          <div class="code-block-bar">
+            <span class="code-block-label">Footer Template</span>
+            <button class="btn-copy" onclick="app._copyText(\`${this._escJs(v('footer_template'))}\`, this)">
+              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar
+            </button>
+          </div>
+          <pre>${this._esc(v('footer_template'))}</pre>
+        </div>
+        ${v('footer_notes') ? fldFull('Footer Notes', v('footer_notes')) : ''}
+      ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
+        <p>Nenhum template de rodapé definido.</p></div>`;
+
+      case 5: return v('full_example') ? `
+        <div class="code-block" style="margin-bottom:14px">
+          <div class="code-block-bar">
+            <span class="code-block-label">Full Example</span>
+            <button class="btn-copy" onclick="app._copyText(\`${this._escJs(v('full_example'))}\`, this)">
+              <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar
+            </button>
+          </div>
+          <pre>${this._esc(v('full_example'))}</pre>
+        </div>
+        ${v('example_notes') ? fldFull('Example Notes', v('example_notes')) : ''}
+      ` : `<div class="gfsk-empty" style="flex:0;padding:40px 0">
+        <p>Nenhum exemplo completo definido.</p></div>`;
+
+      case 6: return `
+        <div class="fld-grid">
+          ${fld('Output Type', v('output_type'))}
+          ${fld('Prompt File Name', v('prompt_file_name'), true)}
+          ${fld('Default Language', v('default_language'))}
+          ${fld('Related Module', v('related_module'))}
+          ${fld('Related Doctype', v('related_doctype'))}
+          ${fld('Skill Priority', v('skill_priority'))}
+          ${fld('Last Reviewed On', v('last_reviewed_on'))}
+          ${chk('Is System Skill', v('is_system_skill'))}
+          ${chk('Allow Export', v('allow_export'))}
+          ${chk('Allow API Usage', v('allow_api_usage'))}
+        </div>
+        <div class="fld-grid full">
+          ${fldFull('Review Notes', v('review_notes'))}
+          ${fldFull('Version History', v('version_history'), true)}
+        </div>`;
+
+      case 7: {
+        const fp = v('full_prompt');
+        if (!fp) return `<div class="gfsk-empty" style="flex:0;padding:40px 0">
+          <p>O Full Prompt será gerado automaticamente ao salvar.</p></div>`;
+        const lines = fp.split('\n').length;
+        const chars = fp.length;
+        return `
+          <div class="prompt-meta">
+            <div class="prompt-meta-item"><i data-lucide="align-left" style="width:13px;height:13px"></i>
+              <strong>${lines}</strong> linhas</div>
+            <div class="prompt-meta-item"><i data-lucide="hash" style="width:13px;height:13px"></i>
+              <strong>${chars}</strong> caracteres</div>
+            <div class="prompt-meta-item"><i data-lucide="zap" style="width:13px;height:13px"></i>
+              <strong>v${this._esc(v('version')||'—')}</strong></div>
+          </div>
+          <div class="code-block">
+            <div class="code-block-bar">
+              <span class="code-block-label">Full Prompt — Gerado Automaticamente</span>
+              <button class="btn-copy" onclick="app._copyText(\`${this._escJs(fp)}\`, this)">
+                <i data-lucide="copy" style="width:12px;height:12px"></i> Copiar Prompt
+              </button>
+            </div>
+            <pre>${this._esc(fp)}</pre>
+          </div>`;
+      }
+
+      default: return '';
+    }
+  }
+
+  // ── Tab form (edit/new) ───────────────────────────
+  _renderTabForm(idx) {
+    const d   = this.editData;
+    const sel = (opts, val) => opts.map(o=>`<option value="${this._esc(o)}"${o===val?' selected':''}>${this._esc(o||'—')}</option>`).join('');
+    const txt = (f, rows=4, mono=false) =>
+      `<textarea class="form-control${mono?' mono':''}" rows="${rows}"
+         oninput="app._fd('${f}',this.value)">${this._esc(d[f]||'')}</textarea>`;
+    const inp = (f, ph='') =>
+      `<input class="form-control" type="text" value="${this._esc(d[f]||'')}"
+         placeholder="${ph}" oninput="app._fd('${f}',this.value)">`;
+    const dd = (f, opts) =>
+      `<select class="form-control" onchange="app._fd('${f}',this.value)">
+         <option value="">Selecionar...</option>${sel(opts, d[f])}</select>`;
+    const chk = (f, label) =>
+      `<div class="form-check">
+         <input type="checkbox" id="chk_${f}" ${d[f]?'checked':''}
+                onchange="app._fd('${f}',this.checked?1:0)">
+         <label for="chk_${f}">${label}</label>
+       </div>`;
+    const grp = (label, ctrl, desc='', req=false) =>
+      `<div class="form-group">
+         <label class="form-label">${label}${req?'<span class="req">*</span>':''}</label>
+         ${ctrl}
+         ${desc?`<div class="form-desc">${desc}</div>`:''}
+       </div>`;
+
+    switch(idx) {
+      case 0: return `
+        <div class="form-grid">
+          ${grp('Skill Name', inp('skill_name','Ex: Documentação Interna HTML'),
+            'Nome amigável de identificação principal.', true)}
+          ${grp('Internal Name', inp('internal_name','Ex: gf_internal_html_doc'),
+            'Identificador técnico único. Gerado automaticamente.', true)}
+          ${grp('Category', dd('category', CATEGORIES), 'Agrupamento funcional.', true)}
+          ${grp('Status', dd('status', STATUSES), 'Situação atual do Skill.', true)}
+          ${grp('Version', inp('version','Ex: 1.0.0'), 'Ex: 1.0.0 → 1.1.0 → 2.0.0', true)}
+          ${grp('Owner', inp('skill_owner','usuario@empresa.com'), 'Responsável pelo Skill.', true)}
+          ${grp('Tags', inp('tags','Ex: html, documentação, interno'), 'Palavras-chave separadas por vírgula.')}
+        </div>
+        <div class="form-grid full">
+          ${grp('Short Description', txt('short_description',2),
+            'Resumo curto para listas e buscas.', true)}
+          ${grp('Version Notes', txt('version_notes',2), 'Alterações desta versão.')}
+          ${grp('Purpose', txt('purpose',4), 'Propósito operacional completo do Skill.', true)}
+          ${grp('When to Use', txt('when_to_use',3), 'Cenários ideais de utilização.')}
+          ${grp('When Not to Use', txt('when_not_to_use',3), 'Limitações e situações inadequadas.')}
+          ${chk('active','Ativo')}
+        </div>`;
+
+      case 1: return `
+        <div class="form-grid full">
+          ${grp('Main Instructions', txt('main_instructions',6,true),
+            'Regras centrais de execução.', true)}
+          ${grp('Mandatory Rules', txt('mandatory_rules',6,true),
+            'Regras críticas e obrigatórias.', true)}
+          ${grp('Forbidden Actions', txt('forbidden_actions',4,true),
+            'Comportamentos proibidos.')}
+          ${grp('Validation Checklist', txt('validation_checklist',4,true),
+            'Verificações obrigatórias antes de concluir.')}
+        </div>`;
+
+      case 2: return `
+        <div class="form-grid">
+          ${grp('Writing Style', txt('writing_style',3),
+            'Ex: Objetivo, técnico, corporativo.', true)}
+          ${grp('Visual Style', txt('visual_style',3),
+            'Ex: Clean, moderno, enterprise.', true)}
+          ${grp('Tone of Voice', txt('tone_of_voice',3),
+            'Ex: Profissional e confiável.')}
+        </div>
+        <div class="form-grid full">
+          ${grp('Formatting Rules', txt('formatting_rules',5,true),
+            'Padrões estruturais obrigatórios de formatação.')}
+        </div>`;
+
+      case 3: return `
+        <div class="form-grid full">
+          ${grp('Header Template', txt('header_template',8,true),
+            'Estrutura visual e textual do cabeçalho.')}
+          ${grp('Header Notes', txt('header_notes',3),
+            'Regras adicionais relacionadas ao cabeçalho.')}
+        </div>`;
+
+      case 4: return `
+        <div class="form-grid full">
+          ${grp('Footer Template', txt('footer_template',8,true),
+            'Estrutura visual e textual do rodapé.')}
+          ${grp('Footer Notes', txt('footer_notes',3),
+            'Regras adicionais relacionadas ao rodapé.')}
+        </div>`;
+
+      case 5: return `
+        <div class="form-grid full">
+          ${grp('Full Example', txt('full_example',10,true),
+            'Modelo completo de referência operacional.')}
+          ${grp('Example Notes', txt('example_notes',3),
+            'Observações complementares sobre o exemplo.')}
+        </div>`;
+
+      case 6: return `
+        <div class="form-grid">
+          ${grp('Output Type', dd('output_type', OUTPUT_TYPES),
+            'Formato principal esperado da saída.', true)}
+          ${grp('Prompt File Name', inp('prompt_file_name','Ex: GF_RULES.md'),
+            'Nome do arquivo para exportação.')}
+          ${grp('Default Language', inp('default_language','Ex: Português (BR)'),
+            'Idioma principal das respostas.')}
+          ${grp('Related Module', inp('related_module'), 'Módulo relacionado no ERPNext.')}
+          ${grp('Related Doctype', inp('related_doctype'), 'DocType relacionado.')}
+          ${grp('Skill Priority', dd('skill_priority', PRIORITIES),
+            'Prioridade operacional.')}
+          ${grp('Last Reviewed On',
+            `<input class="form-control" type="date" value="${this._esc(d.last_reviewed_on||'')}"
+               onchange="app._fd('last_reviewed_on',this.value)">`,
+            'Data da última revisão técnica.')}
+        </div>
+        <div class="form-grid full">
+          ${grp('Review Notes', txt('review_notes',3), 'Comentários técnicos da última revisão.')}
+          ${grp('Version History', txt('version_history',5,true),
+            'Ex: v1.0.0 → criação inicial · v1.1.0 → ajustes')}
+          <div class="form-group">
+            ${chk('is_system_skill','Is System Skill — Protege o Skill contra alterações críticas')}
+            ${chk('allow_export','Allow Export — Permite exportação')}
+            ${chk('allow_api_usage','Allow API Usage — Permite uso via API')}
+          </div>
+        </div>`;
+
+      case 7: return `
+        <div class="fld-box" style="grid-column:1/-1">
+          <div class="fld-lbl">Full Prompt</div>
+          <div class="fld-val empty">
+            O Prompt Completo é gerado automaticamente ao salvar.<br>
+            Preencha os campos nas outras abas e clique em Salvar.
+          </div>
+        </div>`;
+
+      default: return '';
+    }
+  }
+
+  // ── Field data helper ─────────────────────────────
+  _fd(field, val) {
+    this.editData[field] = val;
+    // Auto-fill internal_name from skill_name
+    if (field === 'skill_name' && (!this.editData.internal_name || this.mode === 'new')) {
+      const slug = val.toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g,'')
+        .replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+      this.editData.internal_name = slug;
+      const inp = document.querySelector('[oninput*="internal_name"]');
+      if (inp) inp.value = slug;
+    }
+  }
+
+  // ── Start Edit ────────────────────────────────────
+  _startEdit() {
+    this.mode      = 'edit';
+    this.activeTab = 0;
+    this.editData  = Object.assign({}, this.selected);
+    this._renderEditMode();
+  }
+
+  // ── Start New ─────────────────────────────────────
+  _startNew() {
+    this.mode      = 'new';
+    this.activeTab = 0;
+    this.selected  = null;
+    this.editData  = {
+      status: 'Draft', version: '1.0.0', active: 1,
+      skill_owner: frappe.session.user
+    };
+    document.querySelectorAll('.sk-card').forEach(c=>c.classList.remove('active'));
+    this._renderEditMode();
+  }
+
+  // ── Render edit/new mode ──────────────────────────
+  _renderEditMode() {
+    const isNew = this.mode === 'new';
+    const title = isNew ? 'Novo Skill' : `Editando: ${this.editData.skill_name||this.editData.name||'—'}`;
+    const $main = document.getElementById('gfsk-main');
+    $main.innerHTML = `
+      <div class="gfsk-form-hdr">
+        <div>
+          <div class="gfsk-form-hdr-title">${this._esc(title)}</div>
+          <div class="gfsk-form-hdr-sub">Preencha as abas e clique em Salvar para gerar o Prompt Completo.</div>
+        </div>
+      </div>
+      ${this._buildTabBar()}
+      <div class="gfsk-tab-body" id="gfsk-tab-body" style="flex:1;overflow-y:auto">
+        ${this._renderTabForm(this.activeTab)}
+      </div>
+      <div class="gfsk-form-foot">
+        <button class="btn-cancel" onclick="app._cancelEdit()">Cancelar</button>
+        <button class="btn-save" id="gfsk-btn-save" onclick="app._save()">
+          <i data-lucide="save" style="width:14px;height:14px"></i>
+          Salvar Skill
+        </button>
+      </div>`;
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+  }
+
+  // ── Cancel edit ───────────────────────────────────
+  _cancelEdit() {
+    if (this.selected) {
+      this.mode = 'view';
+      this._renderView();
+    } else {
+      this._renderEmpty();
+    }
+  }
+
+  // ── Save ──────────────────────────────────────────
+  async _save() {
+    if (this._saving) return;
+    const d = this.editData;
+
+    // Basic validation
+    const required = [
+      ['skill_name','Skill Name'],['internal_name','Internal Name'],
+      ['category','Category'],['status','Status'],
+      ['version','Version'],['skill_owner','Owner'],
+      ['short_description','Short Description'],
+      ['purpose','Purpose'],['main_instructions','Main Instructions'],
+      ['mandatory_rules','Mandatory Rules'],
+      ['writing_style','Writing Style'],['visual_style','Visual Style'],
+      ['output_type','Output Type']
+    ];
+    for (const [f, lbl] of required) {
+      if (!d[f] || !String(d[f]).trim()) {
+        this._toast(`Campo obrigatório: ${lbl}`, 'error');
+        return;
+      }
+    }
+
+    this._saving = true;
+    const $btn = document.getElementById('gfsk-btn-save');
+    if ($btn) { $btn.disabled = true; $btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px"></div> Salvando...'; }
+
+    try {
+      let result;
+      if (this.mode === 'new') {
+        const r = await frappe.call({
+          method: 'frappe.client.insert',
+          args: { doc: Object.assign({ doctype:'GF Skill' }, d) }
+        });
+        result = r.message;
+      } else {
+        const r = await frappe.call({
+          method: 'frappe.client.save',
+          args: { doc: Object.assign({ doctype:'GF Skill', name:this.selected.name }, d) }
+        });
+        result = r.message;
+      }
+      this._toast('Skill salvo com sucesso!', 'success');
+      await this._loadSkills();
+      this.selected  = result;
+      this.mode      = 'view';
+      this.activeTab = 0;
+      this._renderView();
+      this._markActive(result.name);
+    } catch(e) {
+      const msg = (e && e.message) ? e.message : 'Erro ao salvar o Skill.';
+      this._toast(msg, 'error');
+      if ($btn) { $btn.disabled = false; $btn.innerHTML = '<i data-lucide="save" style="width:14px;height:14px"></i> Salvar Skill'; if(window.lucide)lucide.createIcons({attrs:{style:'display:block'}}); }
+    }
+    this._saving = false;
+  }
+
+  // ── Submit ────────────────────────────────────────
+  async _submitSkill() {
+    if (!this.selected) return;
+    const conf = await this._confirm('Submeter o Skill? Após submetido, não poderá ser editado diretamente.');
+    if (!conf) return;
+    try {
+      await frappe.call({
+        method: 'frappe.client.submit',
+        args: { doc: { doctype:'GF Skill', name:this.selected.name } }
+      });
+      this._toast('Skill submetido com sucesso!', 'success');
+      await this.selectSkill(this.selected.name);
+    } catch(e) {
+      this._toast('Erro ao submeter o Skill.', 'error');
+    }
+  }
+
+  // ── Delete ────────────────────────────────────────
+  async _deleteSkill() {
+    if (!this.selected) return;
+    const conf = await this._confirm(`Excluir o Skill "${this.selected.skill_name}"? Esta ação não pode ser desfeita.`);
+    if (!conf) return;
+    try {
+      await frappe.call({
+        method: 'frappe.client.delete',
+        args: { doctype:'GF Skill', name:this.selected.name }
+      });
+      this._toast('Skill excluído.', 'info');
+      this.selected = null;
+      await this._loadSkills();
+      this._renderEmpty();
+    } catch(e) {
+      this._toast('Erro ao excluir. Verifique permissões.', 'error');
+    }
+  }
+
+  // ── Copy helper ───────────────────────────────────
+  _copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (btn) {
+        const orig = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = '<i data-lucide="check" style="width:12px;height:12px"></i> Copiado!';
+        if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; if(window.lucide)lucide.createIcons({attrs:{style:'display:block'}}); }, 2000);
+      }
+    }).catch(() => this._toast('Erro ao copiar.','error'));
+  }
+
+  // ── Confirm dialog ────────────────────────────────
+  _confirm(msg) {
+    return new Promise(resolve => {
+      frappe.confirm(msg, () => resolve(true), () => resolve(false));
+    });
+  }
+
+  // ── Toast ─────────────────────────────────────────
+  _toast(msg, type='info') {
+    const $t = document.getElementById('gfsk-toast');
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.textContent = msg;
+    $t.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  // ── Escape helpers ────────────────────────────────
+  _esc(s) {
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  _escJs(s) {
+    if (!s) return '';
+    return String(s).replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+  }
+}
+
+// ── Boot ───────────────────────────────────────────
+let app;
+$(document).ready(() => {
+  frappe.after_ajax(() => {
+    app = new GFSkillApp();
+    app.init();
+  });
+});
+</script>
+{% endblock %}

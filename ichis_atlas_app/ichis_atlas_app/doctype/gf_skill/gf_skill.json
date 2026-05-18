@@ -1,0 +1,523 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:internal_name",
+ "creation": "2026-05-18 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "is_submittable": 1,
+ "field_order": [
+  "tab_general",
+  "sb_identification",
+  "skill_name",
+  "internal_name",
+  "short_description",
+  "cb_g1",
+  "category",
+  "status",
+  "active",
+  "cb_g2",
+  "version",
+  "version_notes",
+  "skill_owner",
+  "tags",
+  "sb_purpose",
+  "purpose",
+  "cb_g3",
+  "when_to_use",
+  "when_not_to_use",
+  "tab_instructions",
+  "main_instructions",
+  "mandatory_rules",
+  "cb_i1",
+  "forbidden_actions",
+  "validation_checklist",
+  "tab_style",
+  "writing_style",
+  "visual_style",
+  "cb_s1",
+  "tone_of_voice",
+  "formatting_rules",
+  "tab_header",
+  "header_template",
+  "header_notes",
+  "tab_footer",
+  "footer_template",
+  "footer_notes",
+  "tab_example",
+  "full_example",
+  "example_notes",
+  "tab_technical",
+  "sb_tech_config",
+  "output_type",
+  "prompt_file_name",
+  "default_language",
+  "cb_t1",
+  "related_module",
+  "related_doctype",
+  "skill_priority",
+  "sb_tech_review",
+  "last_reviewed_on",
+  "review_notes",
+  "cb_t2",
+  "version_history",
+  "sb_tech_flags",
+  "is_system_skill",
+  "allow_export",
+  "allow_api_usage",
+  "tab_prompt",
+  "full_prompt"
+ ],
+ "fields": [
+  {
+   "fieldname": "tab_general",
+   "fieldtype": "Tab Break",
+   "label": "Informações Gerais"
+  },
+  {
+   "fieldname": "sb_identification",
+   "fieldtype": "Section Break",
+   "label": "Identificação"
+  },
+  {
+   "fieldname": "skill_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Skill Name",
+   "reqd": 1,
+   "description": "Nome amigável utilizado para identificação principal do Skill."
+  },
+  {
+   "fieldname": "internal_name",
+   "fieldtype": "Data",
+   "label": "Internal Name",
+   "reqd": 1,
+   "description": "Identificador técnico único utilizado internamente pelo sistema. Ex: gf_internal_html_documentation"
+  },
+  {
+   "fieldname": "short_description",
+   "fieldtype": "Small Text",
+   "label": "Short Description",
+   "reqd": 1,
+   "description": "Descrição curta utilizada em listas, buscas e consultas rápidas."
+  },
+  {
+   "fieldname": "cb_g1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Category",
+   "reqd": 1,
+   "options": "Documentação\nHTML\nERPNext\nRelatórios\nPrompt Engineering\nAutomação\nIA e Agentes\nProgramação\nSQL e Banco de Dados\nAPIs e Integrações\nFrontend\nBackend\nDevOps e Cloud\nSegurança\nComercial\nEngenharia\nIndustrial\nQualidade\nFinanceiro\nJurídico\nRH\nTemplates\nPadrões Corporativos\nOutros",
+   "description": "Define o agrupamento funcional e organizacional do Skill."
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "reqd": 1,
+   "default": "Draft",
+   "options": "Draft\nEm Desenvolvimento\nEm Teste\nAtivo\nObsoleto\nArquivado",
+   "description": "Define a situação atual do Skill dentro do sistema."
+  },
+  {
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Active",
+   "default": "1",
+   "description": "Controla disponibilidade operacional do Skill."
+  },
+  {
+   "fieldname": "cb_g2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Version",
+   "reqd": 1,
+   "default": "1.0.0",
+   "description": "Versão atual seguindo padrão corporativo de versionamento. Ex: 1.0.0"
+  },
+  {
+   "fieldname": "version_notes",
+   "fieldtype": "Small Text",
+   "label": "Version Notes",
+   "description": "Resumo rápido das alterações realizadas nesta versão do Skill."
+  },
+  {
+   "fieldname": "skill_owner",
+   "fieldtype": "Link",
+   "label": "Owner",
+   "options": "User",
+   "reqd": 1,
+   "description": "Usuário principal responsável pela manutenção do Skill."
+  },
+  {
+   "fieldname": "tags",
+   "fieldtype": "Data",
+   "label": "Tags",
+   "description": "Facilita localização, indexação e agrupamento dos Skills. Ex: html, documentação, interno"
+  },
+  {
+   "fieldname": "sb_purpose",
+   "fieldtype": "Section Break",
+   "label": "Propósito"
+  },
+  {
+   "fieldname": "purpose",
+   "fieldtype": "Long Text",
+   "label": "Purpose",
+   "reqd": 1,
+   "description": "Explica claramente o propósito operacional do Skill."
+  },
+  {
+   "fieldname": "cb_g3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "when_to_use",
+   "fieldtype": "Small Text",
+   "label": "When to Use",
+   "description": "Define os cenários ideais para utilização deste Skill."
+  },
+  {
+   "fieldname": "when_not_to_use",
+   "fieldtype": "Small Text",
+   "label": "When Not to Use",
+   "description": "Define limitações e situações inadequadas para uso do Skill."
+  },
+  {
+   "fieldname": "tab_instructions",
+   "fieldtype": "Tab Break",
+   "label": "Instruções"
+  },
+  {
+   "fieldname": "main_instructions",
+   "fieldtype": "Long Text",
+   "label": "Main Instructions",
+   "reqd": 1,
+   "description": "Define as regras centrais que a IA ou usuário deve seguir."
+  },
+  {
+   "fieldname": "mandatory_rules",
+   "fieldtype": "Long Text",
+   "label": "Mandatory Rules",
+   "reqd": 1,
+   "description": "Define regras críticas e obrigatórias do Skill."
+  },
+  {
+   "fieldname": "cb_i1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "forbidden_actions",
+   "fieldtype": "Long Text",
+   "label": "Forbidden Actions",
+   "description": "Define comportamentos proibidos durante a utilização."
+  },
+  {
+   "fieldname": "validation_checklist",
+   "fieldtype": "Long Text",
+   "label": "Validation Checklist",
+   "description": "Lista de verificações obrigatórias antes da conclusão da execução."
+  },
+  {
+   "fieldname": "tab_style",
+   "fieldtype": "Tab Break",
+   "label": "Estilo"
+  },
+  {
+   "fieldname": "writing_style",
+   "fieldtype": "Small Text",
+   "label": "Writing Style",
+   "reqd": 1,
+   "description": "Define como os textos devem ser escritos. Ex: Objetivo, técnico, corporativo e didático."
+  },
+  {
+   "fieldname": "visual_style",
+   "fieldtype": "Small Text",
+   "label": "Visual Style",
+   "reqd": 1,
+   "description": "Define aparência visual geral do conteúdo gerado. Ex: Clean, moderno, enterprise e minimalista."
+  },
+  {
+   "fieldname": "cb_s1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tone_of_voice",
+   "fieldtype": "Small Text",
+   "label": "Tone of Voice",
+   "description": "Define o tom geral da comunicação. Ex: Profissional, técnico e confiável."
+  },
+  {
+   "fieldname": "formatting_rules",
+   "fieldtype": "Long Text",
+   "label": "Formatting Rules",
+   "description": "Define padrões estruturais obrigatórios de formatação."
+  },
+  {
+   "fieldname": "tab_header",
+   "fieldtype": "Tab Break",
+   "label": "Cabeçalho"
+  },
+  {
+   "fieldname": "header_template",
+   "fieldtype": "Code",
+   "label": "Header Template",
+   "description": "Estrutura visual e textual do cabeçalho padrão."
+  },
+  {
+   "fieldname": "header_notes",
+   "fieldtype": "Small Text",
+   "label": "Header Notes",
+   "description": "Regras adicionais relacionadas ao cabeçalho."
+  },
+  {
+   "fieldname": "tab_footer",
+   "fieldtype": "Tab Break",
+   "label": "Rodapé"
+  },
+  {
+   "fieldname": "footer_template",
+   "fieldtype": "Code",
+   "label": "Footer Template",
+   "description": "Estrutura visual e textual do rodapé padrão."
+  },
+  {
+   "fieldname": "footer_notes",
+   "fieldtype": "Small Text",
+   "label": "Footer Notes",
+   "description": "Regras adicionais relacionadas ao rodapé."
+  },
+  {
+   "fieldname": "tab_example",
+   "fieldtype": "Tab Break",
+   "label": "Exemplo Completo"
+  },
+  {
+   "fieldname": "full_example",
+   "fieldtype": "Code",
+   "label": "Full Example",
+   "description": "Modelo completo utilizado como referência operacional."
+  },
+  {
+   "fieldname": "example_notes",
+   "fieldtype": "Small Text",
+   "label": "Example Notes",
+   "description": "Comentários e observações complementares sobre o exemplo."
+  },
+  {
+   "fieldname": "tab_technical",
+   "fieldtype": "Tab Break",
+   "label": "Campos Técnicos"
+  },
+  {
+   "fieldname": "sb_tech_config",
+   "fieldtype": "Section Break",
+   "label": "Configuração Técnica"
+  },
+  {
+   "fieldname": "output_type",
+   "fieldtype": "Select",
+   "label": "Output Type",
+   "reqd": 1,
+   "options": "HTML\nMarkdown\nTexto\nJSON\nSQL\nPython\nJavaScript\nCSS\nXML\nYAML\nRelatório\nPrompt\nDocumentação\nAPI\nWorkflow\nOutro",
+   "description": "Define o formato principal esperado da saída do Skill."
+  },
+  {
+   "fieldname": "prompt_file_name",
+   "fieldtype": "Data",
+   "label": "Prompt File Name",
+   "description": "Nome técnico do arquivo utilizado para exportação ou armazenamento. Ex: GF_INTERNAL_HTML_RULES.md"
+  },
+  {
+   "fieldname": "default_language",
+   "fieldtype": "Data",
+   "label": "Default Language",
+   "description": "Define idioma principal esperado das respostas. Ex: Português (BR)"
+  },
+  {
+   "fieldname": "cb_t1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "related_module",
+   "fieldtype": "Data",
+   "label": "Related Module",
+   "description": "Define o módulo principal relacionado ao Skill."
+  },
+  {
+   "fieldname": "related_doctype",
+   "fieldtype": "Link",
+   "label": "Related Doctype",
+   "options": "DocType",
+   "description": "Define relacionamento com outros Doctypes do sistema."
+  },
+  {
+   "fieldname": "skill_priority",
+   "fieldtype": "Select",
+   "label": "Skill Priority",
+   "options": "\nBaixa\nNormal\nAlta\nCrítica",
+   "description": "Define prioridade operacional e importância do Skill."
+  },
+  {
+   "fieldname": "sb_tech_review",
+   "fieldtype": "Section Break",
+   "label": "Revisão e Histórico"
+  },
+  {
+   "fieldname": "last_reviewed_on",
+   "fieldtype": "Date",
+   "label": "Last Reviewed On",
+   "description": "Data da última validação técnica realizada."
+  },
+  {
+   "fieldname": "review_notes",
+   "fieldtype": "Small Text",
+   "label": "Review Notes",
+   "description": "Comentários técnicos da última revisão."
+  },
+  {
+   "fieldname": "cb_t2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "version_history",
+   "fieldtype": "Long Text",
+   "label": "Version History",
+   "description": "Mantém rastreabilidade resumida da evolução do Skill. Ex: v1.0.0 → criação inicial"
+  },
+  {
+   "fieldname": "sb_tech_flags",
+   "fieldtype": "Section Break",
+   "label": "Permissões e Flags"
+  },
+  {
+   "fieldname": "is_system_skill",
+   "fieldtype": "Check",
+   "label": "Is System Skill",
+   "default": "0",
+   "description": "Protege Skills internos críticos do sistema."
+  },
+  {
+   "fieldname": "allow_export",
+   "fieldtype": "Check",
+   "label": "Allow Export",
+   "default": "0",
+   "description": "Define se o Skill pode ser exportado."
+  },
+  {
+   "fieldname": "allow_api_usage",
+   "fieldtype": "Check",
+   "label": "Allow API Usage",
+   "default": "0",
+   "description": "Define se APIs externas podem utilizar este Skill."
+  },
+  {
+   "fieldname": "tab_prompt",
+   "fieldtype": "Tab Break",
+   "label": "Prompt Completo"
+  },
+  {
+   "fieldname": "full_prompt",
+   "fieldtype": "Code",
+   "label": "Full Prompt",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "description": "Prompt completo gerado automaticamente antes de cada salvamento. Não edite manualmente."
+  }
+ ],
+ "links": [],
+ "modified": "2026-05-18 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ichis Atlas App",
+ "name": "GF Skill",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GF Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "GF Editor",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "GF Viewer"
+  }
+ ],
+ "search_fields": "skill_name,category,status,tags",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Gray",
+   "title": "Draft"
+  },
+  {
+   "color": "Blue",
+   "title": "Em Desenvolvimento"
+  },
+  {
+   "color": "Orange",
+   "title": "Em Teste"
+  },
+  {
+   "color": "Green",
+   "title": "Ativo"
+  },
+  {
+   "color": "Yellow",
+   "title": "Obsoleto"
+  },
+  {
+   "color": "Red",
+   "title": "Arquivado"
+  }
+ ],
+ "title_field": "skill_name",
+ "track_changes": 1
+}
