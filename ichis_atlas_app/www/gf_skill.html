@@ -933,6 +933,10 @@ class GFSkillApp {
           <button class="btn-act" onclick="app._duplicateSkill()">
             <i data-lucide="copy" style="width:13px;height:13px"></i> Duplicar
           </button>
+          <div class="gfsk-toolbar-sep"></div>
+          <button class="btn-act btn-outline" onclick="app._startNew()">
+            <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Skill
+          </button>
         ` : `
           ${isDraft ? `
             <button class="btn-act btn-primary" onclick="app._startEdit()">
