@@ -16,6 +16,21 @@ class GFSkill(Document):
 
     # ──────────────────────────────────────────────
     def _build_prompt(self):
+        """
+        Monta o prompt operacional completo em Markdown, unindo todos os campos
+        estruturados do GF Skill em um único bloco enviável a modelos de IA.
+
+        Ordem das seções respeita a hierarquia cognitiva:
+          cabeçalho → propósito → quando usar → instruções → estilo
+          → CSS → cabeçalho/rodapé → exemplo completo → metadados técnicos.
+
+        Metadados de controle interno (Histórico de Versões, Tags, rodapé de
+        identidade) são deliberadamente excluídos — pertencem ao cadastro,
+        não ao contexto operacional enviado ao modelo.
+
+        Chamado em before_save() e before_submit() para garantir que o campo
+        full_prompt esteja sempre sincronizado com o conteúdo atual do documento.
+        """
         parts = []
 
         def sec(title, content, note=None):
@@ -142,14 +157,6 @@ class GFSkill(Document):
         )
         parts.append("\n".join(tech))
 
-        sec("HISTÓRICO DE VERSÕES", self.version_history)
-
-        if self.tags:
-            parts.append(f"\n**Tags:** {self.tags}")
-
-        parts.append("\n---")
-        parts.append(
-            f"\n*GF Skill · {self.internal_name or self.name} · v{self.version or '1.0.0'}*"
-        )
-
+        # Histórico de Versões, Tags e rodapé de identidade são metadados de
+        # controle interno — não integram o prompt operacional enviado ao modelo.
         return "\n".join(parts)
