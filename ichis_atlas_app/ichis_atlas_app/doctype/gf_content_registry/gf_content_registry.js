@@ -242,12 +242,13 @@ frappe.ui.form.on('GF Content Registry', {
     title(frm) {
         // Auto-preenche internal_name apenas em documentos novos (antes de salvar)
         if (frm.doc.__islocal) {
+            const ver  = (frm.doc.version || '1.0.0').replace(/\./g, '_');
             const slug = (frm.doc.title || '')
                 .toLowerCase()
                 .normalize('NFD').replace(/[̀-ͯ]/g, '')
                 .replace(/[^a-z0-9]+/g, '_')
                 .replace(/^_+|_+$/g, '');
-            frm.set_value('internal_name', slug);
+            frm.set_value('internal_name', slug ? `${slug}_v${ver}` : '');
         }
     },
 

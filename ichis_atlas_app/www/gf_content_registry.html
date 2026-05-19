@@ -255,6 +255,48 @@ select.form-control{cursor:pointer}
   .gfcr-sb.open{transform:translateX(0)}
   :root{--sidebar:100%}
 }
+
+/* ── Btn accent (Submeter) ────────────────────────── */
+.btn-act.btn-accent{background:#059669;color:#fff;border-color:transparent}
+.btn-act.btn-accent:hover{background:#047857}
+
+/* ── Aba Vínculos — layout ────────────────────────── */
+.cr-links-layout{display:flex;gap:14px;height:100%;min-height:340px;padding:0}
+.cr-tree-panel{flex:2;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-width:0}
+.cr-tree-header{padding:12px 14px 10px;border-bottom:1px solid var(--border);flex-shrink:0;background:#fafafa}
+.cr-tree-title{font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.cr-tree-title .req{color:#dc2626;font-size:12px}
+.cr-tree-search{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:7px 10px;transition:border-color 150ms}
+.cr-tree-search:focus-within{border-color:#94a3b8;box-shadow:0 0 0 3px rgba(71,85,105,.07)}
+.cr-tree-search input{flex:1;border:none;outline:none;background:transparent;font-size:12.5px;color:#0f172a;min-width:0}
+.cr-tree-search input::placeholder{color:#94a3b8}
+.cr-tree-sel-pill{margin-top:8px;display:flex;align-items:center;gap:7px;background:#dbeafe;border:1px solid #93c5fd;border-radius:6px;padding:6px 10px;font-size:12px;color:#1e40af}
+.cr-tree-sel-pill .clear-sel{background:none;border:none;cursor:pointer;padding:2px;display:flex;align-items:center;color:#3b82f6;margin-left:auto;border-radius:4px;transition:background 100ms}
+.cr-tree-sel-pill .clear-sel:hover{background:rgba(59,130,246,.15)}
+.cr-tree-body{flex:1;overflow-y:auto;padding:6px 4px}
+.cr-tree-body::-webkit-scrollbar{width:4px}
+.cr-tree-body::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:4px}
+/* nós da árvore */
+.cg-node{display:flex;align-items:flex-start;gap:3px;padding:5px 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:all 100ms;margin-bottom:1px}
+.cg-node:hover{background:#f1f5f9;border-color:#e2e8f0}
+.cg-node.selected{background:#dbeafe;border-color:#93c5fd}
+.cg-toggle{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:4px;margin-top:2px;cursor:pointer;transition:background 100ms}
+.cg-toggle:hover{background:#e2e8f0}
+.cg-toggle-icon{transition:transform 150ms;color:#94a3b8}
+.cg-toggle-icon.expanded{transform:rotate(90deg)}
+.cg-leaf-dot{width:5px;height:5px;border-radius:50%;background:#d1d5db;margin:0 1px}
+.cg-icon{flex-shrink:0;margin-top:2px;color:#94a3b8}
+.cg-node.selected .cg-icon{color:#3b82f6}
+.cg-content{flex:1;min-width:0}
+.cg-name{font-size:12.5px;font-weight:500;color:#1e293b;line-height:1.3}
+.cg-node.selected .cg-name{color:#1d4ed8;font-weight:600}
+.cg-order{display:inline-flex;font-size:10px;font-weight:600;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:0px 5px;margin-left:5px;font-family:var(--mono);vertical-align:middle}
+.cg-desc{font-size:10.5px;color:#94a3b8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cg-breadcrumb{font-size:10px;color:#94a3b8;margin-top:2px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cg-empty{text-align:center;color:#94a3b8;font-size:12px;padding:28px 16px;line-height:1.6}
+/* painel direito */
+.cr-links-right{flex:1;display:flex;flex-direction:column;gap:12px;min-width:200px;max-width:280px;overflow-y:auto}
+.cr-links-right-hdr{font-size:10.5px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:5px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 </style>
 {% endblock %}
 
@@ -380,6 +422,8 @@ class GFContentRegistryApp {
     this._accessGroups   = [];
     this._skills         = [];
     this._webPages       = [];
+    this._cgExpanded     = new Set();
+    this._cgSearchQuery  = '';
   }
 
   async init() {
@@ -444,7 +488,7 @@ class GFContentRegistryApp {
       });
     });
     return Promise.all([
-      load('GF Content Group', ['name','display_name']),
+      load('GF Content Group', ['name','display_name','parent_group','description','icon','sort_order']),
       load('GF Access Group',  ['name','display_name']),
       load('GF Skill',         ['name','skill_name']),
       load('Web Page',         ['name','title']),
@@ -453,6 +497,8 @@ class GFContentRegistryApp {
       this._accessGroups  = ag;
       this._skills        = sk;
       this._webPages      = wp;
+      // Expande todos os nós raiz por padrão
+      this._cgExpanded = new Set(cg.filter(n => !n.parent_group).map(n => n.name));
     });
   }
 
@@ -619,6 +665,7 @@ class GFContentRegistryApp {
           <button class="btn-act btn-outline" onclick="app._startNew()"><i data-lucide="plus" style="width:13px;height:13px"></i> Novo Registro</button>
         ` : `
           <button class="btn-act btn-primary" onclick="app._startEdit()"><i data-lucide="edit-2" style="width:13px;height:13px"></i> Editar</button>
+          ${isDraft ? `<button class="btn-act btn-accent" onclick="app._submitRecord()"><i data-lucide="send" style="width:13px;height:13px"></i> Submeter</button>` : ''}
           <button class="btn-act" onclick="app._duplicateRecord()"><i data-lucide="copy" style="width:13px;height:13px"></i> Duplicar</button>
           ${s.status === 'Submetido' ? `
           <button class="btn-act" onclick="app._newRevision()"><i data-lucide="git-branch" style="width:13px;height:13px"></i> Nova Revisão</button>
@@ -871,22 +918,71 @@ class GFContentRegistryApp {
           ${grp('Tags', inp('tags','Ex: produção, mensal, relatório'), 'Palavras-chave separadas por vírgula.')}
         </div>`;
 
-      case 1: return `
-        <div class="form-grid">
-          ${grp('Grupo de Conteúdo',
-            dd('content_group', this._contentGroups, o=>o.name, o=>o.display_name||o.name),
-            'Grupo funcional ao qual este conteúdo pertence.', true)}
-          ${grp('Grupo de Acesso',
-            dd('access_group', this._accessGroups, o=>o.name, o=>o.display_name||o.name),
-            'Controla quem pode visualizar este conteúdo.', true)}
-          ${grp('Skill',
-            dd('skill', this._skills, o=>o.name, o=>o.skill_name||o.name),
-            'Skill corporativo associado a este conteúdo.', true)}
-          ${grp('Web Page',
-            dd('web_page', this._webPages, o=>o.name, o=>o.title||o.name),
-            'Página web do ERPNext vinculada a este conteúdo.')}
-          ${grp('Responsável', inp('responsible_user','usuario@empresa.com'), 'Usuário responsável pelo conteúdo.')}
+      case 1: {
+        const selNode  = this.editData.content_group
+          ? (this._contentGroups||[]).find(n => n.name === this.editData.content_group)
+          : null;
+        const selLabel = selNode ? (selNode.display_name || selNode.name) : '';
+        const selPath  = selNode ? this._getCGPath(selNode, this._contentGroups) : [];
+        return `
+        <div class="cr-links-layout">
+
+          <!-- ── LEFT: árvore de Grupos de Conteúdo ── -->
+          <div class="cr-tree-panel">
+            <div class="cr-tree-header">
+              <div class="cr-tree-title">
+                <i data-lucide="folder-tree" style="width:13px;height:13px"></i>
+                Grupo de Conteúdo <span class="req">*</span>
+              </div>
+              <div class="cr-tree-search">
+                <i data-lucide="search" style="width:13px;height:13px;color:#94a3b8;flex-shrink:0"></i>
+                <input type="text" id="cg-search-inp"
+                       placeholder="Buscar por nome, código ou descrição..."
+                       oninput="app._filterTree(this.value)" autocomplete="off"
+                       value="${this._esc(this._cgSearchQuery||'')}">
+                <button id="cg-search-clear"
+                        onclick="app._clearCGSearch()"
+                        style="display:${this._cgSearchQuery?'flex':'none'};background:none;border:none;cursor:pointer;align-items:center;color:#94a3b8;padding:0">
+                  <i data-lucide="x" style="width:12px;height:12px"></i>
+                </button>
+              </div>
+              <div id="cg-sel-pill" class="cr-tree-sel-pill" style="display:${selNode?'flex':'none'}">
+                <i data-lucide="folder-check" style="width:13px;height:13px;flex-shrink:0"></i>
+                <div style="flex:1;min-width:0;overflow:hidden">
+                  <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._esc(selLabel)}</div>
+                  ${selPath.length > 1 ? `<div style="font-size:10px;opacity:.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._esc(selPath.join(' › '))}</div>` : ''}
+                </div>
+                <button class="clear-sel" onclick="event.stopPropagation();app._clearCGSelection()" title="Limpar seleção">
+                  <i data-lucide="x" style="width:11px;height:11px"></i>
+                </button>
+              </div>
+            </div>
+            <div class="cr-tree-body" id="cg-tree-body">
+              ${this._renderCGTree()}
+            </div>
+          </div>
+
+          <!-- ── RIGHT: outros vínculos ── -->
+          <div class="cr-links-right">
+            <div class="cr-links-right-hdr">
+              <i data-lucide="link-2" style="width:11px;height:11px"></i> Outros Vínculos
+            </div>
+            ${grp('Grupo de Acesso',
+              dd('access_group', this._accessGroups, o=>o.name, o=>o.display_name||o.name),
+              'Controla quem pode visualizar este conteúdo.', true)}
+            ${grp('Skill',
+              dd('skill', this._skills, o=>o.name, o=>o.skill_name||o.name),
+              'Skill corporativo associado.', true)}
+            ${grp('Web Page',
+              dd('web_page', this._webPages, o=>o.name, o=>o.title||o.name),
+              'Página web do ERPNext vinculada.')}
+            ${grp('Responsável',
+              inp('responsible_user','usuario@empresa.com'),
+              'Usuário responsável pelo conteúdo.')}
+          </div>
+
         </div>`;
+      }
 
       case 2: return `
         <div class="form-grid">
@@ -1076,12 +1172,14 @@ class GFContentRegistryApp {
   _fd(field, val) {
     this.editData[field] = val;
     if (field === 'title' && this.mode === 'new') {
+      const ver  = (this.editData.version || '1.0.0').replace(/\./g, '_');
       const slug = val.toLowerCase()
         .normalize('NFD').replace(/[̀-ͯ]/g,'')
         .replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
-      this.editData.internal_name = slug;
+      const full = slug ? `${slug}_v${ver}` : '';
+      this.editData.internal_name = full;
       const $el = document.getElementById('fld_internal_name');
-      if ($el) $el.textContent = slug || 'Gerado automaticamente...';
+      if ($el) $el.textContent = full || 'Gerado automaticamente...';
     }
   }
 
@@ -1311,6 +1409,161 @@ class GFContentRegistryApp {
     btn.style.display = (this.mode === 'edit' || this.mode === 'new') ? 'none' : '';
   }
 
+  // ── Submit ────────────────────────────────────────
+  _submitRecord() {
+    if (!this.selected) return;
+    const name = this.selected.name;
+    frappe.confirm('Submeter este registro? Após submetido, utilize Nova Revisão para realizar alterações.', () => {
+      frappe.call({
+        method: 'frappe.client.set_value',
+        args: { doctype:'GF Content Registry', name, fieldname:'status', value:'Submetido' },
+        callback: () => { this._toast('Registro submetido com sucesso!','success'); this.selectRecord(name); },
+        error:    () => { this._toast('Erro ao submeter o registro.','error'); }
+      });
+    });
+  }
+
+  // ── Content Group Tree ────────────────────────────
+  _renderCGTree() {
+    const nodes = this._contentGroups || [];
+    const q     = (this._cgSearchQuery || '').toLowerCase().trim();
+    if (!nodes.length) return `<div class="cg-empty"><i data-lucide="loader" style="width:14px;height:14px;margin-right:6px"></i>Carregando grupos...</div>`;
+    if (q) return this._renderCGSearchResults(q, nodes);
+    const roots = nodes
+      .filter(n => !n.parent_group)
+      .sort((a,b) => String(a.sort_order||'zzz').localeCompare(String(b.sort_order||'zzz')));
+    if (!roots.length) return `<div class="cg-empty">Nenhum grupo disponível.</div>`;
+    return roots.map(n => this._renderCGNode(n, nodes, 0)).join('');
+  }
+
+  _renderCGNode(node, all, depth) {
+    const children = all
+      .filter(n => n.parent_group === node.name)
+      .sort((a,b) => String(a.sort_order||'zzz').localeCompare(String(b.sort_order||'zzz')));
+    const hasKids  = children.length > 0;
+    const expanded = this._cgExpanded.has(node.name);
+    const selected = this.editData && this.editData.content_group === node.name;
+    const pad      = 8 + depth * 18;
+    const iconHtml = node.icon
+      ? `<span class="cg-icon"><i data-lucide="${this._esc(node.icon)}" style="width:13px;height:13px"></i></span>`
+      : '';
+    return `<div>
+      <div class="cg-node${selected?' selected':''}" style="padding-left:${pad}px"
+           onclick="app._selectCGGroup('${this._escJs(node.name)}')">
+        <span class="cg-toggle" onclick="event.stopPropagation();app._toggleCGNode('${this._escJs(node.name)}')">
+          ${hasKids
+            ? `<i data-lucide="chevron-right" class="cg-toggle-icon${expanded?' expanded':''}" style="width:13px;height:13px"></i>`
+            : `<span class="cg-leaf-dot"></span>`}
+        </span>
+        ${iconHtml}
+        <div class="cg-content">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px">
+            <span class="cg-name">${this._esc(node.display_name||node.name)}</span>
+            ${node.sort_order?`<span class="cg-order">${this._esc(String(node.sort_order))}</span>`:''}
+          </div>
+          ${node.description?`<div class="cg-desc">${this._esc((node.description||'').substring(0,80))}</div>`:''}
+        </div>
+      </div>
+      ${hasKids&&expanded ? children.map(c=>this._renderCGNode(c,all,depth+1)).join('') : ''}
+    </div>`;
+  }
+
+  _renderCGSearchResults(q, nodes) {
+    const matches = nodes.filter(n =>
+      (n.display_name||'').toLowerCase().includes(q) ||
+      (n.name||'').toLowerCase().includes(q) ||
+      (n.description||'').toLowerCase().includes(q) ||
+      String(n.sort_order||'').toLowerCase().includes(q)
+    );
+    if (!matches.length) return `<div class="cg-empty">Nenhum grupo encontrado para "<strong>${this._esc(q)}</strong>".</div>`;
+    return matches.map(n => {
+      const path = this._getCGPath(n, nodes);
+      const sel  = this.editData && this.editData.content_group === n.name;
+      return `<div class="cg-node${sel?' selected':''}"
+               onclick="app._selectCGGroup('${this._escJs(n.name)}')">
+        <span class="cg-toggle"><span class="cg-leaf-dot"></span></span>
+        ${n.icon?`<span class="cg-icon"><i data-lucide="${this._esc(n.icon)}" style="width:13px;height:13px"></i></span>`:''}
+        <div class="cg-content">
+          <div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap">
+            <span class="cg-name">${this._esc(n.display_name||n.name)}</span>
+            ${n.sort_order?`<span class="cg-order">${this._esc(String(n.sort_order))}</span>`:''}
+          </div>
+          ${path.length>1?`<div class="cg-breadcrumb">${this._esc(path.slice(0,-1).join(' › '))}</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  _getCGPath(node, nodes) {
+    const path = [];
+    let cur = node;
+    while (cur) {
+      path.unshift(cur.display_name || cur.name);
+      cur = cur.parent_group ? nodes.find(n => n.name === cur.parent_group) : null;
+      if (path.length > 8) break;
+    }
+    return path;
+  }
+
+  _selectCGGroup(name) {
+    this._fd('content_group', name);
+    const node  = (this._contentGroups||[]).find(n => n.name === name);
+    const label = node ? (node.display_name||node.name) : name;
+    const path  = node ? this._getCGPath(node, this._contentGroups) : [label];
+    const $pill = document.getElementById('cg-sel-pill');
+    if ($pill) {
+      $pill.innerHTML = `
+        <i data-lucide="folder-check" style="width:13px;height:13px;flex-shrink:0"></i>
+        <div style="flex:1;min-width:0;overflow:hidden">
+          <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._esc(label)}</div>
+          ${path.length>1?`<div style="font-size:10px;opacity:.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._esc(path.join(' › '))}</div>`:''}
+        </div>
+        <button class="clear-sel" onclick="event.stopPropagation();app._clearCGSelection()" title="Limpar seleção">
+          <i data-lucide="x" style="width:11px;height:11px"></i>
+        </button>`;
+      $pill.style.display = 'flex';
+      if (window.lucide) lucide.createIcons({attrs:{style:'display:block'}});
+    }
+    this._rerenderCGTree();
+  }
+
+  _clearCGSelection() {
+    this._fd('content_group', '');
+    const $pill = document.getElementById('cg-sel-pill');
+    if ($pill) $pill.style.display = 'none';
+    this._rerenderCGTree();
+  }
+
+  _toggleCGNode(name) {
+    if (this._cgExpanded.has(name)) this._cgExpanded.delete(name);
+    else this._cgExpanded.add(name);
+    this._rerenderCGTree();
+  }
+
+  _filterTree(q) {
+    this._cgSearchQuery = q;
+    const $clear = document.getElementById('cg-search-clear');
+    if ($clear) $clear.style.display = q ? 'flex' : 'none';
+    this._rerenderCGTree();
+  }
+
+  _clearCGSearch() {
+    this._cgSearchQuery = '';
+    const $inp   = document.getElementById('cg-search-inp');
+    const $clear = document.getElementById('cg-search-clear');
+    if ($inp)   $inp.value = '';
+    if ($clear) $clear.style.display = 'none';
+    this._rerenderCGTree();
+  }
+
+  _rerenderCGTree() {
+    const $body = document.getElementById('cg-tree-body');
+    if (!$body) return;
+    $body.innerHTML = this._renderCGTree();
+    if (window.lucide) lucide.createIcons({attrs:{style:'display:block'}});
+  }
+
+  // ── Helpers ───────────────────────────────────────
   _esc(s) {
     if (s === null || s === undefined) return '';
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

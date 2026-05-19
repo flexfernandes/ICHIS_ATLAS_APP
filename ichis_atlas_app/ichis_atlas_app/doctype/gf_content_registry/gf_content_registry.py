@@ -7,10 +7,11 @@ from frappe.model.document import Document
 class GFContentRegistry(Document):
 
     def before_insert(self):
-        if not self.internal_name and self.title:
-            self.internal_name = self._generate_internal_name(self.title)
         if not self.version:
             self.version = "1.0.0"
+        if not self.internal_name and self.title:
+            ver_slug = (self.version or "1.0.0").replace(".", "_")
+            self.internal_name = self._generate_internal_name(self.title) + "_v" + ver_slug
 
     def validate(self):
         if self.content_group and not self.access_group:
