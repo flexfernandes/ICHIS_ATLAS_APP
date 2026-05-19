@@ -1,0 +1,1544 @@
+{% extends "templates/web.html" %}
+
+{% block head_include %}
+<script src="/assets/ichis_atlas_app/js/lucide.min.js"></script>
+<style>
+/* ── Frappe container reset — full-width SPA ──────── */
+.page-content,.container,.container-fluid,.row{
+  max-width:100%!important;
+  padding-left:0!important;padding-right:0!important;
+  margin-left:0!important;margin-right:0!important;
+  width:100%!important
+}
+
+/* ── Reset & base ─────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#1e293b;--primary-h:#0f172a;--primary-l:#334155;
+  --primary-pale:#f1f5f9;--primary-bg:#f8fafc;
+  --accent:#059669;--accent-h:#047857;--accent-l:#10b981;--accent-pale:#d1fae5;
+  --bg:#f1f5f9;--surface:#ffffff;--surface2:#f8fafc;
+  --border:#e2e8f0;--border-h:#cbd5e1;
+  --text:#0f172a;--text-m:#475569;--text-l:#94a3b8;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.09);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.11);
+  --radius:10px;--radius-sm:6px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,monospace;
+  --sidebar:272px;--header:56px
+}
+html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+
+/* ── Layout ───────────────────────────────────────── */
+#gfcr{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ── Header ───────────────────────────────────────── */
+.gfcr-hdr{
+  height:var(--header);min-height:var(--header);
+  display:flex;align-items:center;gap:12px;padding:0 20px;
+  background:var(--primary);color:#fff;
+  box-shadow:0 2px 8px rgba(15,23,42,.22);
+  z-index:100;flex-shrink:0
+}
+.gfcr-hdr-logo{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:13px;letter-spacing:.5px;flex-shrink:0
+}
+.gfcr-hdr-title{font-weight:600;font-size:15px;letter-spacing:-.2px}
+.gfcr-hdr-sub{font-size:11px;opacity:.55;margin-left:2px}
+.gfcr-hdr-sep{flex:1}
+.gfcr-hdr-user{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.8}
+.gfcr-hdr-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700
+}
+.gfcr-hdr-atlas{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;
+  transition:background 150ms;text-decoration:none;color:#fff
+}
+.gfcr-hdr-atlas:hover{background:rgba(255,255,255,.2)}
+
+/* ── Body ─────────────────────────────────────────── */
+.gfcr-body{display:flex;flex:1;overflow:hidden}
+
+/* ── Sidebar ──────────────────────────────────────── */
+.gfcr-sb{
+  width:var(--sidebar);min-width:var(--sidebar);
+  background:#0f172a;border-right:1px solid rgba(255,255,255,.06);
+  display:flex;flex-direction:column;overflow:hidden
+}
+.gfcr-sb-top{padding:14px 14px 10px;flex-shrink:0}
+.gfcr-sb-search{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;padding:7px 10px;
+  transition:border-color 150ms
+}
+.gfcr-sb-search:focus-within{border-color:rgba(255,255,255,.25)}
+.gfcr-sb-search input{
+  border:none;outline:none;background:transparent;
+  font-size:13px;color:#e2e8f0;flex:1;min-width:0
+}
+.gfcr-sb-search input::placeholder{color:#475569}
+.gfcr-sb-search svg{flex-shrink:0;color:#475569}
+
+.gfcr-sb-filters{
+  display:flex;gap:5px;padding:8px 14px;flex-wrap:wrap;flex-shrink:0;
+  border-bottom:1px solid rgba(255,255,255,.06)
+}
+.gfcr-sb-filter{
+  font-size:10px;padding:3px 8px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.12);cursor:pointer;
+  background:transparent;color:#94a3b8;
+  transition:all 150ms;white-space:nowrap
+}
+.gfcr-sb-filter.active{background:#334155;color:#e2e8f0;border-color:#475569}
+.gfcr-sb-filter:hover:not(.active){background:rgba(255,255,255,.07);color:#cbd5e1}
+
+.gfcr-sb-list{flex:1;overflow-y:auto;padding:8px}
+.gfcr-sb-list::-webkit-scrollbar{width:4px}
+.gfcr-sb-list::-webkit-scrollbar-track{background:transparent}
+.gfcr-sb-list::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
+
+.gfcr-sb-empty{
+  text-align:center;color:#475569;font-size:12px;
+  padding:32px 16px;line-height:1.6
+}
+
+.cr-card{
+  border-radius:8px;padding:10px 11px;margin-bottom:4px;cursor:pointer;
+  border:1.5px solid transparent;transition:all 150ms;
+  background:transparent
+}
+.cr-card:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.09)}
+.cr-card.active{background:#1e293b;border-color:#334155}
+.cr-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:5px}
+.cr-card-name{font-weight:600;font-size:12.5px;color:#cbd5e1;line-height:1.3}
+.cr-card.active .cr-card-name{color:#93c5fd}
+.cr-card-id{font-size:10px;color:#475569;white-space:nowrap;margin-top:1px;font-family:var(--mono)}
+.cr-card.active .cr-card-id{color:#64748b}
+.cr-card-badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
+.cr-card-desc{font-size:11px;color:#64748b;line-height:1.4;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+.gfcr-sb-foot{padding:12px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.btn-new-cr{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:6px;
+  background:#059669;color:#fff;border:none;
+  border-radius:8px;padding:9px;font-size:13px;font-weight:600;
+  cursor:pointer;transition:background 150ms
+}
+.btn-new-cr:hover{background:#047857}
+
+/* ── Badges ───────────────────────────────────────── */
+.badge{
+  display:inline-flex;align-items:center;
+  font-size:10px;font-weight:600;padding:2px 7px;
+  border-radius:20px;line-height:1.4;white-space:nowrap
+}
+.badge-draft{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
+.badge-ativo{background:#d1fae5;color:#065f46}
+.badge-arquivado{background:#fee2e2;color:#dc2626}
+.badge-obsoleto{background:#fef9c3;color:#854d0e}
+.badge-type{background:#ede9fe;color:#5b21b6}
+.badge-group{background:#dbeafe;color:#1d4ed8}
+.badge-out{background:#f8fafc;color:#374151;border:1px solid #e2e8f0}
+
+/* ── Main content ─────────────────────────────────── */
+.gfcr-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── Empty / Welcome ──────────────────────────────── */
+.gfcr-empty{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:16px;padding:40px;text-align:center
+}
+.gfcr-empty-icon{
+  width:72px;height:72px;border-radius:20px;
+  background:var(--primary-pale);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-m)
+}
+.gfcr-empty h2{font-size:20px;font-weight:700;color:var(--text)}
+.gfcr-empty p{color:var(--text-m);font-size:13px;max-width:320px;line-height:1.6}
+.gfcr-empty .btn-primary{
+  display:flex;align-items:center;gap:6px;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;
+  cursor:pointer;transition:background 150ms
+}
+.gfcr-empty .btn-primary:hover{background:var(--primary-h)}
+
+/* ── Detail header ────────────────────────────────── */
+.gfcr-det-hdr{
+  padding:14px 10px 10px;border-bottom:1px solid var(--border);
+  background:var(--surface);flex-shrink:0
+}
+.gfcr-det-hdr-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.gfcr-det-hdr-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:var(--primary-pale);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-m);flex-shrink:0
+}
+.gfcr-det-hdr-info{flex:1;min-width:0}
+.gfcr-det-hdr-name{font-size:20px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:4px}
+.gfcr-det-hdr-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gfcr-det-hdr-meta span{font-size:12px;color:var(--text-m)}
+.gfcr-det-hdr-meta .sep{color:var(--border-h)}
+.gfcr-det-hdr-desc{
+  font-size:13px;color:var(--text-m);line-height:1.5;
+  padding-top:8px;border-top:1px solid var(--border)
+}
+
+/* ── Action toolbar ───────────────────────────────── */
+.gfcr-toolbar{
+  display:flex;align-items:center;gap:5px;flex-wrap:wrap;
+  padding:9px 10px;background:var(--surface);
+  flex-shrink:0
+}
+.gfcr-toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 4px;flex-shrink:0}
+.btn-act{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;
+  cursor:pointer;border:1px solid var(--border);background:var(--surface);
+  color:var(--text-m);transition:all 150ms;white-space:nowrap
+}
+.btn-act:hover{background:var(--surface2);border-color:var(--border-h)}
+.btn-act:disabled{opacity:.45;cursor:not-allowed}
+.btn-act.btn-primary{background:var(--primary);color:#fff;border-color:transparent}
+.btn-act.btn-primary:hover{background:var(--primary-h)}
+.btn-act.btn-accent{background:var(--accent);color:#fff;border-color:transparent}
+.btn-act.btn-accent:hover{background:var(--accent-h)}
+.btn-act.btn-outline{background:var(--surface);color:var(--primary);border-color:var(--primary-l)}
+.btn-act.btn-outline:hover{background:var(--primary-pale)}
+.btn-act.btn-danger{color:#dc2626}
+.btn-act.btn-danger:hover{background:#fee2e2;border-color:#fca5a5}
+.btn-act.btn-warn{color:#b45309}
+.btn-act.btn-warn:hover{background:#fef3c7;border-color:#fde68a}
+
+/* ── Meta panel ───────────────────────────────────── */
+.ver-panel{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:8px 10px;background:var(--surface);border-bottom:1px solid var(--border);
+  flex-shrink:0;font-size:12px
+}
+.ver-panel-item{display:flex;align-items:center;gap:5px;color:var(--text-m)}
+.ver-panel-item strong{font-weight:600;color:var(--text)}
+.ver-panel-item svg{color:var(--text-l)}
+
+/* ── Tabs ─────────────────────────────────────────── */
+.gfcr-tabs{
+  display:flex;gap:0;background:var(--surface);
+  border-bottom:1px solid #eef0f4;
+  padding:0 10px;flex-shrink:0;overflow-x:auto
+}
+.gfcr-tabs::-webkit-scrollbar{height:0}
+.gfcr-tab{
+  display:flex;align-items:center;gap:4px;
+  padding:8px 10px;font-size:11.5px;font-weight:500;
+  color:var(--text-m);cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all 150ms
+}
+.gfcr-tab:hover{color:var(--text);background:var(--primary-pale)}
+.gfcr-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+
+/* ── Tab content ──────────────────────────────────── */
+.gfcr-tab-body{flex:1;overflow-y:auto;padding:16px 10px;background:var(--bg)}
+.gfcr-tab-body::-webkit-scrollbar{width:5px}
+.gfcr-tab-body::-webkit-scrollbar-track{background:transparent}
+.gfcr-tab-body::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
+
+/* ── Field display (view mode) ────────────────────── */
+.fld-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:16px}
+.fld-grid.full{grid-template-columns:1fr}
+.fld-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.fld-lbl{font-size:10.5px;font-weight:600;color:var(--text-l);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.fld-val{font-size:13.5px;color:var(--text);line-height:1.5;word-break:break-word}
+.fld-val.empty{color:var(--text-l);font-style:italic;font-size:12px}
+.fld-val.mono{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap}
+.fld-val.check{display:flex;align-items:center;gap:5px}
+.fld-check-yes{color:var(--accent)}
+.fld-check-no{color:var(--text-l)}
+
+/* ── Section heading ──────────────────────────────── */
+.sec-heading{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700;color:var(--text);
+  margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid var(--border)
+}
+.sec-heading svg{color:var(--accent)}
+
+/* ── Content view layout ─────────────────────────── */
+.cr-view-body{display:flex;flex-direction:column;gap:12px;padding:16px 10px;overflow-y:auto;flex:1}
+
+.cr-tech-strip{
+  display:flex;align-items:center;flex-wrap:wrap;gap:8px;
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;
+  padding:10px 14px
+}
+.cr-tech-id{
+  display:flex;align-items:center;gap:6px;
+  background:#1e293b;color:#93c5fd;
+  border-radius:6px;padding:4px 10px;font-family:var(--mono);font-size:11.5px
+}
+.cr-tech-id-copy{
+  background:none;border:none;cursor:pointer;padding:0 2px;
+  color:#64748b;display:flex;align-items:center;transition:color 150ms
+}
+.cr-tech-id-copy:hover{color:#93c5fd}
+.cr-tech-sep{width:1px;height:14px;background:#e2e8f0;flex-shrink:0}
+.cr-tech-chip{
+  display:flex;align-items:center;gap:4px;
+  font-size:11.5px;color:#475569;
+  background:#fff;border:1px solid #e2e8f0;
+  border-radius:5px;padding:3px 9px
+}
+.cr-tech-chip.active-yes{color:#065f46;background:#f0fdf4;border-color:#a7f3d0}
+.cr-tech-chip.active-no{color:#92400e;background:#fffbeb;border-color:#fde68a}
+.cr-tech-chip.fav-yes{color:#b45309;background:#fffbeb;border-color:#fde68a}
+
+.cr-desc-card{
+  background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden
+}
+.cr-desc-hdr{
+  display:flex;align-items:center;gap:7px;
+  background:#1e293b;color:#f1f5f9;
+  font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:9px 16px
+}
+.cr-desc-body{
+  padding:14px 16px;font-size:13px;color:#374151;line-height:1.7;white-space:pre-wrap
+}
+
+.cr-bottom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.cr-bottom-card{
+  background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden
+}
+.cr-bottom-hdr{
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:#94a3b8;padding:8px 14px;border-bottom:1px solid #f1f5f9
+}
+.cr-bottom-body{padding:10px 14px;font-size:12.5px;color:#475569;line-height:1.6}
+.cr-tag-list{display:flex;flex-wrap:wrap;gap:5px;padding:10px 14px}
+.cr-tag{
+  font-size:11px;background:#ede9fe;color:#5b21b6;
+  border-radius:20px;padding:2px 9px;font-weight:500
+}
+
+/* ── Route URL chip ───────────────────────────────── */
+.cr-url-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:12px;color:#0f172a;
+  background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;
+  padding:5px 12px;word-break:break-all
+}
+
+/* ── Color swatch ─────────────────────────────────── */
+.cr-color-swatch{
+  display:inline-flex;align-items:center;gap:8px;font-size:13px
+}
+.cr-color-dot{
+  width:20px;height:20px;border-radius:50%;
+  border:1px solid rgba(0,0,0,.1);flex-shrink:0
+}
+
+/* ── Locked notice ────────────────────────────────── */
+.cr-locked-notice{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:#92400e;
+  background:#fffbeb;border:1px solid #fde68a;
+  border-radius:6px;padding:5px 12px;flex-shrink:0
+}
+
+/* ── Form (edit/new) ──────────────────────────────── */
+.gfcr-form-hdr{
+  padding:16px 24px;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;flex-shrink:0
+}
+.gfcr-form-hdr-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
+.gfcr-form-hdr-sub{font-size:12px;color:var(--text-m)}
+
+.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+.form-grid.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:11px;font-weight:600;color:#374151 !important;letter-spacing:.3px}
+.form-label .req{color:#dc2626;margin-left:2px}
+.form-desc{font-size:10.5px;color:var(--text-l);line-height:1.4;margin-top:1px}
+.form-control{
+  background:#f8fafc !important;border:1px solid #e2e8f0 !important;
+  border-radius:7px;padding:8px 11px;font-size:13px;color:#0f172a !important;
+  outline:none;transition:border-color 150ms,box-shadow 150ms;font-family:var(--font);
+  width:100%
+}
+.form-control:focus{
+  background:#ffffff !important;border-color:#94a3b8 !important;
+  box-shadow:0 0 0 3px rgba(71,85,105,.10) !important
+}
+textarea.form-control{
+  resize:vertical;min-height:90px;line-height:1.6;
+  background:#f8fafc !important
+}
+select.form-control{cursor:pointer}
+.form-check{display:flex;align-items:center;gap:8px;padding:8px 0}
+.form-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+.form-check label{font-size:13px;color:var(--text);cursor:pointer}
+
+.gfcr-form-foot{
+  padding:12px 24px;background:var(--surface);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-shrink:0
+}
+.btn-cancel{
+  background:var(--surface);color:var(--text-m);
+  border:1px solid var(--border);border-radius:7px;
+  padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;transition:all 150ms
+}
+.btn-cancel:hover{background:var(--surface2)}
+.btn-save{
+  display:flex;align-items:center;gap:6px;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:7px;padding:8px 20px;font-size:13px;font-weight:600;
+  cursor:pointer;transition:background 150ms
+}
+.btn-save:hover{background:var(--primary-h)}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── Toast ────────────────────────────────────────── */
+#gfcr-toast{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none
+}
+.toast{
+  display:flex;align-items:center;gap:10px;
+  background:#fff;color:var(--text);
+  border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;font-size:13px;font-weight:500;
+  box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.07);
+  pointer-events:auto;min-width:270px;max-width:380px;
+  animation:toastIn 220ms ease
+}
+.toast.success{background:#f0fdf4;color:#065f46;border-color:#a7f3d0}
+.toast.error{background:#fef2f2;color:#991b1b;border-color:#fca5a5}
+.toast.info{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
+.toast-icon{flex-shrink:0}
+.toast-msg{flex:1;line-height:1.4}
+.toast-close{
+  flex-shrink:0;background:none;border:none;cursor:pointer;
+  color:inherit;opacity:.4;padding:2px;display:flex;align-items:center;
+  border-radius:4px;transition:opacity 150ms
+}
+.toast-close:hover{opacity:.8}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(6px)}}
+.toast.leaving{animation:toastOut 180ms ease forwards}
+
+/* ── Loading ──────────────────────────────────────── */
+.gfcr-loading{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;color:var(--text-l)
+}
+.spinner{
+  width:32px;height:32px;border:3px solid var(--border);
+  border-top-color:var(--primary);border-radius:50%;
+  animation:spin 700ms linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Frappe dialog/modal — override legibilidade ──── */
+.modal .modal-content{
+  background:#fff !important;border:none !important;
+  border-radius:12px !important;
+  box-shadow:0 20px 60px rgba(0,0,0,.18),0 4px 12px rgba(0,0,0,.10) !important;
+  overflow:hidden
+}
+.modal .modal-header{
+  background:var(--primary) !important;
+  padding:14px 20px !important;border-bottom:none !important
+}
+.modal .modal-header .modal-title,
+.modal .modal-header h4,
+.modal .modal-header h5{
+  color:#f8fafc !important;font-size:14px !important;font-weight:600 !important
+}
+.modal .modal-header .close,
+.modal .modal-header .btn-modal-close{
+  color:#94a3b8 !important;opacity:1 !important;text-shadow:none !important
+}
+.modal .modal-header .close:hover{color:#fff !important}
+.modal .modal-body{
+  color:#1e293b !important;background:#fff !important;
+  padding:20px !important;font-size:13.5px !important;line-height:1.6 !important
+}
+.modal .modal-body p,
+.modal .modal-body .msgprint,
+.modal .modal-body .msgprint-area{color:#374151 !important}
+.modal .modal-footer{
+  border-top:1px solid #e2e8f0 !important;
+  background:#f8fafc !important;padding:12px 16px !important
+}
+.modal .modal-footer .btn-primary{
+  background:var(--primary) !important;border-color:var(--primary) !important;color:#fff !important
+}
+.modal .modal-footer .btn-primary:hover{background:var(--primary-h) !important}
+.modal .modal-footer .btn-default,
+.modal .modal-footer .btn-secondary{
+  background:#fff !important;border-color:#e2e8f0 !important;color:#475569 !important
+}
+
+/* ── Responsive ───────────────────────────────────── */
+@media(max-width:700px){
+  .gfcr-sb{width:100%;position:absolute;z-index:50;top:var(--header);bottom:0;transform:translateX(-100%);transition:transform 200ms}
+  .gfcr-sb.open{transform:translateX(0)}
+  :root{--sidebar:100%}
+}
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div id="gfcr">
+
+  <!-- Header -->
+  <header class="gfcr-hdr">
+    <div class="gfcr-hdr-logo">GF</div>
+    <div>
+      <div class="gfcr-hdr-title">GF Content Registry</div>
+    </div>
+    <div class="gfcr-hdr-sub">Registro Central de Conteúdos</div>
+    <div class="gfcr-hdr-sep"></div>
+    <a class="gfcr-hdr-atlas" href="/gf-atlas">
+      <i data-lucide="layout-dashboard" style="width:13px;height:13px"></i>
+      Wiki Hub
+    </a>
+    <div class="gfcr-hdr-user">
+      <div class="gfcr-hdr-avatar" id="gfcr-avatar">GF</div>
+      <span id="gfcr-username">...</span>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="gfcr-body">
+
+    <!-- Sidebar -->
+    <aside class="gfcr-sb" id="gfcr-sb">
+      <div class="gfcr-sb-top">
+        <div class="gfcr-sb-search">
+          <i data-lucide="search" style="width:14px;height:14px"></i>
+          <input type="text" placeholder="Buscar registros..." id="gfcr-search" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="gfcr-sb-filters" id="gfcr-filters">
+        <span class="gfcr-sb-filter" data-status="">Todos</span>
+        <span class="gfcr-sb-filter" data-status="DRAFT">Draft</span>
+        <span class="gfcr-sb-filter active" data-status="ACTIVE">Ativos</span>
+        <span class="gfcr-sb-filter" data-status="ARCHIVED">Arquivados</span>
+        <span class="gfcr-sb-filter" data-status="OBSOLETE">Obsoletos</span>
+      </div>
+
+      <div class="gfcr-sb-list" id="gfcr-list">
+        <div class="gfcr-loading"><div class="spinner"></div><span>Carregando...</span></div>
+      </div>
+
+      <div class="gfcr-sb-foot">
+        <button class="btn-new-cr" id="btn-new-cr">
+          <i data-lucide="plus" style="width:15px;height:15px"></i>
+          Novo Registro
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="gfcr-main" id="gfcr-main">
+      <div class="gfcr-loading" style="flex:1">
+        <div class="spinner"></div>
+        <span>Inicializando...</span>
+      </div>
+    </main>
+
+  </div><!-- /body -->
+</div><!-- /gfcr -->
+
+<div id="gfcr-toast"></div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   GF Content Registry App
+   ════════════════════════════════════════════════════ */
+
+/*
+ * Máquina de estados: this.mode = 'empty' | 'view' | 'edit' | 'new'
+ *
+ * Toolbar por status:
+ *   DRAFT    → Edit, Duplicate, Delete, Novo Registro
+ *   ACTIVE   → Edit, Duplicate, Nova Revisão, Marcar Obsoleto, Novo Registro
+ *   ARCHIVED / OBSOLETE → locked notice + Duplicate + Novo Registro
+ *
+ * _newRevision(): copia todos os campos, status=DRAFT, previous_version=nome atual.
+ * _save() dois estágios: modo edit busca doc fresco antes de salvar (timestamp sync).
+ * 6-second timeout fallback em _loadRecords() para pré-migrate silencioso.
+ */
+
+const TABS = [
+  { id:'general',    label:'Geral',         icon:'info' },
+  { id:'links',      label:'Vínculos',      icon:'link-2' },
+  { id:'reference',  label:'Referência',    icon:'globe' },
+  { id:'visual',     label:'Apresentação',  icon:'palette' },
+  { id:'config',     label:'Configurações', icon:'settings-2' },
+  { id:'versioning', label:'Versionamento', icon:'git-branch' },
+];
+
+const STATUS_COLORS = {
+  'DRAFT':'draft', 'ACTIVE':'ativo', 'ARCHIVED':'arquivado', 'OBSOLETE':'obsoleto'
+};
+const STATUS_LABELS = {
+  'DRAFT':'Draft', 'ACTIVE':'Ativo', 'ARCHIVED':'Arquivado', 'OBSOLETE':'Obsoleto'
+};
+const STATUSES = ['ACTIVE','DRAFT','ARCHIVED','OBSOLETE'];
+
+const ITEM_TYPES = [
+  'WEB_PAGE','REPORT','DASHBOARD','PDF','HTML','DOCUMENT',
+  'APPLICATION','WORKFLOW','EXTERNAL_LINK','API','SCRIPT','OTHER'
+];
+const ITEM_TYPE_LABELS = {
+  'WEB_PAGE':'Web Page','REPORT':'Relatório','DASHBOARD':'Dashboard',
+  'PDF':'PDF','HTML':'HTML','DOCUMENT':'Documento','APPLICATION':'Aplicação',
+  'WORKFLOW':'Workflow','EXTERNAL_LINK':'Link Externo','API':'API',
+  'SCRIPT':'Script','OTHER':'Outro'
+};
+const ITEM_TYPE_ICONS = {
+  'WEB_PAGE':'globe','REPORT':'bar-chart-2','DASHBOARD':'layout-dashboard',
+  'PDF':'file-text','HTML':'code-2','DOCUMENT':'file','APPLICATION':'app-window',
+  'WORKFLOW':'git-merge','EXTERNAL_LINK':'external-link','API':'zap',
+  'SCRIPT':'terminal','OTHER':'more-horizontal'
+};
+
+const REQUIRED_FIELDS = [
+  ['title','Título'],
+  ['item_type','Tipo do Item'],
+  ['content_group','Grupo de Conteúdo'],
+  ['access_group','Grupo de Acesso'],
+  ['skill','GF Skill'],
+];
+
+class GFContentRegistryApp {
+  constructor() {
+    this.records   = [];
+    this.selected  = null;
+    this.mode      = 'empty';
+    this.activeTab = 0;
+    this.editData  = {};
+    this.filterQ   = '';
+    this.filterSt  = 'ACTIVE';
+    this._saving   = false;
+  }
+
+  async init() {
+    try { this._setupUser(); }    catch(e) {}
+    try { this._bindSidebar(); } catch(e) {}
+    try { await this._loadRecords(); } catch(e) { this.records = []; try { this._renderList(); } catch(_) {} }
+    try { this._renderEmpty(); } catch(e) {
+      const $m = document.getElementById('gfcr-main');
+      if ($m) $m.innerHTML = `<div style="padding:40px;color:#dc2626">Erro ao inicializar: ${e.message}</div>`;
+    }
+    if (window.lucide) try { lucide.createIcons({ attrs:{ style:'display:block' } }); } catch(e) {}
+  }
+
+  // ── User ──────────────────────────────────────────
+  _setupUser() {
+    const full = frappe.session.user_fullname || frappe.session.user || 'Usuário';
+    const init = full.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase() || 'GF';
+    const $av  = document.getElementById('gfcr-avatar');
+    const $un  = document.getElementById('gfcr-username');
+    if ($av) $av.textContent = init;
+    if ($un) $un.textContent = full.split(' ')[0];
+  }
+
+  // ── Load Records ──────────────────────────────────
+  // Timeout de 6 s: escape hatch para frappe.call pré-migrate que never resolves.
+  _loadRecords() {
+    return new Promise((resolve) => {
+      const done = (data) => {
+        clearTimeout(timer);
+        this.records = data || [];
+        try { this._renderList(); } catch(e) {}
+        resolve();
+      };
+      const timer = setTimeout(() => done([]), 6000);
+      try {
+        frappe.call({
+          method: 'frappe.client.get_list',
+          args: {
+            doctype: 'GF Content Registry',
+            fields: ['name','title','item_type','status','content_group',
+                     'access_group','skill','description','active','tags','modified'],
+            order_by: 'modified desc',
+            limit_page_length: 2000
+          },
+          callback: (r) => done((r && r.message) ? r.message : []),
+          error:    ()  => done([])
+        });
+      } catch(e) { done([]); }
+    });
+  }
+
+  // ── Sidebar bindings ──────────────────────────────
+  _bindSidebar() {
+    document.getElementById('gfcr-search').addEventListener('input', e => {
+      this.filterQ = e.target.value.toLowerCase().trim();
+      this._renderList();
+    });
+    document.getElementById('gfcr-filters').addEventListener('click', e => {
+      const f = e.target.closest('.gfcr-sb-filter');
+      if (!f) return;
+      document.querySelectorAll('.gfcr-sb-filter').forEach(x=>x.classList.remove('active'));
+      f.classList.add('active');
+      this.filterSt = f.dataset.status;
+      this._renderList();
+    });
+    document.getElementById('btn-new-cr').addEventListener('click', () => this._startNew());
+  }
+
+  // ── Render list ───────────────────────────────────
+  _renderList() {
+    const $list = document.getElementById('gfcr-list');
+    if (!$list) return;
+    let items = this.records || [];
+    if (this.filterQ) {
+      items = items.filter(r =>
+        (r.title||'').toLowerCase().includes(this.filterQ) ||
+        (r.item_type||'').toLowerCase().includes(this.filterQ) ||
+        (r.content_group||'').toLowerCase().includes(this.filterQ) ||
+        (r.tags||'').toLowerCase().includes(this.filterQ) ||
+        (r.description||'').toLowerCase().includes(this.filterQ)
+      );
+    }
+    if (this.filterSt) {
+      items = items.filter(r => r.status === this.filterSt);
+    }
+    if (!items.length) {
+      $list.innerHTML = `<div class="gfcr-sb-empty">Nenhum registro encontrado.</div>`;
+      return;
+    }
+    $list.innerHTML = items.map(r => {
+      const stCls  = STATUS_COLORS[r.status] || 'draft';
+      const stLbl  = STATUS_LABELS[r.status] || (r.status||'');
+      const active = this.selected && this.selected.name === r.name ? ' active' : '';
+      const typeIcon = ITEM_TYPE_ICONS[r.item_type] || 'file';
+      const typeLbl  = ITEM_TYPE_LABELS[r.item_type] || (r.item_type||'');
+      return `<div class="cr-card${active}" data-name="${this._esc(r.name)}"
+                   onclick="app.selectRecord('${this._esc(r.name)}')">
+        <div class="cr-card-top">
+          <div class="cr-card-name">${this._esc(r.title||r.name)}</div>
+          <div class="cr-card-id">${this._esc(r.name)}</div>
+        </div>
+        <div class="cr-card-badges">
+          ${r.item_type ? `<span class="badge badge-type"><i data-lucide="${typeIcon}" style="width:9px;height:9px;margin-right:3px"></i>${this._esc(typeLbl)}</span>` : ''}
+          ${r.status    ? `<span class="badge badge-${stCls}">${this._esc(stLbl)}</span>` : ''}
+        </div>
+        <div class="cr-card-desc">${this._esc(r.description||r.content_group||'')}</div>
+      </div>`;
+    }).join('');
+    if (window.lucide) try { lucide.createIcons({ attrs:{ style:'display:block' } }); } catch(e) {}
+  }
+
+  // ── Select record ─────────────────────────────────
+  selectRecord(name) {
+    const $main = document.getElementById('gfcr-main');
+    $main.innerHTML = `<div class="gfcr-loading" style="flex:1"><div class="spinner"></div><span>Carregando...</span></div>`;
+    frappe.call({
+      method: 'frappe.client.get',
+      args: { doctype:'GF Content Registry', name },
+      callback: (r) => {
+        if (r && r.message) {
+          this.selected  = r.message;
+          this.activeTab = 0;
+          this.mode      = 'view';
+          this._renderView();
+          this._markActive(name);
+        } else {
+          this._toast('Registro não encontrado.','error');
+          this._renderEmpty();
+        }
+      },
+      error: () => { this._toast('Erro ao carregar o registro.','error'); this._renderEmpty(); }
+    });
+  }
+
+  _markActive(name) {
+    document.querySelectorAll('.cr-card').forEach(c => {
+      c.classList.toggle('active', c.dataset.name === name);
+    });
+  }
+
+  // ── Render empty ──────────────────────────────────
+  _renderEmpty() {
+    const $main = document.getElementById('gfcr-main');
+    $main.innerHTML = `
+      <div class="gfcr-empty">
+        <div class="gfcr-empty-icon">
+          <i data-lucide="book-open" style="width:32px;height:32px"></i>
+        </div>
+        <h2>Registro de Conteúdos</h2>
+        <p>Selecione um registro na lista ou crie um novo para começar.</p>
+        <button class="btn-primary" onclick="app._startNew()">
+          <i data-lucide="plus" style="width:15px;height:15px"></i>
+          Criar Novo Registro
+        </button>
+      </div>`;
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    this.selected = null;
+    document.querySelectorAll('.cr-card').forEach(c=>c.classList.remove('active'));
+    this._syncNewBtn();
+  }
+
+  // ── Render view ───────────────────────────────────
+  _renderView() {
+    const s = this.selected;
+    const isLocked = s.status === 'ARCHIVED' || s.status === 'OBSOLETE';
+    const isDraft  = s.status === 'DRAFT';
+    const stCls    = STATUS_COLORS[s.status] || 'draft';
+    const stLbl    = STATUS_LABELS[s.status] || (s.status||'');
+    const typeIcon = ITEM_TYPE_ICONS[s.item_type] || 'file';
+    const typeLbl  = ITEM_TYPE_LABELS[s.item_type] || (s.item_type||'');
+    const modified = s.modified ? s.modified.substring(0,16).replace('T',' ') : '—';
+    const $main = document.getElementById('gfcr-main');
+
+    $main.innerHTML = `
+      <!-- Detail Header -->
+      <div class="gfcr-det-hdr">
+        <div class="gfcr-det-hdr-top">
+          <div class="gfcr-det-hdr-icon">
+            <i data-lucide="${typeIcon}" style="width:22px;height:22px"></i>
+          </div>
+          <div class="gfcr-det-hdr-info">
+            <div class="gfcr-det-hdr-name">${this._esc(s.title||s.name)}</div>
+            <div class="gfcr-det-hdr-meta">
+              <span class="badge badge-${stCls}">${this._esc(stLbl)}</span>
+              ${s.item_type ? `<span class="badge badge-type">${this._esc(typeLbl)}</span>` : ''}
+              ${s.content_group ? `<span class="badge badge-group">${this._esc(s.content_group)}</span>` : ''}
+              <span class="sep">·</span>
+              <span class="sep" style="font-family:var(--mono);font-size:11px;color:#64748b">${this._esc(s.name)}</span>
+              ${s.responsible_user ? `<span class="sep">·</span><span>${this._esc(s.responsible_user)}</span>` : ''}
+            </div>
+          </div>
+        </div>
+        ${s.description ? `<div class="gfcr-det-hdr-desc">${this._esc(s.description)}</div>` : ''}
+      </div>
+
+      <!-- Meta panel -->
+      <div class="ver-panel">
+        <div class="ver-panel-item"><i data-lucide="tag" style="width:12px;height:12px"></i><span>Tipo</span><strong>${this._esc(typeLbl)}</strong></div>
+        <div class="ver-panel-item"><i data-lucide="activity" style="width:12px;height:12px"></i><span>Status</span><strong>${this._esc(stLbl)}</strong></div>
+        <div class="ver-panel-item"><i data-lucide="clock" style="width:12px;height:12px"></i><span>Modificado</span><strong>${modified}</strong></div>
+        ${s.content_group ? `<div class="ver-panel-item"><i data-lucide="folder" style="width:12px;height:12px"></i><span>Grupo</span><strong>${this._esc(s.content_group)}</strong></div>` : ''}
+        ${s.skill ? `<div class="ver-panel-item"><i data-lucide="zap" style="width:12px;height:12px"></i><span>Skill</span><strong>${this._esc(s.skill)}</strong></div>` : ''}
+      </div>
+
+      <!-- Action toolbar -->
+      <div class="gfcr-toolbar">
+        ${isLocked ? `
+          <div class="cr-locked-notice">
+            <i data-lucide="lock" style="width:13px;height:13px"></i>
+            Este registro está <strong>&nbsp;${this._esc(stLbl)}&nbsp;</strong> — somente duplicação é permitida para preservar rastreabilidade.
+          </div>
+          <div class="gfcr-toolbar-sep"></div>
+          <button class="btn-act" onclick="app._duplicateRecord()">
+            <i data-lucide="copy" style="width:13px;height:13px"></i> Duplicar
+          </button>
+          <div class="gfcr-toolbar-sep"></div>
+          <button class="btn-act btn-outline" onclick="app._startNew()">
+            <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Registro
+          </button>
+        ` : `
+          <button class="btn-act btn-primary" onclick="app._startEdit()">
+            <i data-lucide="edit-2" style="width:13px;height:13px"></i> Editar
+          </button>
+          <button class="btn-act" onclick="app._duplicateRecord()">
+            <i data-lucide="copy" style="width:13px;height:13px"></i> Duplicar
+          </button>
+          ${s.status === 'ACTIVE' ? `
+          <button class="btn-act" onclick="app._newRevision()">
+            <i data-lucide="git-branch" style="width:13px;height:13px"></i> Nova Revisão
+          </button>
+          <button class="btn-act btn-warn" onclick="app._markObsolete()">
+            <i data-lucide="archive" style="width:13px;height:13px"></i> Marcar Obsoleto
+          </button>` : ''}
+          ${isDraft ? `
+            <div class="gfcr-toolbar-sep"></div>
+            <button class="btn-act btn-danger" onclick="app._deleteRecord()">
+              <i data-lucide="trash-2" style="width:13px;height:13px"></i> Excluir
+            </button>` : ''}
+          <div class="gfcr-toolbar-sep"></div>
+          <button class="btn-act btn-outline" onclick="app._startNew()">
+            <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Registro
+          </button>
+        `}
+      </div>
+
+      <!-- Tabs -->
+      ${this._buildTabBar()}
+
+      <!-- Tab body -->
+      <div class="gfcr-tab-body" id="gfcr-tab-body">
+        ${this._renderTabContent(this.activeTab)}
+      </div>`;
+
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    this._syncNewBtn();
+  }
+
+  // ── Tab bar ───────────────────────────────────────
+  _buildTabBar() {
+    return `<div class="gfcr-tabs">${TABS.map((t,i)=>`
+      <div class="gfcr-tab${i===this.activeTab?' active':''}" onclick="app._switchTab(${i})">
+        <i data-lucide="${t.icon}" style="width:11px;height:11px"></i>
+        ${t.label}
+      </div>`).join('')}</div>`;
+  }
+
+  _switchTab(idx) {
+    this.activeTab = idx;
+    document.querySelectorAll('.gfcr-tab').forEach((el,i) => {
+      el.classList.toggle('active', i===idx);
+    });
+    const $body = document.getElementById('gfcr-tab-body');
+    if ($body) {
+      $body.innerHTML = (this.mode==='edit' || this.mode==='new')
+        ? this._renderTabForm(idx)
+        : this._renderTabContent(idx);
+      if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    }
+  }
+
+  // ── Tab content (view) ────────────────────────────
+  _renderTabContent(idx) {
+    const s   = this.selected || {};
+    const v   = (f) => s[f] || '';
+    const fld = (label, val, mono=false) => {
+      const empty = !val && val !== 0;
+      return `<div class="fld-box">
+        <div class="fld-lbl">${label}</div>
+        <div class="fld-val${mono?' mono':''}${empty?' empty':''}">${empty?'—':this._esc(String(val))}</div>
+      </div>`;
+    };
+    const chk = (label, val) => `<div class="fld-box">
+      <div class="fld-lbl">${label}</div>
+      <div class="fld-val check">
+        ${val ? `<i data-lucide="check-circle" style="width:14px;height:14px" class="fld-check-yes"></i><span>Sim</span>`
+              : `<i data-lucide="x-circle" style="width:14px;height:14px" class="fld-check-no"></i><span>Não</span>`}
+      </div>
+    </div>`;
+
+    switch(idx) {
+      case 0: {
+        const tags = (v('tags')||'').split(',').map(t=>t.trim()).filter(Boolean);
+        const typeIcon = ITEM_TYPE_ICONS[v('item_type')] || 'file';
+        const typeLbl  = ITEM_TYPE_LABELS[v('item_type')] || v('item_type');
+        const stCls    = STATUS_COLORS[v('status')] || 'draft';
+        const stLbl    = STATUS_LABELS[v('status')] || v('status');
+        return `<div class="cr-view-body">
+
+          <!-- Strip técnico: ID + chips de metadados -->
+          <div class="cr-tech-strip">
+            <div class="cr-tech-id">
+              <i data-lucide="hash" style="width:12px;height:12px;flex-shrink:0"></i>
+              ${this._esc(v('name')||'—')}
+              <button class="cr-tech-id-copy" title="Copiar ID"
+                onclick="app._copyText('${this._escJs(v('name'))}', this)">
+                <i data-lucide="copy" style="width:11px;height:11px"></i>
+              </button>
+            </div>
+            <div class="cr-tech-sep"></div>
+            <div class="cr-tech-chip">
+              <i data-lucide="${typeIcon}" style="width:11px;height:11px"></i>
+              ${this._esc(typeLbl)}
+            </div>
+            <span class="badge badge-${stCls}">${this._esc(stLbl)}</span>
+            <div class="cr-tech-chip ${v('active') ? 'active-yes' : 'active-no'}">
+              <i data-lucide="${v('active') ? 'check-circle' : 'x-circle'}" style="width:11px;height:11px"></i>
+              ${v('active') ? 'Ativo' : 'Inativo'}
+            </div>
+            ${v('favorite') ? `
+            <div class="cr-tech-chip fav-yes">
+              <i data-lucide="star" style="width:11px;height:11px"></i>
+              Favorito
+            </div>` : ''}
+            ${v('show_on_home') ? `
+            <div class="cr-tech-chip">
+              <i data-lucide="home" style="width:11px;height:11px"></i>
+              Na Home
+            </div>` : ''}
+            ${v('route_url') ? `
+            <div class="cr-tech-sep"></div>
+            <div class="cr-tech-chip" style="font-family:var(--mono);font-size:11px;max-width:280px;overflow:hidden;text-overflow:ellipsis" title="${this._esc(v('route_url'))}">
+              <i data-lucide="link" style="width:11px;height:11px;flex-shrink:0"></i>
+              ${this._esc(v('route_url'))}
+            </div>` : ''}
+          </div>
+
+          <!-- Descrição -->
+          ${v('description') ? `
+            <div class="cr-desc-card">
+              <div class="cr-desc-hdr">
+                <i data-lucide="align-left" style="width:13px;height:13px"></i> Descrição
+              </div>
+              <div class="cr-desc-body">${this._esc(v('description'))}</div>
+            </div>` : ''}
+
+          <!-- Bottom: grupos, skill, tags -->
+          <div class="cr-bottom-grid">
+            ${v('content_group') ? `
+              <div class="cr-bottom-card">
+                <div class="cr-bottom-hdr">Grupo de Conteúdo</div>
+                <div class="cr-bottom-body">${this._esc(v('content_group'))}</div>
+              </div>` : ''}
+            ${v('access_group') ? `
+              <div class="cr-bottom-card">
+                <div class="cr-bottom-hdr">Grupo de Acesso</div>
+                <div class="cr-bottom-body">${this._esc(v('access_group'))}</div>
+              </div>` : ''}
+            ${v('skill') ? `
+              <div class="cr-bottom-card">
+                <div class="cr-bottom-hdr">GF Skill</div>
+                <div class="cr-bottom-body" style="display:flex;align-items:center;gap:5px">
+                  <i data-lucide="zap" style="width:12px;height:12px;color:#94a3b8;flex-shrink:0"></i>
+                  ${this._esc(v('skill'))}
+                </div>
+              </div>` : ''}
+            ${v('responsible_user') ? `
+              <div class="cr-bottom-card">
+                <div class="cr-bottom-hdr">Responsável</div>
+                <div class="cr-bottom-body">${this._esc(v('responsible_user'))}</div>
+              </div>` : ''}
+            ${tags.length ? `
+              <div class="cr-bottom-card">
+                <div class="cr-bottom-hdr">Tags</div>
+                <div class="cr-tag-list">
+                  ${tags.map(t=>`<span class="cr-tag">${this._esc(t)}</span>`).join('')}
+                </div>
+              </div>` : ''}
+          </div>
+
+        </div>`;
+      }
+
+      case 1: return `
+        <div class="fld-grid">
+          ${fld('Grupo de Conteúdo', v('content_group'))}
+          ${fld('Grupo de Acesso',   v('access_group'))}
+          ${fld('GF Skill',         v('skill'))}
+          ${fld('Responsável',      v('responsible_user'))}
+        </div>`;
+
+      case 2: return `
+        <div class="fld-grid">
+          ${fld('URL / Rota', v('route_url'), true)}
+          ${fld('DocType de Referência', v('reference_doctype'))}
+          ${fld('Nome de Referência', v('reference_name'))}
+        </div>
+        ${v('route_url') ? `
+        <div style="margin-top:4px">
+          <div class="fld-lbl" style="margin-bottom:8px">Link Direto</div>
+          <div class="cr-url-chip">
+            <i data-lucide="link" style="width:12px;height:12px;flex-shrink:0"></i>
+            ${this._esc(v('route_url'))}
+            <button class="cr-tech-id-copy" title="Copiar URL" style="margin-left:4px"
+              onclick="app._copyText('${this._escJs(v('route_url'))}', this)">
+              <i data-lucide="copy" style="width:11px;height:11px"></i>
+            </button>
+          </div>
+        </div>` : ''}`;
+
+      case 3: return `
+        <div class="fld-grid">
+          ${v('icon') ? `<div class="fld-box">
+            <div class="fld-lbl">Ícone</div>
+            <div class="fld-val" style="display:flex;align-items:center;gap:8px">
+              <i data-lucide="${this._esc(v('icon'))}" style="width:18px;height:18px;flex-shrink:0"></i>
+              ${this._esc(v('icon'))}
+            </div>
+          </div>` : fld('Ícone', '')}
+          ${v('color') ? `<div class="fld-box">
+            <div class="fld-lbl">Cor</div>
+            <div class="fld-val">
+              <div class="cr-color-swatch">
+                <div class="cr-color-dot" style="background:${this._esc(v('color'))}"></div>
+                ${this._esc(v('color'))}
+              </div>
+            </div>
+          </div>` : fld('Cor', '')}
+          ${chk('Exibir na Home', v('show_on_home'))}
+          ${chk('Favorito',       v('favorite'))}
+        </div>`;
+
+      case 4: return `
+        <div class="fld-grid">
+          ${fld('Ordem de Exibição', v('sort_order') !== '' ? v('sort_order') : null)}
+          ${chk('Ativo',          v('active'))}
+          ${chk('Exibir na Home', v('show_on_home'))}
+          ${chk('Favorito',       v('favorite'))}
+        </div>`;
+
+      case 5: return `
+        <div class="fld-grid">
+          <div class="fld-box">
+            <div class="fld-lbl">Última Revisão <span style="font-size:9px;color:#94a3b8;font-weight:400;margin-left:4px">auto</span></div>
+            <div class="fld-val${!v('last_reviewed_on')?' empty':''}">${v('last_reviewed_on')||'—'}</div>
+          </div>
+          <div class="fld-box">
+            <div class="fld-lbl">Versão Anterior <span style="font-size:9px;color:#94a3b8;font-weight:400;margin-left:4px">auto</span></div>
+            ${v('previous_version')
+              ? `<div class="fld-val mono" style="display:flex;align-items:center;gap:6px">
+                   <i data-lucide="git-branch" style="width:12px;height:12px;color:#64748b;flex-shrink:0"></i>
+                   ${this._esc(v('previous_version'))}
+                 </div>`
+              : `<div class="fld-val empty">— Versão inicial</div>`}
+          </div>
+        </div>`;
+
+      default: return '';
+    }
+  }
+
+  // ── Tab form (edit/new) ───────────────────────────
+  _renderTabForm(idx) {
+    const d   = this.editData;
+    const sel = (opts, val, labelFn) => opts.map(o=>`<option value="${this._esc(o)}"${o===val?' selected':''}>${this._esc(labelFn ? labelFn(o) : o)}</option>`).join('');
+    const inp = (f, ph='', type='text') =>
+      `<input class="form-control" type="${type}" value="${this._esc(d[f]||'')}"
+         placeholder="${ph}" oninput="app._fd('${f}',this.value)">`;
+    const ta = (f, rows=3) =>
+      `<textarea class="form-control" rows="${rows}"
+         oninput="app._fd('${f}',this.value)">${this._esc(d[f]||'')}</textarea>`;
+    const dd = (f, opts, labelFn) =>
+      `<select class="form-control" onchange="app._fd('${f}',this.value)">
+         <option value="">Selecionar...</option>${sel(opts, d[f], labelFn)}</select>`;
+    const chk = (f, label) =>
+      `<div class="form-check">
+         <input type="checkbox" id="chk_${f}" ${d[f]?'checked':''}
+                onchange="app._fd('${f}',this.checked?1:0)">
+         <label for="chk_${f}">${label}</label>
+       </div>`;
+    const grp = (label, ctrl, desc='', req=false) =>
+      `<div class="form-group">
+         <label class="form-label">${label}${req?'<span class="req">*</span>':''}</label>
+         ${ctrl}
+         ${desc?`<div class="form-desc">${desc}</div>`:''}
+       </div>`;
+    const locked = (f, icon='lock') =>
+      `<div class="form-control" style="background:#f1f5f9;color:#64748b;cursor:default;display:flex;align-items:center;gap:6px;font-family:monospace">
+         <i data-lucide="${icon}" style="width:12px;height:12px;flex-shrink:0"></i>${this._esc(d[f]||'—')}
+       </div>`;
+
+    switch(idx) {
+      case 0: return `
+        <div class="form-grid">
+          ${grp('Título', inp('title','Ex: Relatório de Produção Mensal'), 'Nome principal do conteúdo.', true)}
+          ${grp('Tipo do Item', dd('item_type', ITEM_TYPES, k=>ITEM_TYPE_LABELS[k]||k),
+            'Categoria técnica do conteúdo.', true)}
+          ${grp('Status', dd('status', STATUSES, k=>STATUS_LABELS[k]||k),
+            'Situação atual do registro.', true)}
+          ${chk('active','Ativo')}
+        </div>
+        <div class="form-grid full">
+          ${grp('Descrição', ta('description',4), 'Descrição detalhada do conteúdo.')}
+          ${grp('Tags', inp('tags','Ex: produção, mensal, relatório'), 'Palavras-chave separadas por vírgula.')}
+        </div>`;
+
+      case 1: return `
+        <div class="form-grid">
+          ${grp('Grupo de Conteúdo', inp('content_group','Ex: Relatórios Operacionais'),
+            'Grupo funcional ao qual este conteúdo pertence.', true)}
+          ${grp('Grupo de Acesso', inp('access_group','Ex: GF_OPERACIONAL'),
+            'Controla quem pode visualizar. Pré-preenchido pelo Grupo de Conteúdo.', true)}
+          ${grp('GF Skill', inp('skill','Ex: gf_internal_html_doc'),
+            'Skill corporativo associado a este conteúdo.', true)}
+          ${grp('Responsável', inp('responsible_user','usuario@empresa.com'),
+            'Usuário responsável pelo conteúdo.')}
+        </div>`;
+
+      case 2: return `
+        <div class="form-grid">
+          ${grp('URL / Rota', inp('route_url','Ex: /app/query-report/timesheet'),
+            'Rota interna do ERPNext ou URL externa completa.')}
+          ${grp('DocType de Referência', inp('reference_doctype','Ex: Timesheet'),
+            'DocType do Frappe relacionado a este conteúdo.')}
+          ${grp('Nome de Referência', inp('reference_name','Ex: TS-0001'),
+            'Nome do documento específico de referência.')}
+        </div>`;
+
+      case 3: return `
+        <div class="form-grid">
+          ${grp('Ícone (Lucide)', inp('icon','Ex: bar-chart-2'),
+            'Nome do ícone Lucide. Consulte lucide.dev.')}
+          ${grp('Cor', inp('color','Ex: #059669','color'),
+            'Cor de destaque para o conteúdo.')}
+          ${chk('show_on_home','Exibir na Home')}
+          ${chk('favorite','Favorito')}
+        </div>`;
+
+      case 4: return `
+        <div class="form-grid">
+          ${grp('Ordem de Exibição', inp('sort_order','Ex: 10'),
+            'Número para ordenação. Menor valor = exibido primeiro.')}
+          ${chk('active','Ativo')}
+          ${chk('show_on_home','Exibir na Home')}
+          ${chk('favorite','Favorito')}
+        </div>`;
+
+      case 5: return `
+        <div class="form-grid">
+          ${grp('Última Revisão',
+            `<div class="form-control" style="background:#f1f5f9;color:#64748b;cursor:default;display:flex;align-items:center;gap:6px">
+               <i data-lucide="calendar" style="width:12px;height:12px;flex-shrink:0"></i>
+               ${d.last_reviewed_on ? this._esc(d.last_reviewed_on) : 'Preenchido automaticamente ao salvar'}
+             </div>`,
+            'Atualizado automaticamente a cada salvamento.')}
+          ${grp('Versão Anterior',
+            `<div class="form-control" style="background:#f1f5f9;color:#64748b;cursor:default;display:flex;align-items:center;gap:6px;font-family:monospace">
+               <i data-lucide="git-branch" style="width:12px;height:12px;flex-shrink:0"></i>
+               ${d.previous_version ? this._esc(d.previous_version) : '— Versão inicial (sem origem)'}
+             </div>`,
+            'Preenchido automaticamente ao criar Nova Revisão — somente leitura.')}
+        </div>`;
+
+      default: return '';
+    }
+  }
+
+  // ── Render edit/new mode ──────────────────────────
+  _renderEditMode() {
+    const isNew    = this.mode === 'new';
+    const isNewRev = isNew && !!this.editData._isNewRevision;
+    const title    = isNewRev
+      ? `Nova Revisão — ${this.editData.title || '—'}`
+      : isNew ? 'Novo Registro'
+      : `Editando: ${this.editData.title || this.editData.name || '—'}`;
+    const saveLabel = isNewRev ? 'Salvar Nova Revisão' : 'Salvar Registro';
+    const saveIcon  = isNewRev ? 'git-branch' : 'save';
+    const $main = document.getElementById('gfcr-main');
+    $main.innerHTML = `
+      <div class="gfcr-form-hdr">
+        <div>
+          <div class="gfcr-form-hdr-title">${this._esc(title)}</div>
+          <div class="gfcr-form-hdr-sub">Preencha os campos nas abas e clique em Salvar.</div>
+        </div>
+      </div>
+      <div class="gfcr-toolbar">
+        <button class="btn-act btn-primary" id="gfcr-btn-save" onclick="app._save()">
+          <i data-lucide="${saveIcon}" style="width:13px;height:13px"></i> ${saveLabel}
+        </button>
+        <button class="btn-act" onclick="app._cancelEdit()">
+          <i data-lucide="x" style="width:13px;height:13px"></i> Cancelar
+        </button>
+        ${this.mode !== 'new' ? `
+        <div class="gfcr-toolbar-sep"></div>
+        <button class="btn-act btn-outline" onclick="app._startNew()">
+          <i data-lucide="plus" style="width:13px;height:13px"></i> Novo Registro
+        </button>` : ''}
+      </div>
+      ${this._buildTabBar()}
+      <div class="gfcr-tab-body" id="gfcr-tab-body" style="flex:1;overflow-y:auto">
+        ${this._renderTabForm(this.activeTab)}
+      </div>
+      <div class="gfcr-form-foot">
+        <button class="btn-cancel" onclick="app._cancelEdit()">Cancelar</button>
+        <button class="btn-save" onclick="app._save()">
+          <i data-lucide="${saveIcon}" style="width:14px;height:14px"></i>
+          ${saveLabel}
+        </button>
+      </div>`;
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    this._syncNewBtn();
+  }
+
+  // ── Field data ────────────────────────────────────
+  // Efeito colateral automático: status ARCHIVED/OBSOLETE → zera active e desmarca checkbox.
+  _fd(field, val) {
+    this.editData[field] = val;
+    if (field === 'status' && (val === 'ARCHIVED' || val === 'OBSOLETE')) {
+      this.editData.active = 0;
+      const cb = document.getElementById('chk_active');
+      if (cb) cb.checked = false;
+    }
+  }
+
+  // ── Start Edit ────────────────────────────────────
+  _startEdit() {
+    this.mode      = 'edit';
+    this.activeTab = 0;
+    this.editData  = Object.assign({}, this.selected);
+    this._renderEditMode();
+  }
+
+  // ── Start New ─────────────────────────────────────
+  _startNew() {
+    this.mode      = 'new';
+    this.activeTab = 0;
+    this.selected  = null;
+    this.editData  = {
+      status: 'ACTIVE',
+      active: 1,
+      show_on_home: 0,
+      favorite: 0,
+    };
+    document.querySelectorAll('.cr-card').forEach(c=>c.classList.remove('active'));
+    this._renderEditMode();
+  }
+
+  // ── Cancel Edit ───────────────────────────────────
+  _cancelEdit() {
+    if (this.selected) {
+      this.mode = 'view';
+      this._renderView();
+    } else {
+      this.mode = 'empty'; // reset antes de _syncNewBtn()
+      this._renderEmpty();
+    }
+  }
+
+  // ── Save ──────────────────────────────────────────
+  // Modo edit → busca doc fresco (timestamp sync) → mescla editData → save.
+  // Modo new  → insert direto. Se nova revisão, desativa o registro de origem após insert.
+  async _save() {
+    if (this._saving) return;
+    const d = this.editData;
+
+    for (const [f, lbl] of REQUIRED_FIELDS) {
+      if (!d[f] || !String(d[f]).trim()) {
+        this._toast(`Campo obrigatório: ${lbl}`, 'error');
+        return;
+      }
+    }
+
+    this._saving = true;
+    const $btn = document.getElementById('gfcr-btn-save');
+    const resetBtn = () => {
+      if ($btn) { $btn.disabled = false; $btn.innerHTML = '<i data-lucide="save" style="width:14px;height:14px"></i> Salvar Registro'; if(window.lucide)lucide.createIcons({attrs:{style:'display:block'}}); }
+      this._saving = false;
+    };
+    if ($btn) { $btn.disabled = true; $btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px"></div> Salvando...'; }
+
+    const originToObsolete = (this.mode === 'new') ? (d._originName || null) : null;
+
+    const buildAndSave = (baseDoc) => {
+      const method = this.mode === 'new' ? 'frappe.client.insert' : 'frappe.client.save';
+      const doc    = this.mode === 'new'
+        ? Object.assign({ doctype:'GF Content Registry' }, d)
+        : Object.assign({}, baseDoc, d, { doctype:'GF Content Registry', name:this.selected.name, modified:baseDoc.modified });
+
+      // Remove flags internas antes de enviar ao servidor
+      delete doc._isNewRevision;
+      delete doc._originName;
+
+      frappe.call({
+        method,
+        args: { doc },
+        callback: (r) => {
+          if (r && r.message) {
+            const saved = r.message;
+            const finish = () => {
+              this._saving = false;
+              this._loadRecords().then(() => {
+                this.selected  = saved;
+                this.mode      = 'view';
+                this.activeTab = 0;
+                this._renderView();
+                this._markActive(saved.name);
+              });
+            };
+            if (originToObsolete) {
+              frappe.call({
+                method: 'frappe.client.set_value',
+                args: { doctype:'GF Content Registry', name:originToObsolete, fieldname:'status', value:'OBSOLETE' },
+                callback: () => {
+                  frappe.call({
+                    method: 'frappe.client.set_value',
+                    args: { doctype:'GF Content Registry', name:originToObsolete, fieldname:'active', value:0 },
+                    callback: () => { this._toast('Revisão salva! Versão anterior marcada como Obsoleta.', 'success'); finish(); },
+                    error: () => { this._toast('Revisão salva, mas não foi possível marcar a versão anterior.', 'info'); finish(); }
+                  });
+                },
+                error: () => { this._toast('Registro salvo, mas não foi possível atualizar a versão anterior.', 'info'); finish(); }
+              });
+            } else {
+              this._toast('Registro salvo com sucesso!', 'success');
+              finish();
+            }
+          } else {
+            this._toast('Erro ao salvar o registro.', 'error');
+            resetBtn();
+          }
+        },
+        error: () => { this._toast('Erro ao salvar o registro.', 'error'); resetBtn(); }
+      });
+    };
+
+    if (this.mode === 'edit') {
+      frappe.call({
+        method: 'frappe.client.get',
+        args: { doctype:'GF Content Registry', name:this.selected.name },
+        callback: (r) => {
+          if (!r.message) { this._toast('Erro ao carregar o registro.', 'error'); resetBtn(); return; }
+          buildAndSave(r.message);
+        },
+        error: () => { this._toast('Erro ao carregar o registro.', 'error'); resetBtn(); }
+      });
+    } else {
+      buildAndSave(null);
+    }
+  }
+
+  // ── Delete ────────────────────────────────────────
+  _deleteRecord() {
+    if (!this.selected) return;
+    const name  = this.selected.name;
+    const label = this.selected.title || name;
+    frappe.confirm(`Excluir o registro "${label}"? Esta ação não pode ser desfeita.`, () => {
+      frappe.call({
+        method: 'frappe.client.delete',
+        args: { doctype:'GF Content Registry', name },
+        callback: () => {
+          this._toast('Registro excluído.', 'info');
+          this.selected = null;
+          this._loadRecords().then(() => this._renderEmpty());
+        },
+        error: () => { this._toast('Erro ao excluir. Verifique permissões.', 'error'); }
+      });
+    });
+  }
+
+  // ── Duplicate ─────────────────────────────────────
+  _duplicateRecord() {
+    if (!this.selected) return;
+    const s = this.selected;
+    this.mode      = 'new';
+    this.activeTab = 0;
+    this.selected  = null;
+    this.editData  = Object.assign({}, s, {
+      name:             undefined,
+      title:            (s.title||'') + ' (Cópia)',
+      status:           'DRAFT',
+      active:           1,
+      previous_version: undefined,
+      last_reviewed_on: undefined,
+    });
+    document.querySelectorAll('.cr-card').forEach(c=>c.classList.remove('active'));
+    this._renderEditMode();
+    this._toast('Registro duplicado. Ajuste os campos e salve.', 'info');
+  }
+
+  // ── New Revision ──────────────────────────────────
+  // Cria novo documento (modo 'new') pré-populado com os dados do registro atual.
+  // Após insert: o registro de origem é marcado como OBSOLETE via _originName.
+  _newRevision() {
+    if (!this.selected) return;
+    const s = this.selected;
+    this.mode      = 'new';
+    this.activeTab = 0;
+    this.selected  = null;
+    this.editData  = Object.assign({}, s, {
+      name:             undefined,
+      status:           'DRAFT',
+      active:           1,
+      previous_version: s.name,
+      last_reviewed_on: undefined,
+      _originName:      s.name,
+      _isNewRevision:   true,
+    });
+    document.querySelectorAll('.cr-card').forEach(c=>c.classList.remove('active'));
+    this._renderEditMode();
+    this._toast(`Nova revisão criada a partir de ${s.name}. Ajuste e salve.`, 'info');
+  }
+
+  // ── Mark Obsolete ─────────────────────────────────
+  _markObsolete() {
+    if (!this.selected) return;
+    const name = this.selected.name;
+    frappe.confirm('Marcar este registro como Obsoleto? O campo Ativo será desativado automaticamente.', () => {
+      frappe.call({
+        method: 'frappe.client.set_value',
+        args: { doctype:'GF Content Registry', name, fieldname:'active', value:0 },
+        callback: () => {
+          frappe.call({
+            method: 'frappe.client.set_value',
+            args: { doctype:'GF Content Registry', name, fieldname:'status', value:'OBSOLETE' },
+            callback: () => { this._toast('Registro marcado como Obsoleto.', 'info'); this.selectRecord(name); },
+            error: () => { this._toast('Erro ao atualizar status.', 'error'); }
+          });
+        },
+        error: () => { this._toast('Erro ao atualizar.', 'error'); }
+      });
+    });
+  }
+
+  // ── Copy helper ───────────────────────────────────
+  _copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (btn) {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i data-lucide="check" style="width:12px;height:12px"></i>';
+        if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+        setTimeout(() => { btn.innerHTML = orig; if(window.lucide)lucide.createIcons({attrs:{style:'display:block'}}); }, 1500);
+      }
+    }).catch(() => this._toast('Erro ao copiar.','error'));
+  }
+
+  // ── Toast ─────────────────────────────────────────
+  _toast(msg, type='info') {
+    const icons = { success:'check-circle', error:'x-circle', info:'info' };
+    const $t = document.getElementById('gfcr-toast');
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.innerHTML = `
+      <i data-lucide="${icons[type]||'info'}" class="toast-icon" style="width:16px;height:16px;flex-shrink:0"></i>
+      <span class="toast-msg">${this._esc(msg)}</span>
+      <button class="toast-close" onclick="this.closest('.toast').remove()" title="Fechar">
+        <i data-lucide="x" style="width:14px;height:14px"></i>
+      </button>`;
+    $t.appendChild(el);
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    const dismiss = () => { el.classList.add('leaving'); setTimeout(() => el.remove(), 200); };
+    setTimeout(dismiss, 5000);
+  }
+
+  // ── Sync sidebar "Novo Registro" button ───────────
+  // Oculta o botão somente quando há edição/inserção em andamento.
+  _syncNewBtn() {
+    const btn = document.getElementById('btn-new-cr');
+    if (!btn) return;
+    btn.style.display = (this.mode === 'edit' || this.mode === 'new') ? 'none' : '';
+  }
+
+  // ── Escape helpers ────────────────────────────────
+  _esc(s) {
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  _escJs(s) {
+    if (!s) return '';
+    return String(s).replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+  }
+}
+
+// ── Boot ───────────────────────────────────────────
+let app;
+frappe.ready(function() {
+  app = new GFContentRegistryApp();
+  app.init();
+});
+</script>
+{% endblock %}

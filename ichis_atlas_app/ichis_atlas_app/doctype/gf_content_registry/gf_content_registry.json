@@ -15,6 +15,7 @@
   "content_group",
   "access_group",
   "responsible_user",
+  "skill",
   "sb_reference",
   "route_url",
   "reference_doctype",
@@ -30,7 +31,9 @@
   "sort_order",
   "show_on_home",
   "favorite",
-  "active"
+  "active",
+  "last_reviewed_on",
+  "previous_version"
  ],
  "fields": [
   {
@@ -82,6 +85,13 @@
    "fieldtype": "Link",
    "label": "Responsável",
    "options": "User"
+  },
+  {
+   "fieldname": "skill",
+   "fieldtype": "Link",
+   "label": "GF Skill",
+   "options": "GF Skill",
+   "reqd": 1
   },
   {
    "fieldname": "sb_reference",
@@ -164,6 +174,17 @@
    "fieldtype": "Check",
    "label": "Ativo",
    "default": "1"
+  },
+  {
+   "fieldname": "last_reviewed_on",
+   "fieldtype": "Date",
+   "label": "Última Revisão"
+  },
+  {
+   "fieldname": "previous_version",
+   "fieldtype": "Link",
+   "label": "Versão Anterior",
+   "options": "GF Content Registry"
   }
  ],
  "links": [],
