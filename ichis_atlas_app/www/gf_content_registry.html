@@ -159,10 +159,11 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .cr-desc-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
 .cr-desc-hdr{display:flex;align-items:center;gap:7px;background:#f8fafc;color:#475569;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:9px 16px;border-bottom:1px solid #e2e8f0;border-left:3px solid #059669}
 .cr-desc-body{padding:14px 16px;font-size:13px;color:#374151;line-height:1.7;white-space:pre-wrap}
-.cr-bottom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.cr-bottom-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
-.cr-bottom-hdr{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#94a3b8;padding:8px 14px;border-bottom:1px solid #f1f5f9}
-.cr-bottom-body{padding:10px 14px;font-size:12.5px;color:#475569;line-height:1.6}
+.cr-bottom-grid{display:flex;flex-direction:column;gap:8px}
+.cr-bottom-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;display:flex;align-items:center;gap:18px;padding:14px 20px;transition:box-shadow 150ms}
+.cr-bottom-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.cr-bottom-hdr{width:180px;flex-shrink:0;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#94a3b8;padding-right:16px}
+.cr-bottom-body{flex:1;font-size:14px;color:#1e293b;line-height:1.5;font-weight:600;word-break:break-word;min-width:0}
 .cr-tag-list{display:flex;flex-wrap:wrap;gap:5px;padding:10px 14px}
 .cr-tag{font-size:11px;background:#ede9fe;color:#5b21b6;border-radius:20px;padding:2px 9px;font-weight:500}
 .cr-color-swatch{display:inline-flex;align-items:center;gap:8px;font-size:13px}
@@ -170,14 +171,14 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .cr-locked-notice{display:flex;align-items:center;gap:7px;font-size:12px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:5px 12px;flex-shrink:0}
 
 /* ── View cards (Vínculos + tabs) ────────────────── */
-.vk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:16px}
-.vk-card{display:flex;align-items:center;gap:14px;border-radius:12px;padding:16px 18px;border:1px solid transparent;transition:box-shadow 150ms}
-.vk-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.07)}
-.vk-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.vk-card-body{flex:1;min-width:0}
-.vk-card-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;opacity:.8}
-.vk-card-val{font-size:13.5px;font-weight:600;line-height:1.3;word-break:break-word}
-.vk-card-val.empty{font-style:italic;opacity:.45;font-weight:400;font-size:12px}
+.vk-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.vk-card{display:flex;align-items:center;gap:18px;border-radius:12px;padding:14px 20px;border:1px solid transparent;transition:box-shadow 150ms}
+.vk-card:hover{box-shadow:0 3px 14px rgba(0,0,0,.07)}
+.vk-card-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vk-card-body{flex:1;display:flex;align-items:center;gap:0;min-width:0}
+.vk-card-lbl{width:180px;flex-shrink:0;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;opacity:.75;line-height:1.3;padding-right:16px}
+.vk-card-val{flex:1;font-size:14px;font-weight:600;line-height:1.4;word-break:break-word;min-width:0}
+.vk-card-val.empty{font-style:italic;opacity:.4;font-weight:400;font-size:13px}
 .vk-green{background:#ecfdf5;border-color:#a7f3d0}
 .vk-green .vk-card-icon{background:#d1fae5;color:#059669}
 .vk-green .vk-card-lbl{color:#065f46}
@@ -763,6 +764,14 @@ class GFContentRegistryApp {
         ? `<i data-lucide="check-circle" style="width:14px;height:14px" class="fld-check-yes"></i><span>Sim</span>`
         : `<i data-lucide="x-circle" style="width:14px;height:14px" class="fld-check-no"></i><span>Não</span>`
       }</div></div>`;
+    const mkCard = (cls, icon, label, val) =>
+      `<div class="vk-card ${cls}">
+        <div class="vk-card-icon"><i data-lucide="${icon}" style="width:20px;height:20px"></i></div>
+        <div class="vk-card-body">
+          <div class="vk-card-lbl">${label}</div>
+          <div class="vk-card-val${!val?' empty':''}">${val ? this._esc(val) : '—'}</div>
+        </div>
+      </div>`;
 
     switch(idx) {
       case 0: {
@@ -802,34 +811,24 @@ class GFContentRegistryApp {
             <div class="cr-desc-body">${this._esc(v('description'))}</div>
           </div>` : ''}
 
-          <div class="cr-bottom-grid">
-            ${v('content_group') ? `<div class="cr-bottom-card"><div class="cr-bottom-hdr">Grupo de Conteúdo</div><div class="cr-bottom-body">${this._esc(v('content_group'))}</div></div>` : ''}
-            ${v('access_group')  ? `<div class="cr-bottom-card"><div class="cr-bottom-hdr">Grupo de Acesso</div><div class="cr-bottom-body">${this._esc(v('access_group'))}</div></div>` : ''}
-            ${v('skill') ? `<div class="cr-bottom-card"><div class="cr-bottom-hdr">Skill</div>
-              <div class="cr-bottom-body" style="display:flex;align-items:center;gap:5px">
-                <i data-lucide="zap" style="width:12px;height:12px;color:#94a3b8;flex-shrink:0"></i>${this._esc(v('skill'))}
-              </div></div>` : ''}
-            ${v('web_page') ? `<div class="cr-bottom-card"><div class="cr-bottom-hdr">Web Page</div>
-              <div class="cr-bottom-body" style="display:flex;align-items:center;gap:5px">
-                <i data-lucide="globe" style="width:12px;height:12px;color:#94a3b8;flex-shrink:0"></i>
-                ${this._esc(this._webPageTitle(v('web_page')))}
-              </div></div>` : ''}
-            ${v('responsible_user') ? `<div class="cr-bottom-card"><div class="cr-bottom-hdr">Responsável</div><div class="cr-bottom-body">${this._esc(v('responsible_user'))}</div></div>` : ''}
-            ${tags.length ? `<div class="cr-bottom-card"><div class="cr-bottom-hdr">Tags</div>
-              <div class="cr-tag-list">${tags.map(t=>`<span class="cr-tag">${this._esc(t)}</span>`).join('')}</div></div>` : ''}
+          <div class="vk-grid">
+            ${v('content_group') ? mkCard('vk-green',  'folder', 'Grupo de Conteúdo', v('content_group')) : ''}
+            ${v('access_group')  ? mkCard('vk-blue',   'shield', 'Grupo de Acesso',   v('access_group'))  : ''}
+            ${v('skill')         ? mkCard('vk-purple', 'zap',    'Skill',             v('skill'))         : ''}
+            ${v('web_page')      ? mkCard('vk-amber',  'globe',  'Web Page',          this._webPageTitle(v('web_page'))) : ''}
+            ${v('responsible_user') ? mkCard('vk-slate', 'user', 'Responsável', v('responsible_user')) : ''}
+            ${tags.length ? `<div class="vk-card vk-slate">
+              <div class="vk-card-icon"><i data-lucide="tag" style="width:20px;height:20px"></i></div>
+              <div class="vk-card-body">
+                <div class="vk-card-lbl">Tags</div>
+                <div class="vk-card-val"><div class="cr-tag-list" style="padding:0">${tags.map(t=>`<span class="cr-tag">${this._esc(t)}</span>`).join('')}</div></div>
+              </div>
+            </div>` : ''}
           </div>
         </div>`;
       }
 
       case 1: {
-        const mkCard = (cls, icon, label, val) =>
-          `<div class="vk-card ${cls}">
-            <div class="vk-card-icon"><i data-lucide="${icon}" style="width:20px;height:20px"></i></div>
-            <div class="vk-card-body">
-              <div class="vk-card-lbl">${label}</div>
-              <div class="vk-card-val${!val?' empty':''}">${val ? this._esc(val) : '—'}</div>
-            </div>
-          </div>`;
         const wpTitle = v('web_page') ? this._webPageTitle(v('web_page')) : '';
         return `<div class="vk-grid">
           ${mkCard('vk-green',  'folder',  'Grupo de Conteúdo', v('content_group'))}
