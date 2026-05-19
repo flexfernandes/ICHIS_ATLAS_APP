@@ -40,9 +40,6 @@ class GFSkill(Document):
                 else:
                     parts.append(f"\n## {title}\n{str(content).strip()}")
 
-        def flag(label, value):
-            return f"- {label}: {'Sim' if value else 'Não'}"
-
         # ── Cabeçalho ────────────────────────────────────────────────────────
         parts.append(f"# {self.skill_name or '—'} — v{self.version or '1.0.0'}")
 
@@ -138,25 +135,7 @@ class GFSkill(Document):
                 "O conteúdo gerado deve ser comparado a este padrão antes de ser entregue.")
             sec("Observações do Exemplo", self.example_notes)
 
-        # ── Informações técnicas ─────────────────────────────────────────────
-        tech = []
-        if self.prompt_file_name: tech.append(f"- Arquivo: `{self.prompt_file_name}`")
-        if self.related_module:   tech.append(f"- Módulo: {self.related_module}")
-        if self.related_doctype:  tech.append(f"- DocType: {self.related_doctype}")
-        if self.default_language: tech.append(f"- Idioma: {self.default_language}")
-        if self.skill_priority:   tech.append(f"- Prioridade: {self.skill_priority}")
-        if self.last_reviewed_on: tech.append(f"- Última Revisão: {self.last_reviewed_on}")
-        tech.append(flag("Exportável", self.allow_export))
-        tech.append(flag("Uso via API", self.allow_api_usage))
-        tech.append(flag("Skill de Sistema", self.is_system_skill))
-
-        parts.append("\n---")
-        parts.append(
-            "\n## INFORMAÇÕES TÉCNICAS\n"
-            "> Metadados de configuração e controle operacional deste Skill.\n"
-        )
-        parts.append("\n".join(tech))
-
-        # Histórico de Versões, Tags e rodapé de identidade são metadados de
-        # controle interno — não integram o prompt operacional enviado ao modelo.
+        # Informações técnicas, Histórico de Versões, Tags e rodapé de identidade
+        # são metadados de controle interno — não integram o prompt operacional
+        # enviado ao modelo.
         return "\n".join(parts)
