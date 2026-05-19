@@ -7,6 +7,7 @@ def after_install():
     create_content_groups()
     create_web_page_custom_fields()
     create_sample_skills()
+    create_sample_content_registry()
     frappe.db.commit()
     print("GF Atlas App: instalação concluída com sucesso.")
 
@@ -1196,5 +1197,90 @@ def create_sample_skills():
         doc = frappe.get_doc(skill_data)
         doc.insert(ignore_permissions=True)
         print(f"GF Atlas App: Skill '{skill_data['skill_name']}' criado.")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SAMPLE CONTENT REGISTRY
+# Registros de exemplo para o GF Content Registry.
+# Criados apenas se o título ainda não existir no banco.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def create_sample_content_registry():
+    records = [
+        {
+            "doctype": "GF Content Registry",
+            "title": "Relatório de Horas — Timesheet",
+            "item_type": "REPORT",
+            "status": "ACTIVE",
+            "content_group": "1_0010_070_relatorios_financeiros",
+            "access_group": "financeiro",
+            "skill": "gf_skill_erpnext_relatorios",
+            "route_url": "/app/query-report/Timesheet",
+            "reference_doctype": "Timesheet",
+            "description": "Relatório gerencial de horas apontadas por colaborador e projeto.",
+            "tags": "timesheet, horas, produção, relatório",
+            "icon": "clock",
+            "sort_order": 10,
+            "show_on_home": 0,
+            "favorite": 0,
+            "active": 1,
+        },
+        {
+            "doctype": "GF Content Registry",
+            "title": "Especificação Técnica de Peças — Padrão GF",
+            "item_type": "DOCUMENT",
+            "status": "ACTIVE",
+            "content_group": "1_0060_100_especificacoes_tecnicas",
+            "access_group": "engenharia",
+            "skill": "gf_skill_eng_pecas_tecnicas",
+            "description": "Padrão corporativo para elaboração de especificações técnicas de peças usinadas e soldadas.",
+            "tags": "engenharia, peças, especificação, usinagem",
+            "icon": "file-check",
+            "sort_order": 20,
+            "show_on_home": 0,
+            "favorite": 0,
+            "active": 1,
+        },
+        {
+            "doctype": "GF Content Registry",
+            "title": "GF Skill — Central de Skills Corporativos",
+            "item_type": "APPLICATION",
+            "status": "ACTIVE",
+            "content_group": "1_0120_060_gf_atlas",
+            "access_group": "tecnologia_da_informacao",
+            "skill": "gf_skill_html_corporativo_gf",
+            "route_url": "/gf-skill",
+            "description": "Aplicação interna para gestão e consulta dos Skills corporativos do GF Atlas.",
+            "tags": "gf atlas, skills, documentação, ia",
+            "icon": "zap",
+            "sort_order": 1,
+            "show_on_home": 1,
+            "favorite": 1,
+            "active": 1,
+        },
+        {
+            "doctype": "GF Content Registry",
+            "title": "Procedimento de Codificação de Produtos GF",
+            "item_type": "DOCUMENT",
+            "status": "ACTIVE",
+            "content_group": "1_0050_010_estoque",
+            "access_group": "suprimentos",
+            "skill": "gf_skill_html_corporativo_gf",
+            "description": "Procedimento interno que define o padrão GF.000.0000 para codificação de produtos no ERPNext.",
+            "tags": "cadastro, produtos, codificação, padrão",
+            "icon": "package",
+            "sort_order": 30,
+            "show_on_home": 0,
+            "favorite": 0,
+            "active": 1,
+        },
+    ]
+
+    for rec in records:
+        if frappe.db.exists("GF Content Registry", {"title": rec["title"]}):
+            continue
+        doc = frappe.get_doc(rec)
+        doc.insert(ignore_permissions=True)
+        print(f"GF Atlas App: Content Registry '{rec['title']}' criado.")
 
     print("GF Atlas App: campos Auxiliary Block 1 e 2 criados em Web Page.")
