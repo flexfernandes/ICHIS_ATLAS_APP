@@ -150,11 +150,13 @@ function gf_open_icon_picker(frm) {
 
             $grid.find('.gf-ip-item').on('click', function() {
                 const name = $(this).data('icon');
-                frm.set_value('icon', name);
+                // Usa set_value mesmo com read_only para permitir seleção via picker
+                frm.doc.icon = name;
+                frm.refresh_field('icon');
+                frm.dirty();
                 $grid.find('.gf-ip-item').removeClass('selected');
                 $(this).addClass('selected');
                 d.hide();
-                // Atualiza preview no form
                 gf_refresh_icon_preview(frm);
             });
         }
@@ -186,6 +188,17 @@ function gf_refresh_icon_preview(frm) {
             lucide.createIcons({ attrs: { style: 'display:block' } });
         }
     });
+}
+
+// ── Testa a URL do campo route_url
+function gf_test_url(frm) {
+    const url = frm.doc.route_url;
+    if (!url) {
+        frappe.msgprint({ title: 'URL vazia', message: 'Preencha o campo URL / Rota antes de testar.', indicator: 'orange' });
+        return;
+    }
+    const full = /^https?:\/\//.test(url) ? url : window.location.origin + url;
+    window.open(full, '_blank');
 }
 
 frappe.ui.form.on('GF Content Registry', {
@@ -226,6 +239,18 @@ frappe.ui.form.on('GF Content Registry', {
             );
     },
 
+    title(frm) {
+        // Auto-preenche internal_name apenas em documentos novos (antes de salvar)
+        if (frm.doc.__islocal) {
+            const slug = (frm.doc.title || '')
+                .toLowerCase()
+                .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                .replace(/[^a-z0-9]+/g, '_')
+                .replace(/^_+|_+$/g, '');
+            frm.set_value('internal_name', slug);
+        }
+    },
+
     icon(frm) {
         gf_refresh_icon_preview(frm);
     },
@@ -240,14 +265,3 @@ frappe.ui.form.on('GF Content Registry', {
         }
     }
 });
-
-// ── Testa a URL do campo route_url
-function gf_test_url(frm) {
-    const url = frm.doc.route_url;
-    if (!url) {
-        frappe.msgprint({ title: 'URL vazia', message: 'Preencha o campo URL / Rota antes de testar.', indicator: 'orange' });
-        return;
-    }
-    const full = /^https?:\/\//.test(url) ? url : window.location.origin + url;
-    window.open(full, '_blank');
-}

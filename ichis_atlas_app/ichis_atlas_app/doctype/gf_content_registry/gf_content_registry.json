@@ -8,19 +8,25 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "sb_identif",
   "title",
+  "cb_title_int",
+  "internal_name",
+  "sb_class",
   "item_type",
   "status",
+  "version",
   "cb_col1",
   "content_group",
   "access_group",
   "responsible_user",
+  "sb_skill_row",
   "skill",
+  "cb_skill_web",
+  "web_page",
   "sb_reference",
   "route_url",
   "reference_doctype",
-  "cb_ref",
-  "reference_name",
   "sb_details",
   "description",
   "tags",
@@ -31,17 +37,39 @@
   "sort_order",
   "show_on_home",
   "favorite",
-  "active",
   "last_reviewed_on",
   "previous_version"
  ],
  "fields": [
+  {
+   "fieldname": "sb_identif",
+   "fieldtype": "Section Break",
+   "label": "Identificação"
+  },
   {
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Título",
    "reqd": 1
+  },
+  {
+   "fieldname": "cb_title_int",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "internal_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Internal Name",
+   "reqd": 1,
+   "read_only_depends_on": "eval:!doc.__islocal",
+   "description": "Identificador técnico único. Gerado automaticamente na criação — não pode ser alterado após salvo."
+  },
+  {
+   "fieldname": "sb_class",
+   "fieldtype": "Section Break",
+   "label": "Classificação"
   },
   {
    "fieldname": "item_type",
@@ -56,8 +84,16 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "ACTIVE\nDRAFT\nARCHIVED\nOBSOLETE",
-   "default": "ACTIVE"
+   "options": "Draft\nEm Desenvolvimento\nEm Teste\nSubmetido\nObsoleto\nArquivado",
+   "default": "Draft"
+  },
+  {
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "label": "Versão",
+   "default": "1.0.0",
+   "read_only": 1,
+   "description": "Gerada automaticamente — 1.0.0 na criação. Não edite manualmente."
   },
   {
    "fieldname": "cb_col1",
@@ -87,11 +123,27 @@
    "options": "User"
   },
   {
+   "fieldname": "sb_skill_row",
+   "fieldtype": "Section Break",
+   "label": "Skill"
+  },
+  {
    "fieldname": "skill",
    "fieldtype": "Link",
-   "label": "GF Skill",
+   "label": "Skill",
    "options": "GF Skill",
    "reqd": 1
+  },
+  {
+   "fieldname": "cb_skill_web",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "web_page",
+   "fieldtype": "Link",
+   "label": "Web Page",
+   "options": "Web Page",
+   "description": "Página Web do ERPNext vinculada a este conteúdo. Pesquise pelo título da página."
   },
   {
    "fieldname": "sb_reference",
@@ -108,15 +160,6 @@
    "fieldname": "reference_doctype",
    "fieldtype": "Data",
    "label": "DocType de Referência"
-  },
-  {
-   "fieldname": "cb_ref",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "reference_name",
-   "fieldtype": "Data",
-   "label": "Nome de Referência"
   },
   {
    "fieldname": "sb_details",
@@ -140,7 +183,9 @@
   {
    "fieldname": "icon",
    "fieldtype": "Data",
-   "label": "Ícone"
+   "label": "Ícone",
+   "read_only": 1,
+   "description": "Selecione via botão 'Escolher Ícone' abaixo. Utiliza ícones Lucide."
   },
   {
    "fieldname": "color",
@@ -170,12 +215,6 @@
    "default": "0"
   },
   {
-   "fieldname": "active",
-   "fieldtype": "Check",
-   "label": "Ativo",
-   "default": "1"
-  },
-  {
    "fieldname": "last_reviewed_on",
    "fieldtype": "Date",
    "label": "Última Revisão"
@@ -188,7 +227,7 @@
   }
  ],
  "links": [],
- "modified": "2026-05-16 00:00:00.000000",
+ "modified": "2026-05-19 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Ichis Atlas App",
  "name": "GF Content Registry",
@@ -237,7 +276,7 @@
    "role": "GF Viewer"
   }
  ],
- "search_fields": "title,item_type,status",
+ "search_fields": "title,internal_name,item_type,status",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
