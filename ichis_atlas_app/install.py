@@ -1246,7 +1246,7 @@ def create_sample_content_registry():
             "title": "GF Skill — Central de Skills Corporativos",
             "item_type": "APPLICATION",
             "status": "Submetido",
-            "content_group": "1_0120_060_gf_atlas",
+            "content_group": "1_0210_030_aplicacoes_web",
             "access_group": "tecnologia_da_informacao",
             "skill": "gf_skill_html_corporativo_gf",
             "route_url": "/gf-skill",
