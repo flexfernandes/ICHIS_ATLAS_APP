@@ -1,10 +1,12 @@
 import frappe
 from frappe.model.document import Document
 
-
-class GFIntegrationSettings(Document):
-    pass
-
+SITE_URL        = "https://greenfarms.v.frappe.cloud"
+CALLBACK_PATH   = "/api/method/ichis_atlas_app.ichis_atlas_app.doctype.gf_integration_settings.gf_integration_settings.google_oauth_callback"
+REDIRECT_URI    = SITE_URL + CALLBACK_PATH
+OAUTH_SCOPE     = "https://www.googleapis.com/auth/drive"
+GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
+GOOGLE_TOKEN_URL= "https://oauth2.googleapis.com/token"
 
 # ── Campos sensíveis por integração ─────────────────────────────────────────
 PASSWORD_FIELDS = [
@@ -29,6 +31,14 @@ def get_settings():
     O frontend usa esse booleano para exibir o placeholder "configurado".
     """
     doc = frappe.get_single("GF Integration Settings")
+
+    # Garante que redirect_uri e oauth_scope estejam sempre preenchidos
+    if doc.gd_redirect_uri != REDIRECT_URI or doc.gd_oauth_scope != OAUTH_SCOPE:
+        doc.gd_redirect_uri = REDIRECT_URI
+        doc.gd_oauth_scope  = OAUTH_SCOPE
+        doc.save(ignore_permissions=True)
+        frappe.db.commit()
+
     data = doc.as_dict()
 
     for field in PASSWORD_FIELDS:
@@ -117,38 +127,74 @@ def test_connection(service):
 def initiate_google_oauth():
     """
     Inicia o fluxo OAuth 2.0 do Google Drive.
-
-    Retorno:
-        dict: { "auth_url": str } — URL de autorização para redirect no frontend.
-
-    TODO: implementar fluxo completo:
-
-    1. Ler client_id e redirect_uri do DocType
-    2. Gerar state token aleatório anti-CSRF:
-           state = frappe.generate_hash(length=32)
-           frappe.cache().set_value(f"gd_oauth_state_{state}", True, expires_in_sec=600)
-    3. Montar authorization URL:
-           https://accounts.google.com/o/oauth2/v2/auth?
-             client_id=<client_id>
-             &redirect_uri=<redirect_uri>
-             &response_type=code
-             &scope=https://www.googleapis.com/auth/drive
-             &access_type=offline
-             &prompt=consent
-             &state=<state>
-    4. Retornar {"auth_url": url} para o frontend redirecionar o usuário.
-
-    ── BACKEND INTEGRATION POINT ──────────────────────────────────────────────
-    Endpoint de callback a criar:
-        /api/method/ichis_atlas_app.ichis_atlas_app.doctype
-          .gf_integration_settings.gf_integration_settings.google_oauth_callback
-    Parâmetros recebidos: code (str), state (str)
-    Ação:
-        - Validar state no cache do Frappe (anti-CSRF)
-        - POST https://oauth2.googleapis.com/token com code + client_id + client_secret
-        - Armazenar access_token e refresh_token nos campos gd_access_token / gd_refresh_token
-        - Atualizar gd_status para "connected"
-    ────────────────────────────────────────────────────────────────────────────
+    Retorna a URL de autorização para o frontend redirecionar o usuário.
     """
-    # TODO: implementar
-    pass
+    from urllib.parse import urlencode
+
+    doc = frappe.get_single("GF Integration Settings")
+
+    if not doc.gd_client_id:
+        frappe.throw("Configure o Client ID antes de iniciar o OAuth.")
+
+    state = frappe.generate_hash(length=32)
+    frappe.cache().set_value(f"gd_oauth_state_{state}", True, expires_in_sec=600)
+
+    params = {
+        "client_id":     doc.gd_client_id,
+        "redirect_uri":  REDIRECT_URI,
+        "response_type": "code",
+        "scope":         OAUTH_SCOPE,
+        "access_type":   "offline",
+        "prompt":        "consent",
+        "state":         state,
+    }
+
+    auth_url = GOOGLE_AUTH_URL + "?" + urlencode(params)
+    return {"auth_url": auth_url}
+
+
+@frappe.whitelist(allow_guest=True)
+def google_oauth_callback(code=None, state=None, error=None):
+    """
+    Callback OAuth 2.0 do Google Drive.
+    Recebe o code de autorização, troca por tokens e salva no DocType.
+    """
+    import requests
+    from urllib.parse import urlencode
+
+    redirect_base = f"{SITE_URL}/gf_integration_settings"
+
+    if error:
+        return frappe.redirect(f"{redirect_base}?oauth_error={error}")
+
+    if not code or not state:
+        return frappe.redirect(f"{redirect_base}?oauth_error=missing_params")
+
+    # Valida state anti-CSRF
+    cache_key = f"gd_oauth_state_{state}"
+    if not frappe.cache().get_value(cache_key):
+        return frappe.redirect(f"{redirect_base}?oauth_error=invalid_state")
+    frappe.cache().delete_value(cache_key)
+
+    doc = frappe.get_single("GF Integration Settings")
+
+    # Troca code por access_token + refresh_token
+    resp = requests.post(GOOGLE_TOKEN_URL, data={
+        "code":          code,
+        "client_id":     doc.gd_client_id,
+        "client_secret": doc.get_password("gd_client_secret"),
+        "redirect_uri":  REDIRECT_URI,
+        "grant_type":    "authorization_code",
+    }, timeout=15)
+
+    if resp.status_code != 200:
+        return frappe.redirect(f"{redirect_base}?oauth_error=token_exchange_failed")
+
+    tokens = resp.json()
+    doc.gd_access_token  = tokens.get("access_token", "")
+    doc.gd_refresh_token = tokens.get("refresh_token", doc.get_password("gd_refresh_token") or "")
+    doc.gd_status        = "connected"
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+
+    return frappe.redirect(f"{redirect_base}?oauth_success=1")

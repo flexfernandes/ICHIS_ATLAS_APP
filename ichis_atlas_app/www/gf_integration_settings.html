@@ -898,6 +898,17 @@ class GFIntegrationSettingsApp {
 
 // ── Bootstrap ──────────────────────────────────────────────────────────────
 const app = new GFIntegrationSettingsApp();
-document.addEventListener('DOMContentLoaded', () => app.init());
+document.addEventListener('DOMContentLoaded', () => {
+  app.init().then(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('oauth_success')) {
+      app._toast('Google Drive conectado com sucesso!', 'success');
+      history.replaceState({}, '', window.location.pathname);
+    } else if (params.get('oauth_error')) {
+      app._toast('Erro no OAuth: ' + params.get('oauth_error'), 'error');
+      history.replaceState({}, '', window.location.pathname);
+    }
+  });
+});
 </script>
 {% endblock %}
