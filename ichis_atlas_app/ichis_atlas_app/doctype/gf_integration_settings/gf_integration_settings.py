@@ -50,18 +50,9 @@ def get_settings():
 @frappe.whitelist()
 def save_settings(data):
     """
-    Salva os campos do DocType Single GF Integration Settings.
-
-    Regra para campos Password:
-    - Atualiza no banco APENAS se o valor recebido NÃO for None/null.
-    - None indica que o usuário não alterou o campo (frontend enviou null
-      intencionalmente) — o valor existente deve ser preservado.
-
-    Parâmetros:
-        data (str | dict): JSON com os valores do formulário.
-
-    Retorno:
-        dict: { "success": True } em caso de sucesso.
+    Salva APENAS campos Password que o usuário alterou explicitamente.
+    Campos normais são salvos pelo frontend via frappe.client.set_value (nativo).
+    Só é chamado quando ao menos um campo sensível foi preenchido.
     """
     import json
     if isinstance(data, str):
@@ -70,9 +61,8 @@ def save_settings(data):
     doc = frappe.get_single("GF Integration Settings")
 
     for field, value in data.items():
-        if field in PASSWORD_FIELDS and value is None:
-            continue
-        setattr(doc, field, value)
+        if field in PASSWORD_FIELDS and value:
+            doc.set(field, value)
 
     doc.save(ignore_permissions=True)
     frappe.db.commit()

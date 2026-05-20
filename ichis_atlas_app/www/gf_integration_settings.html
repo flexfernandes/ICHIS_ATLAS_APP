@@ -698,53 +698,68 @@ class GFIntegrationSettingsApp {
   }
 
   // ── Save ───────────────────────────────────────────────────────────────────
-  // ── BACKEND INTEGRATION POINT ─────────────────────────────────────────────
-  // Método:  M_SAVE
-  // Params:  { data: JSON string com os valores do formulário }
-  // Regra:   campos Password com value=null → backend NÃO sobrescreve.
-  // Retorno: { success: true } | { error: string }
-  // ──────────────────────────────────────────────────────────────────────────
+  // Usa frappe.client.set_value (nativo) para campos normais.
+  // Usa M_SAVE apenas para campos Password que o usuário alterou.
   save(svc) {
-    const cfg     = SERVICE_CFG[svc];
-    const payload = {};
+    const cfg      = SERVICE_CFG[svc];
+    const fields   = {};   // campos normais
+    const pwFields = {};   // campos sensíveis alterados
 
     // Toggle
     const tog = document.getElementById(cfg.toggle);
-    if (tog) payload[cfg.toggle] = tog.checked ? 1 : 0;
+    if (tog) fields[cfg.toggle] = tog.checked ? 1 : 0;
 
-    // Plain fields
+    // Campos normais
     for (const f of cfg.plain) {
       const el = document.getElementById(f);
-      if (el) payload[f] = el.value;
+      if (el) fields[f] = el.value;
     }
 
-    // Sensitive fields — send null if user did not type a new value
+    // Campos sensíveis — só envia se o usuário digitou algo novo
     for (const f of cfg.sensitive) {
       const el = document.getElementById(f);
-      if (!el) continue;
-      const newVal = el.value.trim();
-      payload[f] = newVal ? newVal : null; // null = keep existing value in backend
+      if (el && el.value.trim()) pwFields[f] = el.value.trim();
     }
 
     const btn = document.getElementById(`btn-save-${svc}`);
     this._setLoading(btn, true, 'Salvando...');
 
+    const onError = (msg) => {
+      this._setLoading(btn, false);
+      this._toast(msg || 'Erro ao salvar.', 'error', true);
+    };
+
+    const onDone = () => {
+      this._setLoading(btn, false);
+      this._toast('Configurações salvas com sucesso.', 'success');
+      this._loadSettings();
+    };
+
+    // Passo 1: salva campos normais via frappe.client.set_value (nativo, confiável)
     frappe.call({
-      method: M_SAVE,
-      args:   { data: JSON.stringify(payload) },
+      method: 'frappe.client.set_value',
+      args: {
+        doctype:   'GF Integration Settings',
+        name:      'GF Integration Settings',
+        fieldname: fields,
+      },
       callback: (r) => {
-        this._setLoading(btn, false);
-        if (r && r.message && r.message.success) {
-          this._toast('Configurações salvas com sucesso', 'success');
-          this._loadSettings(); // refresh to update sensitive field states
+        // Passo 2: se há campo sensível alterado, salva via método customizado
+        if (Object.keys(pwFields).length > 0) {
+          frappe.call({
+            method:   M_SAVE,
+            args:     { data: JSON.stringify(pwFields) },
+            callback: (r2) => {
+              if (r2 && r2.message && r2.message.success) onDone();
+              else onError('Campos normais salvos, mas erro ao salvar campo de senha.');
+            },
+            error: () => onError('Erro ao salvar campo de senha.')
+          });
         } else {
-          this._toast('Erro ao salvar. Verifique o console.', 'error');
+          onDone();
         }
       },
-      error: () => {
-        this._setLoading(btn, false);
-        this._toast('Erro de comunicação com o servidor.', 'error');
-      }
+      error: () => onError('Erro ao salvar no servidor.')
     });
   }
 
@@ -892,7 +907,8 @@ class GFIntegrationSettingsApp {
   }
 
   // ── Toast notification ─────────────────────────────────────────────────────
-  _toast(msg, type = 'info') {
+  // persist=true → erro fica na tela até o usuário fechar manualmente
+  _toast(msg, type = 'info', persist = false) {
     const icons = { success: 'check-circle', error: 'alert-circle', info: 'info' };
     const $c    = document.getElementById('gfis-toast');
     if (!$c) return;
@@ -905,7 +921,10 @@ class GFIntegrationSettingsApp {
       </button>`;
     $c.appendChild(el);
     if (window.lucide) lucide.createIcons({ attrs: { style: 'display:block' } });
-    setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 200); }, 4500);
+    // erros persistem; sucesso/info somem após 8 segundos
+    if (!persist && type !== 'error') {
+      setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 200); }, 8000);
+    }
   }
 }
 
