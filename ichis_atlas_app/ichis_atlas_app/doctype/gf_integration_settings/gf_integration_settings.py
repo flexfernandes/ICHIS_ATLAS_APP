@@ -129,37 +129,67 @@ def google_oauth_callback(code=None, state=None, error=None):
         frappe.local.response["type"] = "redirect"
         frappe.local.response["location"] = url
 
-    if error:
-        return _redirect(f"{redirect_base}?oauth_error={error}")
+    try:
+        if error:
+            return _redirect(f"{redirect_base}?oauth_error={error}")
 
-    if not code or not state:
-        return _redirect(f"{redirect_base}?oauth_error=missing_params")
+        if not code or not state:
+            return _redirect(f"{redirect_base}?oauth_error=missing_params")
 
-    # Valida state anti-CSRF
-    cache_key = f"gd_oauth_state_{state}"
-    if not frappe.cache.get_value(cache_key):
-        return _redirect(f"{redirect_base}?oauth_error=invalid_state")
-    frappe.cache.delete_value(cache_key)
+        # Valida state anti-CSRF
+        cache_key = f"gd_oauth_state_{state}"
+        try:
+            cached = frappe.cache.get_value(cache_key)
+        except Exception:
+            cached = None
 
-    doc = frappe.get_single("GF Integration Settings")
+        if not cached:
+            return _redirect(f"{redirect_base}?oauth_error=invalid_state")
 
-    # Troca code por access_token + refresh_token
-    resp = requests.post(GOOGLE_TOKEN_URL, data={
-        "code":          code,
-        "client_id":     doc.gd_client_id,
-        "client_secret": doc.get_password("gd_client_secret"),
-        "redirect_uri":  REDIRECT_URI,
-        "grant_type":    "authorization_code",
-    }, timeout=15)
+        try:
+            frappe.cache.delete_value(cache_key)
+        except Exception:
+            pass
 
-    if resp.status_code != 200:
-        return _redirect(f"{redirect_base}?oauth_error=token_exchange_failed")
+        doc = frappe.get_single("GF Integration Settings")
 
-    tokens = resp.json()
-    doc.gd_access_token  = tokens.get("access_token", "")
-    doc.gd_refresh_token = tokens.get("refresh_token", doc.get_password("gd_refresh_token") or "")
-    doc.gd_status        = "connected"
-    doc.save(ignore_permissions=True)
-    frappe.db.commit()
+        try:
+            client_secret = doc.get_password("gd_client_secret") or ""
+        except Exception:
+            client_secret = ""
 
-    return _redirect(f"{redirect_base}?oauth_success=1")
+        if not doc.gd_client_id or not client_secret:
+            frappe.log_error("Client ID ou Client Secret não configurados.", "OAuth Callback")
+            return _redirect(f"{redirect_base}?oauth_error=missing_credentials")
+
+        # Troca code por access_token + refresh_token
+        resp = requests.post(GOOGLE_TOKEN_URL, data={
+            "code":          code,
+            "client_id":     doc.gd_client_id,
+            "client_secret": client_secret,
+            "redirect_uri":  REDIRECT_URI,
+            "grant_type":    "authorization_code",
+        }, timeout=15)
+
+        if resp.status_code != 200:
+            frappe.log_error(f"Token exchange falhou ({resp.status_code}): {resp.text}", "OAuth Callback")
+            return _redirect(f"{redirect_base}?oauth_error=token_exchange_failed")
+
+        tokens = resp.json()
+
+        try:
+            existing_refresh = doc.get_password("gd_refresh_token") or ""
+        except Exception:
+            existing_refresh = ""
+
+        doc.gd_access_token  = tokens.get("access_token", "")
+        doc.gd_refresh_token = tokens.get("refresh_token") or existing_refresh
+        doc.gd_status        = "connected"
+        doc.save(ignore_permissions=True)
+        frappe.db.commit()
+
+        return _redirect(f"{redirect_base}?oauth_success=1")
+
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "OAuth Callback Error")
+        return _redirect(f"{redirect_base}?oauth_error=server_error")
