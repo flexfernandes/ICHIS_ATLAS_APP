@@ -79,10 +79,165 @@ def test_connection(service):
     Testa a conectividade com o serviço especificado.
     Retorna status e mensagem. Atualiza <service>_status e <service>_last_tested.
     """
-    return {
-        "status":  "error",
-        "message": f"Teste de conexão para '{service}' ainda não implementado."
-    }
+    if service == "google_drive":
+        return _test_google_drive()
+    elif service == "gemini":
+        return _test_gemini()
+    elif service == "openai":
+        return _test_openai()
+    return {"status": "error", "message": f"Serviço '{service}' desconhecido."}
+
+
+def _test_google_drive():
+    import requests
+
+    doc = frappe.get_single("GF Integration Settings")
+
+    try:
+        access_token = doc.get_password("gd_access_token") or ""
+    except Exception:
+        access_token = ""
+
+    if not access_token:
+        return {
+            "status":  "error",
+            "message": "Sem token de acesso. Clique em 'Conectar Google Drive' para autorizar.",
+        }
+
+    def _do_test(token):
+        return requests.get(
+            "https://www.googleapis.com/drive/v3/about",
+            params={"fields": "user"},
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=10,
+        )
+
+    resp = _do_test(access_token)
+
+    # Token expirado → tenta renovar e repete
+    if resp.status_code == 401:
+        new_token = _refresh_google_token(doc)
+        if new_token:
+            resp = _do_test(new_token)
+
+    def _save_status(status):
+        doc.gd_status      = status
+        doc.gd_last_tested = frappe.utils.now_datetime()
+        doc.save(ignore_permissions=True)
+        frappe.db.commit()
+
+    if resp.status_code == 200:
+        email = resp.json().get("user", {}).get("emailAddress", "")
+        _save_status("connected")
+        msg = f"Conectado como {email}" if email else "Conexão com Google Drive bem-sucedida."
+        return {"status": "connected", "message": msg}
+
+    _save_status("error")
+    return {"status": "error", "message": f"Falha ao conectar ao Google Drive (HTTP {resp.status_code})."}
+
+
+def _refresh_google_token(doc):
+    """Tenta renovar o access_token usando o refresh_token. Retorna o novo token ou None."""
+    import requests
+
+    try:
+        refresh_token = doc.get_password("gd_refresh_token") or ""
+        client_secret = doc.get_password("gd_client_secret") or ""
+    except Exception:
+        return None
+
+    if not refresh_token or not doc.gd_client_id or not client_secret:
+        return None
+
+    resp = requests.post(GOOGLE_TOKEN_URL, data={
+        "grant_type":    "refresh_token",
+        "refresh_token": refresh_token,
+        "client_id":     doc.gd_client_id,
+        "client_secret": client_secret,
+    }, timeout=10)
+
+    if resp.status_code == 200:
+        new_token = resp.json().get("access_token", "")
+        if new_token:
+            doc.gd_access_token = new_token
+            doc.save(ignore_permissions=True)
+            frappe.db.commit()
+            return new_token
+
+    return None
+
+
+def _test_gemini():
+    import requests
+
+    doc = frappe.get_single("GF Integration Settings")
+
+    try:
+        api_key = doc.get_password("gemini_api_key") or ""
+    except Exception:
+        api_key = ""
+
+    if not api_key:
+        return {"status": "error", "message": "API Key não configurada."}
+
+    model = doc.gemini_default_model or "gemini-2.0-flash"
+    url   = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+
+    try:
+        resp = requests.post(url, json={"contents": [{"parts": [{"text": "ping"}]}]}, timeout=10)
+    except Exception as e:
+        return {"status": "error", "message": f"Erro de rede: {e}"}
+
+    if resp.status_code == 200:
+        doc.gemini_status      = "connected"
+        doc.gemini_last_tested = frappe.utils.now_datetime()
+        doc.save(ignore_permissions=True)
+        frappe.db.commit()
+        return {"status": "connected", "message": f"Gemini ({model}) respondendo corretamente."}
+
+    doc.gemini_status      = "error"
+    doc.gemini_last_tested = frappe.utils.now_datetime()
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    return {"status": "error", "message": f"Erro Gemini API (HTTP {resp.status_code})."}
+
+
+def _test_openai():
+    import requests
+
+    doc = frappe.get_single("GF Integration Settings")
+
+    try:
+        api_key = doc.get_password("oai_api_key") or ""
+    except Exception:
+        api_key = ""
+
+    if not api_key:
+        return {"status": "error", "message": "API Key não configurada."}
+
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    if doc.oai_org_id:
+        headers["OpenAI-Organization"] = doc.oai_org_id
+    if doc.oai_project_id:
+        headers["OpenAI-Project"] = doc.oai_project_id
+
+    try:
+        resp = requests.get("https://api.openai.com/v1/models", headers=headers, timeout=10)
+    except Exception as e:
+        return {"status": "error", "message": f"Erro de rede: {e}"}
+
+    if resp.status_code == 200:
+        doc.oai_status      = "connected"
+        doc.oai_last_tested = frappe.utils.now_datetime()
+        doc.save(ignore_permissions=True)
+        frappe.db.commit()
+        return {"status": "connected", "message": "Conexão com OpenAI bem-sucedida."}
+
+    doc.oai_status      = "error"
+    doc.oai_last_tested = frappe.utils.now_datetime()
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    return {"status": "error", "message": f"Erro OpenAI API (HTTP {resp.status_code})."}
 
 
 @frappe.whitelist()

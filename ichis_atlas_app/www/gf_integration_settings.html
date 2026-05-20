@@ -921,9 +921,9 @@ class GFIntegrationSettingsApp {
       </button>`;
     $c.appendChild(el);
     if (window.lucide) lucide.createIcons({ attrs: { style: 'display:block' } });
-    // erros persistem; sucesso/info somem após 8 segundos
+    // erros persistem; sucesso/info somem após 15 segundos
     if (!persist && type !== 'error') {
-      setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 200); }, 8000);
+      setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 200); }, 15000);
     }
   }
 }
@@ -931,13 +931,24 @@ class GFIntegrationSettingsApp {
 // ── Bootstrap ──────────────────────────────────────────────────────────────
 const app = new GFIntegrationSettingsApp();
 document.addEventListener('DOMContentLoaded', () => {
-  app.init().then(() => {
+  app.init().then(async () => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('oauth_success')) {
-      app._toast('Google Drive conectado com sucesso!', 'success');
       history.replaceState({}, '', window.location.pathname);
+      // Recarrega configurações para refletir status "connected" salvo pelo callback
+      await app._loadSettings();
+      app._toast('Google Drive conectado com sucesso!', 'success');
     } else if (params.get('oauth_error')) {
-      app._toast('Erro no OAuth: ' + params.get('oauth_error'), 'error');
+      const errCode = params.get('oauth_error');
+      const errMsgs = {
+        'access_denied':        'Acesso negado pelo usuário.',
+        'missing_params':       'Parâmetros ausentes no retorno do Google.',
+        'invalid_state':        'Token de segurança inválido. Tente novamente.',
+        'missing_credentials':  'Client ID ou Client Secret não configurados.',
+        'token_exchange_failed':'Falha na troca de tokens com o Google.',
+        'server_error':         'Erro interno no servidor. Verifique o Error Log.',
+      };
+      app._toast('Erro OAuth: ' + (errMsgs[errCode] || errCode), 'error');
       history.replaceState({}, '', window.location.pathname);
     }
   });
