@@ -27,6 +27,7 @@
   "sb_reference",
   "route_url",
   "reference_doctype",
+  "reference_name",
   "sb_details",
   "description",
   "tags",
@@ -37,6 +38,7 @@
   "sort_order",
   "show_on_home",
   "favorite",
+  "active",
   "last_reviewed_on",
   "previous_version"
  ],
@@ -162,6 +164,13 @@
    "label": "DocType de Referência"
   },
   {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nome de Referência",
+   "description": "Nome do documento, relatório ou recurso referenciado por este item."
+  },
+  {
    "fieldname": "sb_details",
    "fieldtype": "Section Break",
    "label": "Detalhes"
@@ -213,6 +222,14 @@
    "fieldtype": "Check",
    "label": "Favorito",
    "default": "0"
+  },
+  {
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Ativo",
+   "default": "1",
+   "description": "Desmarque para ocultar este item do portal sem excluí-lo."
   },
   {
    "fieldname": "last_reviewed_on",
