@@ -18,6 +18,10 @@ PASSWORD_FIELDS = [
 ]
 
 
+class GFIntegrationSettings(Document):
+    pass
+
+
 @frappe.whitelist()
 def get_settings():
     """
@@ -95,7 +99,7 @@ def initiate_google_oauth():
         return {"error": "Configure e salve o Client ID antes de iniciar o OAuth."}
 
     state = frappe.generate_hash(length=32)
-    frappe.cache().set_value(f"gd_oauth_state_{state}", True, expires_in_sec=600)
+    frappe.cache.set_value(f"gd_oauth_state_{state}", True, expires_in_sec=600)
 
     params = {
         "client_id":     doc.gd_client_id,
@@ -118,21 +122,24 @@ def google_oauth_callback(code=None, state=None, error=None):
     Recebe o code de autorização, troca por tokens e salva no DocType.
     """
     import requests
-    from urllib.parse import urlencode
 
     redirect_base = f"{SITE_URL}/gf_integration_settings"
 
+    def _redirect(url):
+        frappe.local.response["type"] = "redirect"
+        frappe.local.response["location"] = url
+
     if error:
-        return frappe.redirect(f"{redirect_base}?oauth_error={error}")
+        return _redirect(f"{redirect_base}?oauth_error={error}")
 
     if not code or not state:
-        return frappe.redirect(f"{redirect_base}?oauth_error=missing_params")
+        return _redirect(f"{redirect_base}?oauth_error=missing_params")
 
     # Valida state anti-CSRF
     cache_key = f"gd_oauth_state_{state}"
-    if not frappe.cache().get_value(cache_key):
-        return frappe.redirect(f"{redirect_base}?oauth_error=invalid_state")
-    frappe.cache().delete_value(cache_key)
+    if not frappe.cache.get_value(cache_key):
+        return _redirect(f"{redirect_base}?oauth_error=invalid_state")
+    frappe.cache.delete_value(cache_key)
 
     doc = frappe.get_single("GF Integration Settings")
 
@@ -146,7 +153,7 @@ def google_oauth_callback(code=None, state=None, error=None):
     }, timeout=15)
 
     if resp.status_code != 200:
-        return frappe.redirect(f"{redirect_base}?oauth_error=token_exchange_failed")
+        return _redirect(f"{redirect_base}?oauth_error=token_exchange_failed")
 
     tokens = resp.json()
     doc.gd_access_token  = tokens.get("access_token", "")
@@ -155,4 +162,4 @@ def google_oauth_callback(code=None, state=None, error=None):
     doc.save(ignore_permissions=True)
     frappe.db.commit()
 
-    return frappe.redirect(f"{redirect_base}?oauth_success=1")
+    return _redirect(f"{redirect_base}?oauth_success=1")
