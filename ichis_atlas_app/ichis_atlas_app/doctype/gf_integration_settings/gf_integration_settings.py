@@ -83,44 +83,12 @@ def save_settings(data):
 def test_connection(service):
     """
     Testa a conectividade com o serviço especificado.
-
-    Parâmetros:
-        service (str): 'google_drive' | 'gemini' | 'openai'
-
-    Retorno:
-        dict: {
-            "status":  "connected" | "error",
-            "message": str  — mensagem descritiva para exibição no frontend
-        }
-
-    Efeito colateral:
-        Atualiza os campos <service>_status e <service>_last_tested no banco.
+    Retorna status e mensagem. Atualiza <service>_status e <service>_last_tested.
     """
-    # TODO: implementar por serviço
-    #
-    # Exemplo de estrutura futura:
-    #
-    # from datetime import datetime
-    # doc = frappe.get_single("GF Integration Settings")
-    # now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #
-    # if service == "gemini":
-    #     result = _test_gemini(doc)
-    # elif service == "openai":
-    #     result = _test_openai(doc)
-    # elif service == "google_drive":
-    #     result = _test_google_drive(doc)
-    # else:
-    #     return {"status": "error", "message": f"Serviço '{service}' não reconhecido."}
-    #
-    # status_field     = f"{service}_status" if service != "google_drive" else "gd_status"
-    # last_tested_field = f"{service}_last_tested" if service != "google_drive" else "gd_last_tested"
-    # doc.set(status_field, result["status"])
-    # doc.set(last_tested_field, now)
-    # doc.save(ignore_permissions=True)
-    # frappe.db.commit()
-    # return result
-    pass
+    return {
+        "status":  "error",
+        "message": f"Teste de conexão para '{service}' ainda não implementado."
+    }
 
 
 @frappe.whitelist()
@@ -134,7 +102,7 @@ def initiate_google_oauth():
     doc = frappe.get_single("GF Integration Settings")
 
     if not doc.gd_client_id:
-        frappe.throw("Configure o Client ID antes de iniciar o OAuth.")
+        return {"error": "Configure e salve o Client ID antes de iniciar o OAuth."}
 
     state = frappe.generate_hash(length=32)
     frappe.cache().set_value(f"gd_oauth_state_{state}", True, expires_in_sec=600)
