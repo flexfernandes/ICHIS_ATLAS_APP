@@ -28,18 +28,13 @@ def get_settings():
     Isso garante que chaves sensíveis nunca trafeguem para o frontend.
     O frontend usa esse booleano para exibir o placeholder "configurado".
     """
-    # TODO: implementar
-    #
-    # Exemplo de implementação futura:
-    #
-    # doc  = frappe.get_single("GF Integration Settings")
-    # data = doc.as_dict()
-    #
-    # for field in PASSWORD_FIELDS:
-    #     data[field] = bool(data.get(field))   # True = configurado, False = vazio
-    #
-    # return data
-    pass
+    doc = frappe.get_single("GF Integration Settings")
+    data = doc.as_dict()
+
+    for field in PASSWORD_FIELDS:
+        data[field] = bool(data.get(field))
+
+    return data
 
 
 @frappe.whitelist()
@@ -58,25 +53,20 @@ def save_settings(data):
     Retorno:
         dict: { "success": True } em caso de sucesso.
     """
-    # TODO: implementar
-    #
-    # Exemplo de implementação futura:
-    #
-    # import json
-    # if isinstance(data, str):
-    #     data = json.loads(data)
-    #
-    # doc = frappe.get_single("GF Integration Settings")
-    #
-    # for field, value in data.items():
-    #     if field in PASSWORD_FIELDS and value is None:
-    #         continue  # preserva o valor existente — usuário não alterou
-    #     setattr(doc, field, value)
-    #
-    # doc.save(ignore_permissions=True)
-    # frappe.db.commit()
-    # return {"success": True}
-    pass
+    import json
+    if isinstance(data, str):
+        data = json.loads(data)
+
+    doc = frappe.get_single("GF Integration Settings")
+
+    for field, value in data.items():
+        if field in PASSWORD_FIELDS and value is None:
+            continue
+        setattr(doc, field, value)
+
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    return {"success": True}
 
 
 @frappe.whitelist()
