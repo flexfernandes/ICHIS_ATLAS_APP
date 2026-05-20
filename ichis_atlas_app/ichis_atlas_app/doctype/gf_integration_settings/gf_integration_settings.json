@@ -1,0 +1,259 @@
+{
+ "actions": [],
+ "creation": "2026-05-20 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "gd_section",
+  "gd_enabled",
+  "gd_client_id",
+  "gd_client_secret",
+  "gd_redirect_uri",
+  "gd_root_folder_id",
+  "gd_read_folder_id",
+  "gd_write_folder_id",
+  "gd_oauth_scope",
+  "gd_access_token",
+  "gd_refresh_token",
+  "gd_status",
+  "gd_last_tested",
+  "gemini_section",
+  "gemini_enabled",
+  "gemini_api_key",
+  "gemini_default_model",
+  "gemini_temperature",
+  "gemini_max_tokens",
+  "gemini_system_instruction",
+  "gemini_status",
+  "gemini_last_tested",
+  "oai_section",
+  "oai_enabled",
+  "oai_api_key",
+  "oai_org_id",
+  "oai_project_id",
+  "oai_default_model",
+  "oai_temperature",
+  "oai_max_tokens",
+  "oai_system_prompt",
+  "oai_status",
+  "oai_last_tested"
+ ],
+ "fields": [
+  {
+   "fieldname": "gd_section",
+   "fieldtype": "Section Break",
+   "label": "Google Drive"
+  },
+  {
+   "default": "0",
+   "fieldname": "gd_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Google Drive"
+  },
+  {
+   "fieldname": "gd_client_id",
+   "fieldtype": "Data",
+   "label": "Client ID"
+  },
+  {
+   "fieldname": "gd_client_secret",
+   "fieldtype": "Password",
+   "label": "Client Secret"
+  },
+  {
+   "fieldname": "gd_redirect_uri",
+   "fieldtype": "Data",
+   "label": "Redirect URI",
+   "read_only": 1,
+   "description": "Gerado automaticamente. Registre exatamente este valor no Google Cloud Console."
+  },
+  {
+   "fieldname": "gd_root_folder_id",
+   "fieldtype": "Data",
+   "label": "Root Folder ID"
+  },
+  {
+   "fieldname": "gd_read_folder_id",
+   "fieldtype": "Data",
+   "label": "Default Read Folder ID"
+  },
+  {
+   "fieldname": "gd_write_folder_id",
+   "fieldtype": "Data",
+   "label": "Default Write Folder ID"
+  },
+  {
+   "fieldname": "gd_oauth_scope",
+   "fieldtype": "Small Text",
+   "label": "OAuth Scope",
+   "read_only": 1,
+   "description": "Escopos OAuth definidos pelo sistema. Não edite manualmente."
+  },
+  {
+   "fieldname": "gd_access_token",
+   "fieldtype": "Password",
+   "label": "Access Token",
+   "read_only": 1,
+   "description": "Gerenciado exclusivamente pelo backend OAuth."
+  },
+  {
+   "fieldname": "gd_refresh_token",
+   "fieldtype": "Password",
+   "label": "Refresh Token",
+   "read_only": 1,
+   "description": "Gerenciado exclusivamente pelo backend OAuth."
+  },
+  {
+   "fieldname": "gd_status",
+   "fieldtype": "Data",
+   "label": "Connection Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gd_last_tested",
+   "fieldtype": "Datetime",
+   "label": "Last Connection Test",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gemini_section",
+   "fieldtype": "Section Break",
+   "label": "Gemini API"
+  },
+  {
+   "default": "0",
+   "fieldname": "gemini_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Gemini"
+  },
+  {
+   "fieldname": "gemini_api_key",
+   "fieldtype": "Password",
+   "label": "API Key"
+  },
+  {
+   "fieldname": "gemini_default_model",
+   "fieldtype": "Select",
+   "label": "Default Model",
+   "options": "gemini-2.0-flash\ngemini-1.5-pro\ngemini-1.5-flash"
+  },
+  {
+   "default": "0.7",
+   "fieldname": "gemini_temperature",
+   "fieldtype": "Float",
+   "label": "Temperature"
+  },
+  {
+   "default": "2048",
+   "fieldname": "gemini_max_tokens",
+   "fieldtype": "Int",
+   "label": "Max Output Tokens"
+  },
+  {
+   "fieldname": "gemini_system_instruction",
+   "fieldtype": "Text",
+   "label": "System Instruction"
+  },
+  {
+   "fieldname": "gemini_status",
+   "fieldtype": "Data",
+   "label": "Connection Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gemini_last_tested",
+   "fieldtype": "Datetime",
+   "label": "Last Connection Test",
+   "read_only": 1
+  },
+  {
+   "fieldname": "oai_section",
+   "fieldtype": "Section Break",
+   "label": "OpenAI ChatGPT"
+  },
+  {
+   "default": "0",
+   "fieldname": "oai_enabled",
+   "fieldtype": "Check",
+   "label": "Enable OpenAI"
+  },
+  {
+   "fieldname": "oai_api_key",
+   "fieldtype": "Password",
+   "label": "API Key"
+  },
+  {
+   "fieldname": "oai_org_id",
+   "fieldtype": "Data",
+   "label": "Organization ID"
+  },
+  {
+   "fieldname": "oai_project_id",
+   "fieldtype": "Data",
+   "label": "Project ID"
+  },
+  {
+   "fieldname": "oai_default_model",
+   "fieldtype": "Select",
+   "label": "Default Model",
+   "options": "gpt-4o\ngpt-4o-mini\ngpt-4-turbo\ngpt-3.5-turbo"
+  },
+  {
+   "default": "0.7",
+   "fieldname": "oai_temperature",
+   "fieldtype": "Float",
+   "label": "Temperature"
+  },
+  {
+   "default": "2048",
+   "fieldname": "oai_max_tokens",
+   "fieldtype": "Int",
+   "label": "Max Tokens"
+  },
+  {
+   "fieldname": "oai_system_prompt",
+   "fieldtype": "Text",
+   "label": "System Prompt"
+  },
+  {
+   "fieldname": "oai_status",
+   "fieldtype": "Data",
+   "label": "Connection Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "oai_last_tested",
+   "fieldtype": "Datetime",
+   "label": "Last Connection Test",
+   "read_only": 1
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ichis Atlas App",
+ "name": "GF Integration Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 0,
+   "role": "System Manager"
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 0,
+   "role": "GF Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,903 @@
+{% extends "templates/web.html" %}
+
+{% block head_include %}
+<script src="/assets/ichis_atlas_app/js/lucide.min.js"></script>
+<style>
+/* ── Frappe container reset ───────────────────────── */
+.page-content,.container,.container-fluid,.row{
+  max-width:100%!important;padding-left:0!important;padding-right:0!important;
+  margin-left:0!important;margin-right:0!important;width:100%!important
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --primary:#1e293b;--primary-h:#0f172a;--primary-l:#334155;
+  --primary-pale:#f1f5f9;
+  --accent:#059669;--accent-h:#047857;--accent-l:#10b981;--accent-pale:#d1fae5;
+  --bg:#f1f5f9;--surface:#ffffff;--surface2:#f8fafc;
+  --border:#e2e8f0;--border-h:#cbd5e1;
+  --text:#0f172a;--text-m:#475569;--text-l:#94a3b8;
+  --radius:10px;--radius-sm:6px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,monospace;
+  --header:56px
+}
+html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+
+/* ── Root layout ──────────────────────────────────── */
+#gfis{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.gfis-body{display:flex;flex-direction:column;flex:1;overflow:hidden}
+
+/* ── Header ───────────────────────────────────────── */
+.gfis-hdr{height:var(--header);min-height:var(--header);display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(15,23,42,.22);z-index:100;flex-shrink:0}
+.gfis-hdr-logo{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.gfis-hdr-title{font-weight:600;font-size:15px;letter-spacing:-.2px}
+.gfis-hdr-sub{font-size:11px;opacity:.55;margin-left:2px}
+.gfis-hdr-sep{flex:1}
+.gfis-hdr-user{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.8}
+.gfis-hdr-avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.gfis-hdr-atlas{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;transition:background 150ms;text-decoration:none;color:#fff}
+.gfis-hdr-atlas:hover{background:rgba(255,255,255,.2)}
+
+/* ── Tab navigation ───────────────────────────────── */
+.gfis-tab-nav{display:flex;background:var(--surface);border-bottom:2px solid var(--border);padding:0 24px;flex-shrink:0}
+.gfis-tab-btn{display:flex;align-items:center;gap:7px;padding:14px 18px;font-size:13px;font-weight:500;color:var(--text-m);cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 150ms;white-space:nowrap;background:none}
+.gfis-tab-btn:hover{color:var(--text);background:var(--primary-pale)}
+.gfis-tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.tab-dot{width:7px;height:7px;border-radius:50%;background:#e2e8f0;flex-shrink:0;transition:background 200ms}
+.gfis-tab-btn.st-connected .tab-dot{background:var(--accent)}
+.gfis-tab-btn.st-error     .tab-dot{background:#dc2626}
+
+/* ── Scrollable content ───────────────────────────── */
+.gfis-content{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+.gfis-content::-webkit-scrollbar{width:5px}
+.gfis-content::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
+.gfis-panel{display:none;max-width:740px;margin:0 auto}
+.gfis-panel.active{display:block}
+
+/* ── Status banner ────────────────────────────────── */
+.gfis-status-banner{display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:10px;margin-bottom:20px;font-size:13px;font-weight:500;border:1px solid;transition:all 200ms}
+.gfis-status-banner.st-not-connected{background:#f8fafc;border-color:#e2e8f0;color:#475569}
+.gfis-status-banner.st-connected{background:#f0fdf4;border-color:#a7f3d0;color:#065f46}
+.gfis-status-banner.st-error{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+.gfis-status-meta{margin-left:auto;font-size:11px;opacity:.7;font-family:var(--mono)}
+
+/* ── Intro card ───────────────────────────────────── */
+.gfis-intro{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;display:flex;align-items:flex-start;gap:14px}
+.gfis-intro-icon{width:40px;height:40px;border-radius:10px;background:var(--primary-pale);display:flex;align-items:center;justify-content:center;color:var(--text-m);flex-shrink:0}
+.gfis-intro-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+.gfis-intro-desc{font-size:13px;color:var(--text-m);line-height:1.6}
+
+/* ── Enable toggle row ────────────────────────────── */
+.gfis-toggle-row{display:flex;align-items:center;gap:12px;padding:13px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px}
+.gfis-toggle-inp{width:0;height:0;opacity:0;position:absolute;pointer-events:none}
+.gfis-toggle-lbl{position:relative;display:inline-block;width:40px;height:22px;background:#e2e8f0;border-radius:11px;cursor:pointer;transition:background 200ms;flex-shrink:0}
+.gfis-toggle-lbl::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 200ms;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.gfis-toggle-inp:checked+.gfis-toggle-lbl{background:var(--accent)}
+.gfis-toggle-inp:checked+.gfis-toggle-lbl::after{transform:translateX(18px)}
+.gfis-toggle-text{font-size:13.5px;font-weight:600;color:var(--text)}
+.gfis-toggle-sub{font-size:11.5px;color:var(--text-l);margin-left:auto;max-width:300px;text-align:right}
+
+/* ── Form card ────────────────────────────────────── */
+.gfis-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.gfis-card-hdr{display:flex;align-items:center;gap:8px;padding:10px 18px;border-bottom:1px solid var(--border);background:var(--surface2);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-m)}
+.gfis-card-body{padding:18px 20px;display:flex;flex-direction:column;gap:16px}
+
+/* ── Form fields ──────────────────────────────────── */
+.gfis-field{display:flex;flex-direction:column;gap:5px}
+.gfis-field-label{font-size:11px;font-weight:700;color:#374151;letter-spacing:.3px;display:flex;align-items:center;gap:5px}
+.gfis-field-opt{font-size:10px;color:var(--text-l);font-weight:400}
+.gfis-field-ro-badge{font-size:9.5px;font-weight:600;color:var(--text-l);background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 5px}
+.gfis-input{background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:8px 12px;font-size:13px;color:#0f172a;outline:none;transition:border-color 150ms,box-shadow 150ms;font-family:var(--font);width:100%}
+.gfis-input:focus{background:#fff;border-color:#94a3b8;box-shadow:0 0 0 3px rgba(71,85,105,.10)}
+textarea.gfis-input{resize:vertical;min-height:90px;line-height:1.6}
+select.gfis-input{cursor:pointer}
+.gfis-input-row{display:flex;gap:8px;align-items:stretch}
+.gfis-input-row .gfis-input{flex:1}
+.gfis-field-ro{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:7px;padding:8px 12px;font-size:12px;color:var(--text-m);font-family:var(--mono);word-break:break-all;line-height:1.5;flex:1}
+.gfis-field-desc{font-size:11.5px;color:var(--text-l);line-height:1.5}
+
+/* ── Buttons ──────────────────────────────────────── */
+.gfis-foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-top:4px;margin-bottom:24px}
+.gfis-foot-sep{flex:1}
+.btn-gfis{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid;transition:all 150ms;white-space:nowrap;font-family:var(--font)}
+.btn-gfis:disabled{opacity:.5;cursor:not-allowed}
+.btn-save{background:var(--primary);color:#fff;border-color:transparent}
+.btn-save:hover:not(:disabled){background:var(--primary-h)}
+.btn-test{background:var(--surface);color:var(--text-m);border-color:var(--border)}
+.btn-test:hover:not(:disabled){background:var(--surface2);border-color:var(--border-h);color:var(--text)}
+.btn-oauth{background:var(--accent);color:#fff;border-color:transparent}
+.btn-oauth:hover:not(:disabled){background:var(--accent-h)}
+.btn-copy{background:none;border:1px solid #e2e8f0;border-radius:6px;padding:0 10px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:#475569;transition:all 150ms;flex-shrink:0;white-space:nowrap;height:36px;font-family:var(--font)}
+.btn-copy:hover{background:#f1f5f9;border-color:#cbd5e1}
+
+/* ── Loading spinner ──────────────────────────────── */
+.spinner-sm{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin 600ms linear infinite;flex-shrink:0}
+.spinner-sm.dark{border-color:rgba(71,85,105,.2);border-top-color:#475569}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Toast ────────────────────────────────────────── */
+#gfis-toast{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.12);pointer-events:auto;min-width:270px;max-width:380px;animation:toastIn 220ms ease}
+.toast.success{background:#f0fdf4;color:#065f46;border-color:#a7f3d0}
+.toast.error{background:#fef2f2;color:#991b1b;border-color:#fca5a5}
+.toast.info{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
+.toast-close{margin-left:auto;background:none;border:none;cursor:pointer;color:inherit;opacity:.4;padding:2px;display:flex;align-items:center;border-radius:4px}
+.toast-close:hover{opacity:.8}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateY(4px)}}
+.toast.leaving{animation:toastOut 180ms ease forwards}
+
+/* ── Loading state ────────────────────────────────── */
+.gfis-loading{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--text-l);padding:60px}
+.spinner-lg{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 700ms linear infinite}
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div id="gfis">
+
+  <!-- ── Header ──────────────────────────────────── -->
+  <header class="gfis-hdr">
+    <div class="gfis-hdr-logo">GF</div>
+    <div>
+      <div class="gfis-hdr-title">GF Integration Settings</div>
+    </div>
+    <div class="gfis-hdr-sub">Configuração de Integrações Externas</div>
+    <div class="gfis-hdr-sep"></div>
+    <a class="gfis-hdr-atlas" href="/gf-atlas">
+      <i data-lucide="layout-dashboard" style="width:13px;height:13px"></i>
+      Wiki Hub
+    </a>
+    <div class="gfis-hdr-user">
+      <div class="gfis-hdr-avatar" id="gfis-avatar">GF</div>
+      <span id="gfis-username">...</span>
+    </div>
+  </header>
+
+  <div class="gfis-body">
+
+    <!-- ── Tab navigation ──────────────────────── -->
+    <nav class="gfis-tab-nav">
+      <button class="gfis-tab-btn active" data-tab="google_drive" onclick="app.switchTab('google_drive')">
+        <i data-lucide="folder-open" style="width:14px;height:14px"></i>
+        Google Drive
+        <span class="tab-dot" id="tab-dot-google_drive"></span>
+      </button>
+      <button class="gfis-tab-btn" data-tab="gemini" onclick="app.switchTab('gemini')">
+        <i data-lucide="sparkles" style="width:14px;height:14px"></i>
+        Gemini
+        <span class="tab-dot" id="tab-dot-gemini"></span>
+      </button>
+      <button class="gfis-tab-btn" data-tab="openai" onclick="app.switchTab('openai')">
+        <i data-lucide="message-circle" style="width:14px;height:14px"></i>
+        OpenAI ChatGPT
+        <span class="tab-dot" id="tab-dot-openai"></span>
+      </button>
+    </nav>
+
+    <!-- ── Content area ────────────────────────── -->
+    <div class="gfis-content">
+
+      <!-- ════════════════════════════════════════
+           PAINEL: Google Drive
+           ════════════════════════════════════════ -->
+      <div class="gfis-panel active" id="panel-google_drive">
+
+        <!-- Status banner -->
+        <div class="gfis-status-banner st-not-connected" id="status-banner-google_drive">
+          <i data-lucide="wifi-off" style="width:16px;height:16px;flex-shrink:0" id="status-icon-google_drive"></i>
+          <span id="status-text-google_drive">Não conectado</span>
+          <span class="gfis-status-meta" id="status-meta-google_drive">Último teste: —</span>
+        </div>
+
+        <!-- Intro -->
+        <div class="gfis-intro">
+          <div class="gfis-intro-icon">
+            <i data-lucide="folder-open" style="width:20px;height:20px"></i>
+          </div>
+          <div>
+            <div class="gfis-intro-title">Google Drive</div>
+            <div class="gfis-intro-desc">Integração com a API do Google Drive para armazenamento, leitura e escrita de arquivos na nuvem. Utiliza o protocolo OAuth 2.0 para autenticação segura — nenhuma senha é armazenada, apenas tokens de acesso.</div>
+          </div>
+        </div>
+
+        <!-- Toggle enable -->
+        <div class="gfis-toggle-row">
+          <input type="checkbox" id="gd_enabled" class="gfis-toggle-inp">
+          <label for="gd_enabled" class="gfis-toggle-lbl"></label>
+          <span class="gfis-toggle-text">Enable Google Drive Integration</span>
+          <span class="gfis-toggle-sub">Ativa ou desativa toda a integração com o Google Drive</span>
+        </div>
+
+        <!-- Card: Credenciais OAuth -->
+        <div class="gfis-card">
+          <div class="gfis-card-hdr">
+            <i data-lucide="key" style="width:12px;height:12px"></i>
+            Credenciais OAuth
+          </div>
+          <div class="gfis-card-body">
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gd_client_id">Client ID</label>
+              <input type="text" id="gd_client_id" class="gfis-input"
+                     placeholder="Ex: 123456789-abc.apps.googleusercontent.com"
+                     autocomplete="off">
+              <span class="gfis-field-desc">Identificador único do cliente OAuth registrado no Google Cloud Console. Encontrado em Credenciais → ID do Cliente OAuth 2.0.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gd_client_secret">Client Secret</label>
+              <input type="password" id="gd_client_secret" class="gfis-input"
+                     placeholder="Não configurado"
+                     autocomplete="new-password"
+                     data-sensitive="true">
+              <span class="gfis-field-desc">Chave secreta do cliente OAuth. Nunca compartilhe este valor. Deixe em branco para manter o valor atualmente salvo.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label">
+                Redirect URI
+                <span class="gfis-field-ro-badge">somente leitura</span>
+              </label>
+              <div class="gfis-input-row">
+                <div class="gfis-field-ro" id="gd_redirect_uri">—</div>
+                <button class="btn-copy" onclick="app.copyText('gd_redirect_uri')" title="Copiar Redirect URI">
+                  <i data-lucide="copy" style="width:12px;height:12px"></i>Copiar
+                </button>
+              </div>
+              <span class="gfis-field-desc">URL de callback gerada automaticamente. Registre <strong>exatamente</strong> este valor no Google Cloud Console em Credenciais → URIs de redirecionamento autorizados.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label">
+                OAuth Scope
+                <span class="gfis-field-ro-badge">somente leitura</span>
+              </label>
+              <div class="gfis-field-ro" id="gd_oauth_scope">—</div>
+              <span class="gfis-field-desc">Escopos de permissão solicitados ao Google, definidos pelo sistema conforme as operações necessárias (leitura, escrita e metadados de arquivos).</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Card: Configuração de Pastas -->
+        <div class="gfis-card">
+          <div class="gfis-card-hdr">
+            <i data-lucide="folder" style="width:12px;height:12px"></i>
+            Configuração de Pastas
+          </div>
+          <div class="gfis-card-body">
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gd_root_folder_id">Root Folder ID</label>
+              <input type="text" id="gd_root_folder_id" class="gfis-input"
+                     placeholder="Ex: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms">
+              <span class="gfis-field-desc">ID da pasta raiz no Google Drive onde os arquivos da GREENFARMS serão organizados. Extraia o ID da URL da pasta: drive.google.com/drive/folders/<strong>[ID]</strong>.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gd_read_folder_id">Default Read Folder ID</label>
+              <input type="text" id="gd_read_folder_id" class="gfis-input"
+                     placeholder="ID da pasta para leitura">
+              <span class="gfis-field-desc">Pasta padrão de onde arquivos serão lidos nas operações de busca e importação quando nenhuma outra pasta for especificada.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gd_write_folder_id">Default Write Folder ID</label>
+              <input type="text" id="gd_write_folder_id" class="gfis-input"
+                     placeholder="ID da pasta para escrita">
+              <span class="gfis-field-desc">Pasta padrão onde novos arquivos gerados pelo sistema serão salvos no Google Drive quando nenhum destino específico for informado.</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="gfis-foot">
+          <button class="btn-gfis btn-oauth" id="btn-oauth-gd" onclick="app.initiateGoogleOAuth()">
+            <i data-lucide="external-link" style="width:14px;height:14px"></i>
+            Conectar Google Drive
+          </button>
+          <button class="btn-gfis btn-test" id="btn-test-google_drive" onclick="app.testConnection('google_drive')">
+            <i data-lucide="zap" style="width:14px;height:14px"></i>
+            Testar Conexão
+          </button>
+          <div class="gfis-foot-sep"></div>
+          <button class="btn-gfis btn-save" id="btn-save-google_drive" onclick="app.save('google_drive')">
+            <i data-lucide="save" style="width:14px;height:14px"></i>
+            Salvar Configurações
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+           PAINEL: Gemini
+           ════════════════════════════════════════ -->
+      <div class="gfis-panel" id="panel-gemini">
+
+        <div class="gfis-status-banner st-not-connected" id="status-banner-gemini">
+          <i data-lucide="wifi-off" style="width:16px;height:16px;flex-shrink:0" id="status-icon-gemini"></i>
+          <span id="status-text-gemini">Não conectado</span>
+          <span class="gfis-status-meta" id="status-meta-gemini">Último teste: —</span>
+        </div>
+
+        <div class="gfis-intro">
+          <div class="gfis-intro-icon">
+            <i data-lucide="sparkles" style="width:20px;height:20px"></i>
+          </div>
+          <div>
+            <div class="gfis-intro-title">Google Gemini</div>
+            <div class="gfis-intro-desc">Integração com a API Gemini do Google para geração de texto, análise de documentos e assistência inteligente baseada em IA. Requer uma API Key gerada no Google AI Studio (aistudio.google.com).</div>
+          </div>
+        </div>
+
+        <div class="gfis-toggle-row">
+          <input type="checkbox" id="gemini_enabled" class="gfis-toggle-inp">
+          <label for="gemini_enabled" class="gfis-toggle-lbl"></label>
+          <span class="gfis-toggle-text">Enable Gemini Integration</span>
+          <span class="gfis-toggle-sub">Ativa ou desativa toda a integração com o Gemini</span>
+        </div>
+
+        <!-- Card: Autenticação -->
+        <div class="gfis-card">
+          <div class="gfis-card-hdr">
+            <i data-lucide="key" style="width:12px;height:12px"></i>
+            Autenticação
+          </div>
+          <div class="gfis-card-body">
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gemini_api_key">API Key</label>
+              <input type="password" id="gemini_api_key" class="gfis-input"
+                     placeholder="Não configurado"
+                     autocomplete="new-password"
+                     data-sensitive="true">
+              <span class="gfis-field-desc">Chave de API gerada no Google AI Studio. Mantenha em segurança — concede acesso total à sua cota de uso. Deixe em branco para manter o valor atualmente salvo.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Parâmetros do Modelo -->
+        <div class="gfis-card">
+          <div class="gfis-card-hdr">
+            <i data-lucide="settings-2" style="width:12px;height:12px"></i>
+            Parâmetros do Modelo
+          </div>
+          <div class="gfis-card-body">
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gemini_default_model">Default Model</label>
+              <select id="gemini_default_model" class="gfis-input" style="max-width:320px">
+                <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+                <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+                <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+              </select>
+              <span class="gfis-field-desc">Modelo padrão utilizado nas chamadas à API. O gemini-2.0-flash oferece melhor custo-benefício para uso geral; gemini-1.5-pro para tarefas mais complexas.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gemini_temperature">Temperature</label>
+              <input type="number" id="gemini_temperature" class="gfis-input"
+                     min="0" max="2" step="0.1" value="0.7" style="max-width:140px">
+              <span class="gfis-field-desc">Controla a criatividade das respostas. 0.0 = determinístico e preciso; 2.0 = mais variado e criativo. Recomendado: 0.7 para uso geral.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gemini_max_tokens">Max Output Tokens</label>
+              <input type="number" id="gemini_max_tokens" class="gfis-input"
+                     min="1" max="8192" value="2048" style="max-width:140px">
+              <span class="gfis-field-desc">Número máximo de tokens gerados na resposta. Aproximadamente 4 caracteres por token. Valores maiores aumentam o custo por chamada.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="gemini_system_instruction">System Instruction</label>
+              <textarea id="gemini_system_instruction" class="gfis-input" rows="4"
+                        placeholder="Ex: Você é um assistente especializado em processos da GREENFARMS..."></textarea>
+              <span class="gfis-field-desc">Instrução de sistema enviada em todas as chamadas para definir o comportamento, papel e contexto do modelo. Use para personalizar respostas ao domínio da GREENFARMS.</span>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="gfis-foot">
+          <button class="btn-gfis btn-test" id="btn-test-gemini" onclick="app.testConnection('gemini')">
+            <i data-lucide="zap" style="width:14px;height:14px"></i>
+            Testar Conexão
+          </button>
+          <div class="gfis-foot-sep"></div>
+          <button class="btn-gfis btn-save" id="btn-save-gemini" onclick="app.save('gemini')">
+            <i data-lucide="save" style="width:14px;height:14px"></i>
+            Salvar Configurações
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════
+           PAINEL: OpenAI ChatGPT
+           ════════════════════════════════════════ -->
+      <div class="gfis-panel" id="panel-openai">
+
+        <div class="gfis-status-banner st-not-connected" id="status-banner-openai">
+          <i data-lucide="wifi-off" style="width:16px;height:16px;flex-shrink:0" id="status-icon-openai"></i>
+          <span id="status-text-openai">Não conectado</span>
+          <span class="gfis-status-meta" id="status-meta-openai">Último teste: —</span>
+        </div>
+
+        <div class="gfis-intro">
+          <div class="gfis-intro-icon">
+            <i data-lucide="message-circle" style="width:20px;height:20px"></i>
+          </div>
+          <div>
+            <div class="gfis-intro-title">OpenAI ChatGPT</div>
+            <div class="gfis-intro-desc">Integração com a API da OpenAI para geração de texto, análise e automação com os modelos GPT. Requer uma API Key gerada no painel da OpenAI (platform.openai.com).</div>
+          </div>
+        </div>
+
+        <div class="gfis-toggle-row">
+          <input type="checkbox" id="oai_enabled" class="gfis-toggle-inp">
+          <label for="oai_enabled" class="gfis-toggle-lbl"></label>
+          <span class="gfis-toggle-text">Enable OpenAI Integration</span>
+          <span class="gfis-toggle-sub">Ativa ou desativa toda a integração com a OpenAI</span>
+        </div>
+
+        <!-- Card: Autenticação -->
+        <div class="gfis-card">
+          <div class="gfis-card-hdr">
+            <i data-lucide="key" style="width:12px;height:12px"></i>
+            Autenticação
+          </div>
+          <div class="gfis-card-body">
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="oai_api_key">API Key</label>
+              <input type="password" id="oai_api_key" class="gfis-input"
+                     placeholder="Não configurado"
+                     autocomplete="new-password"
+                     data-sensitive="true">
+              <span class="gfis-field-desc">Chave de API gerada no painel da OpenAI. Começa com "sk-proj-" ou "sk-". Deixe em branco para manter o valor atualmente salvo.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="oai_org_id">
+                Organization ID
+                <span class="gfis-field-opt">(opcional)</span>
+              </label>
+              <input type="text" id="oai_org_id" class="gfis-input"
+                     placeholder="Ex: org-xxxxxxxxxxxxxxxx">
+              <span class="gfis-field-desc">ID da organização OpenAI. Necessário apenas se sua conta pertencer a múltiplas organizações e você precisar especificar qual usar.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="oai_project_id">
+                Project ID
+                <span class="gfis-field-opt">(opcional)</span>
+              </label>
+              <input type="text" id="oai_project_id" class="gfis-input"
+                     placeholder="Ex: proj_xxxxxxxxxxxxxxxx">
+              <span class="gfis-field-desc">ID do projeto OpenAI para isolamento de uso e controle de billing por projeto dentro da organização.</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Card: Parâmetros do Modelo -->
+        <div class="gfis-card">
+          <div class="gfis-card-hdr">
+            <i data-lucide="settings-2" style="width:12px;height:12px"></i>
+            Parâmetros do Modelo
+          </div>
+          <div class="gfis-card-body">
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="oai_default_model">Default Model</label>
+              <select id="oai_default_model" class="gfis-input" style="max-width:320px">
+                <option value="gpt-4o">gpt-4o</option>
+                <option value="gpt-4o-mini">gpt-4o-mini</option>
+                <option value="gpt-4-turbo">gpt-4-turbo</option>
+                <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+              </select>
+              <span class="gfis-field-desc">Modelo GPT padrão. O gpt-4o-mini oferece melhor custo-benefício; gpt-4o para tarefas que exigem maior raciocínio e qualidade.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="oai_temperature">Temperature</label>
+              <input type="number" id="oai_temperature" class="gfis-input"
+                     min="0" max="2" step="0.1" value="0.7" style="max-width:140px">
+              <span class="gfis-field-desc">Controla a aleatoriedade das respostas. 0.0 = mais preciso e determinístico; 2.0 = mais variado e criativo. Recomendado: 0.7.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="oai_max_tokens">Max Tokens</label>
+              <input type="number" id="oai_max_tokens" class="gfis-input"
+                     min="1" max="128000" value="2048" style="max-width:140px">
+              <span class="gfis-field-desc">Limite máximo de tokens na resposta (inclui tokens do prompt + resposta). Verificar limite do modelo escolhido.</span>
+            </div>
+
+            <div class="gfis-field">
+              <label class="gfis-field-label" for="oai_system_prompt">System Prompt</label>
+              <textarea id="oai_system_prompt" class="gfis-input" rows="4"
+                        placeholder="Ex: Você é um assistente especializado em processos da GREENFARMS..."></textarea>
+              <span class="gfis-field-desc">Mensagem de sistema enviada no início de todas as conversas para definir o comportamento, papel e contexto do assistente.</span>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="gfis-foot">
+          <button class="btn-gfis btn-test" id="btn-test-openai" onclick="app.testConnection('openai')">
+            <i data-lucide="zap" style="width:14px;height:14px"></i>
+            Testar Conexão
+          </button>
+          <div class="gfis-foot-sep"></div>
+          <button class="btn-gfis btn-save" id="btn-save-openai" onclick="app.save('openai')">
+            <i data-lucide="save" style="width:14px;height:14px"></i>
+            Salvar Configurações
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /gfis-content -->
+  </div>
+</div>
+
+<div id="gfis-toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   GF Integration Settings App
+   ═══════════════════════════════════════════════════════════ */
+
+// ── Backend method paths ─────────────────────────────────────────────────────
+const M_BASE  = 'ichis_atlas_app.ichis_atlas_app.doctype.gf_integration_settings.gf_integration_settings';
+const M_GET   = M_BASE + '.get_settings';
+const M_SAVE  = M_BASE + '.save_settings';
+const M_TEST  = M_BASE + '.test_connection';
+const M_OAUTH = M_BASE + '.initiate_google_oauth';
+
+// ── Field configuration per service ─────────────────────────────────────────
+const SERVICE_CFG = {
+  google_drive: {
+    toggle:    'gd_enabled',
+    plain:     ['gd_client_id', 'gd_root_folder_id', 'gd_read_folder_id', 'gd_write_folder_id'],
+    sensitive: ['gd_client_secret'],
+    roDisplay: ['gd_redirect_uri', 'gd_oauth_scope'],
+    status:    'gd_status',
+    lastTest:  'gd_last_tested',
+  },
+  gemini: {
+    toggle:    'gemini_enabled',
+    plain:     ['gemini_default_model', 'gemini_temperature', 'gemini_max_tokens', 'gemini_system_instruction'],
+    sensitive: ['gemini_api_key'],
+    roDisplay: [],
+    status:    'gemini_status',
+    lastTest:  'gemini_last_tested',
+  },
+  openai: {
+    toggle:    'oai_enabled',
+    plain:     ['oai_org_id', 'oai_project_id', 'oai_default_model', 'oai_temperature', 'oai_max_tokens', 'oai_system_prompt'],
+    sensitive: ['oai_api_key'],
+    roDisplay: [],
+    status:    'oai_status',
+    lastTest:  'oai_last_tested',
+  }
+};
+
+const STATUS_MAP = {
+  'connected':     { cls: 'st-connected',     icon: 'check-circle', label: 'Conectado' },
+  'not-connected': { cls: 'st-not-connected',  icon: 'wifi-off',     label: 'Não conectado' },
+  'Not Connected': { cls: 'st-not-connected',  icon: 'wifi-off',     label: 'Não conectado' },
+  'error':         { cls: 'st-error',          icon: 'alert-circle', label: 'Erro na conexão' },
+};
+
+const SENSITIVE_PLACEHOLDER = '••••••••  (configurado — deixe em branco para manter)';
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+class GFIntegrationSettingsApp {
+  constructor() {
+    this.activeTab = 'google_drive';
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  async init() {
+    this._setupUser();
+    await this._loadSettings();
+    if (window.lucide) lucide.createIcons({ attrs: { style: 'display:block' } });
+  }
+
+  // ── User header ────────────────────────────────────────────────────────────
+  _setupUser() {
+    try {
+      const full = frappe.session.user_fullname || frappe.session.user || 'Usuário';
+      const init = full.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'GF';
+      const $av = document.getElementById('gfis-avatar');
+      const $un = document.getElementById('gfis-username');
+      if ($av) $av.textContent = init;
+      if ($un) $un.textContent = full.split(' ')[0];
+    } catch(e) {}
+  }
+
+  // ── Load settings ──────────────────────────────────────────────────────────
+  // ── BACKEND INTEGRATION POINT ─────────────────────────────────────────────
+  // Método:  M_GET
+  // Params:  nenhum
+  // Retorno: objeto com todos os campos do DocType.
+  //          Campos Password → true (configurado) | false (vazio).
+  // ──────────────────────────────────────────────────────────────────────────
+  _loadSettings() {
+    return new Promise(resolve => {
+      const done = (data) => {
+        try { this._fillAllForms(data || {}); } catch(e) { console.error(e); }
+        resolve();
+      };
+      try {
+        frappe.call({
+          method:   M_GET,
+          callback: r  => done(r && r.message ? r.message : {}),
+          error:    () => { this._toast('Erro ao carregar configurações', 'error'); done({}); }
+        });
+      } catch(e) { done({}); }
+    });
+  }
+
+  // ── Fill all forms from loaded data ───────────────────────────────────────
+  _fillAllForms(data) {
+    for (const [svc, cfg] of Object.entries(SERVICE_CFG)) {
+
+      // Toggle
+      const tog = document.getElementById(cfg.toggle);
+      if (tog) tog.checked = !!data[cfg.toggle];
+
+      // Plain fields (text, select, number, textarea)
+      for (const f of cfg.plain) {
+        const el = document.getElementById(f);
+        if (el && data[f] !== undefined && data[f] !== null) el.value = data[f];
+      }
+
+      // Read-only display fields
+      for (const f of cfg.roDisplay) {
+        const el = document.getElementById(f);
+        if (el && data[f]) el.textContent = data[f];
+      }
+
+      // Sensitive (Password) fields — never show real values
+      for (const f of cfg.sensitive) {
+        const el = document.getElementById(f);
+        if (!el) continue;
+        if (data[f] === true) {
+          // backend says field has a value — show masked placeholder
+          el.placeholder = SENSITIVE_PLACEHOLDER;
+          el.dataset.configured = 'true';
+        } else {
+          el.placeholder = 'Não configurado';
+          el.dataset.configured = 'false';
+        }
+        el.value = '';
+        // restore placeholder on blur if user cleared the field
+        el.addEventListener('blur', () => {
+          if (el.dataset.configured === 'true' && !el.value.trim()) {
+            el.placeholder = SENSITIVE_PLACEHOLDER;
+          }
+        });
+      }
+
+      // Status indicator
+      const rawStatus = data[cfg.status] || 'not-connected';
+      const rawLast   = data[cfg.lastTest] || null;
+      this._updateStatus(svc, rawStatus, rawLast);
+    }
+  }
+
+  // ── Switch tab ─────────────────────────────────────────────────────────────
+  switchTab(svc) {
+    this.activeTab = svc;
+    document.querySelectorAll('.gfis-tab-btn').forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.tab === svc));
+    document.querySelectorAll('.gfis-panel').forEach(p =>
+      p.classList.toggle('active', p.id === `panel-${svc}`));
+    if (window.lucide) lucide.createIcons({ attrs: { style: 'display:block' } });
+  }
+
+  // ── Save ───────────────────────────────────────────────────────────────────
+  // ── BACKEND INTEGRATION POINT ─────────────────────────────────────────────
+  // Método:  M_SAVE
+  // Params:  { data: JSON string com os valores do formulário }
+  // Regra:   campos Password com value=null → backend NÃO sobrescreve.
+  // Retorno: { success: true } | { error: string }
+  // ──────────────────────────────────────────────────────────────────────────
+  save(svc) {
+    const cfg     = SERVICE_CFG[svc];
+    const payload = {};
+
+    // Toggle
+    const tog = document.getElementById(cfg.toggle);
+    if (tog) payload[cfg.toggle] = tog.checked ? 1 : 0;
+
+    // Plain fields
+    for (const f of cfg.plain) {
+      const el = document.getElementById(f);
+      if (el) payload[f] = el.value;
+    }
+
+    // Sensitive fields — send null if user did not type a new value
+    for (const f of cfg.sensitive) {
+      const el = document.getElementById(f);
+      if (!el) continue;
+      const newVal = el.value.trim();
+      payload[f] = newVal ? newVal : null; // null = keep existing value in backend
+    }
+
+    const btn = document.getElementById(`btn-save-${svc}`);
+    this._setLoading(btn, true, 'Salvando...');
+
+    frappe.call({
+      method: M_SAVE,
+      args:   { data: JSON.stringify(payload) },
+      callback: (r) => {
+        this._setLoading(btn, false);
+        if (r && r.message && r.message.success) {
+          this._toast('Configurações salvas com sucesso', 'success');
+          this._loadSettings(); // refresh to update sensitive field states
+        } else {
+          this._toast('Erro ao salvar. Verifique o console.', 'error');
+        }
+      },
+      error: () => {
+        this._setLoading(btn, false);
+        this._toast('Erro de comunicação com o servidor.', 'error');
+      }
+    });
+  }
+
+  // ── Test connection ────────────────────────────────────────────────────────
+  // ── BACKEND INTEGRATION POINT ─────────────────────────────────────────────
+  // Método:  M_TEST
+  // Params:  { service: 'google_drive' | 'gemini' | 'openai' }
+  // Retorno: { status: 'connected'|'error', message: string }
+  //          Backend deve salvar <service>_status e <service>_last_tested.
+  // ──────────────────────────────────────────────────────────────────────────
+  testConnection(svc) {
+    const btn = document.getElementById(`btn-test-${svc}`);
+    this._setLoading(btn, true, 'Testando...');
+
+    frappe.call({
+      method: M_TEST,
+      args:   { service: svc },
+      callback: (r) => {
+        this._setLoading(btn, false);
+        const res    = (r && r.message) ? r.message : {};
+        const status = res.status  || 'error';
+        const msg    = res.message || (status === 'connected' ? 'Conexão bem-sucedida' : 'Falha na conexão');
+        this._updateStatus(svc, status, new Date().toISOString());
+        this._toast(msg, status === 'connected' ? 'success' : 'error');
+      },
+      error: () => {
+        this._setLoading(btn, false);
+        this._updateStatus(svc, 'error', new Date().toISOString());
+        this._toast('Erro de comunicação com o servidor.', 'error');
+      }
+    });
+  }
+
+  // ── Initiate Google OAuth ──────────────────────────────────────────────────
+  // ── BACKEND INTEGRATION POINT ─────────────────────────────────────────────
+  // Método:  M_OAUTH
+  // Params:  nenhum
+  // Retorno: { auth_url: string } — URL de autorização do Google
+  // Callback do Google → gd_redirect_uri (registrado no Cloud Console)
+  //   /api/method/...gf_integration_settings.google_oauth_callback
+  //   Params: code (str), state (str)
+  // ──────────────────────────────────────────────────────────────────────────
+  initiateGoogleOAuth() {
+    const btn = document.getElementById('btn-oauth-gd');
+    this._setLoading(btn, true, 'Aguardando...');
+
+    frappe.call({
+      method: M_OAUTH,
+      callback: (r) => {
+        this._setLoading(btn, false);
+        if (r && r.message && r.message.auth_url) {
+          window.location.href = r.message.auth_url;
+        } else {
+          this._toast('OAuth ainda não implementado no backend.', 'info');
+        }
+      },
+      error: () => {
+        this._setLoading(btn, false);
+        this._toast('Erro ao iniciar OAuth. Backend ainda não implementado.', 'error');
+      }
+    });
+  }
+
+  // ── Update status banner + tab dot ────────────────────────────────────────
+  _updateStatus(svc, status, lastTested) {
+    const s      = STATUS_MAP[status] || STATUS_MAP['not-connected'];
+    const banner = document.getElementById(`status-banner-${svc}`);
+    const text   = document.getElementById(`status-text-${svc}`);
+    const meta   = document.getElementById(`status-meta-${svc}`);
+    const dot    = document.getElementById(`tab-dot-${svc}`);
+    const tabBtn = document.querySelector(`.gfis-tab-btn[data-tab="${svc}"]`);
+
+    if (banner) banner.className = `gfis-status-banner ${s.cls}`;
+    if (text)   text.textContent = s.label;
+    if (meta) {
+      if (lastTested) {
+        const d = typeof lastTested === 'string' ? lastTested.substring(0, 16).replace('T', ' ') : lastTested;
+        meta.textContent = 'Último teste: ' + d;
+      } else {
+        meta.textContent = 'Último teste: —';
+      }
+    }
+
+    // Update tab dot color
+    if (dot) {
+      dot.style.background = s.cls === 'st-connected' ? 'var(--accent)'
+                           : s.cls === 'st-error'     ? '#dc2626'
+                           : '#e2e8f0';
+    }
+
+    // Update tab button status class (for dot color inheritance)
+    if (tabBtn) {
+      tabBtn.classList.remove('st-connected', 'st-error', 'st-not-connected');
+      tabBtn.classList.add(s.cls);
+    }
+
+    // Replace icon element in banner (Lucide SVGs need to be re-created)
+    const iconEl = document.getElementById(`status-icon-${svc}`);
+    if (iconEl && iconEl.parentNode) {
+      const newIcon = document.createElement('i');
+      newIcon.setAttribute('data-lucide', s.icon);
+      newIcon.setAttribute('id', `status-icon-${svc}`);
+      newIcon.style.cssText = 'width:16px;height:16px;flex-shrink:0';
+      iconEl.parentNode.replaceChild(newIcon, iconEl);
+      if (window.lucide) lucide.createIcons({ attrs: { style: 'display:block' } });
+    }
+  }
+
+  // ── Copy read-only field text ──────────────────────────────────────────────
+  copyText(fieldId) {
+    const el  = document.getElementById(fieldId);
+    const txt = el ? (el.textContent || el.value || '').trim() : '';
+    if (!txt || txt === '—') { this._toast('Nenhum valor para copiar', 'info'); return; }
+    navigator.clipboard.writeText(txt)
+      .then(()  => this._toast('Copiado!', 'success'))
+      .catch(()  => this._toast('Falha ao copiar', 'error'));
+  }
+
+  // ── Button loading state ───────────────────────────────────────────────────
+  _setLoading(btn, loading, label = '') {
+    if (!btn) return;
+    if (loading) {
+      btn._origHTML = btn.innerHTML;
+      btn.disabled  = true;
+      const dark    = btn.classList.contains('btn-test');
+      btn.innerHTML = `<span class="spinner-sm${dark ? ' dark' : ''}"></span>${label}`;
+    } else {
+      btn.disabled  = false;
+      btn.innerHTML = btn._origHTML || btn.innerHTML;
+      if (window.lucide) lucide.createIcons({ attrs: { style: 'display:block' } });
+    }
+  }
+
+  // ── Toast notification ─────────────────────────────────────────────────────
+  _toast(msg, type = 'info') {
+    const icons = { success: 'check-circle', error: 'alert-circle', info: 'info' };
+    const $c    = document.getElementById('gfis-toast');
+    if (!$c) return;
+    const el    = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.innerHTML = `<i data-lucide="${icons[type]||'info'}" style="width:16px;height:16px;flex-shrink:0"></i>
+      <span style="flex:1;line-height:1.4">${msg}</span>
+      <button class="toast-close" onclick="this.parentElement.remove()">
+        <i data-lucide="x" style="width:14px;height:14px"></i>
+      </button>`;
+    $c.appendChild(el);
+    if (window.lucide) lucide.createIcons({ attrs: { style: 'display:block' } });
+    setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 200); }, 4500);
+  }
+}
+
+// ── Bootstrap ──────────────────────────────────────────────────────────────
+const app = new GFIntegrationSettingsApp();
+document.addEventListener('DOMContentLoaded', () => app.init());
+</script>
+{% endblock %}
