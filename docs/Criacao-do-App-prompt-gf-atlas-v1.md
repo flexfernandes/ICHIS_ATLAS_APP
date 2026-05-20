@@ -1,7 +1,7 @@
 # PROMPT — GF ATLAS APP (v1)
 ## GREENFARMS Corporate Foundation
 
----
+----
 
 ## CONTEXTO DO SISTEMA
 
@@ -10,7 +10,7 @@ desenvolvido como **Custom App Frappe** (Python + JSON, padrão `apps/`).
 
 O app se chama **GF Atlas** e é a base estrutural do ecossistema digital da
 GREENFARMS. Toda a gestão de conteúdo, acesso e organização corporativa parte
-deste app.
+deste app. 
 
 **Regra de nomenclatura global:** Todos os Doctypes obrigatoriamente iniciam com `GF`.
 `GREENFARMS` deve ser sempre escrito junto, sem espaço.
