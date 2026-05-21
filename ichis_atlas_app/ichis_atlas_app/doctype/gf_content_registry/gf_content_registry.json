@@ -8,6 +8,9 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "tb_natural_studio",
+  "ns_workspace",
+  "tb_geral",
   "sb_identif",
   "title",
   "cb_title_int",
@@ -20,29 +23,52 @@
   "content_group",
   "access_group",
   "responsible_user",
+  "tb_vinculos",
   "sb_skill_row",
   "skill",
   "cb_skill_web",
   "web_page",
+  "tb_referencia",
   "sb_reference",
   "route_url",
   "reference_doctype",
   "reference_name",
+  "tb_apresentacao",
   "sb_details",
   "description",
   "tags",
   "cb_details2",
   "icon",
   "color",
+  "tb_configuracoes",
   "sb_config",
   "sort_order",
   "show_on_home",
   "favorite",
   "active",
   "last_reviewed_on",
+  "tb_versionamento",
+  "sb_versioning",
   "previous_version"
  ],
  "fields": [
+  {
+   "fieldname": "tb_natural_studio",
+   "fieldtype": "Tab Break",
+   "label": "Natural Studio",
+   "depends_on": "eval:!doc.__islocal"
+  },
+  {
+   "fieldname": "ns_workspace",
+   "fieldtype": "HTML",
+   "label": "Natural Studio Workspace",
+   "options": "<div id=\"gf-ns-root\"></div>"
+  },
+  {
+   "fieldname": "tb_geral",
+   "fieldtype": "Tab Break",
+   "label": "Geral"
+  },
   {
    "fieldname": "sb_identif",
    "fieldtype": "Section Break",
@@ -125,6 +151,11 @@
    "options": "User"
   },
   {
+   "fieldname": "tb_vinculos",
+   "fieldtype": "Tab Break",
+   "label": "Vínculos"
+  },
+  {
    "fieldname": "sb_skill_row",
    "fieldtype": "Section Break",
    "label": "Skill"
@@ -148,15 +179,21 @@
    "description": "Página Web do ERPNext vinculada a este conteúdo. Pesquise pelo título da página."
   },
   {
+   "fieldname": "tb_referencia",
+   "fieldtype": "Tab Break",
+   "label": "Referência"
+  },
+  {
    "fieldname": "sb_reference",
    "fieldtype": "Section Break",
-   "label": "Referência"
+   "label": "Localização"
   },
   {
    "fieldname": "route_url",
    "fieldtype": "Data",
    "label": "URL / Rota",
-   "description": "Ex: /app/query-report/timesheet ou https://greenfarms.com.br"
+   "read_only": 1,
+   "description": "Preenchido automaticamente com o caminho hierárquico da pasta no Google Drive ao salvar."
   },
   {
    "fieldname": "reference_doctype",
@@ -169,6 +206,11 @@
    "in_list_view": 1,
    "label": "Nome de Referência",
    "description": "Nome do documento, relatório ou recurso referenciado por este item."
+  },
+  {
+   "fieldname": "tb_apresentacao",
+   "fieldtype": "Tab Break",
+   "label": "Apresentação"
   },
   {
    "fieldname": "sb_details",
@@ -200,6 +242,11 @@
    "fieldname": "color",
    "fieldtype": "Color",
    "label": "Cor"
+  },
+  {
+   "fieldname": "tb_configuracoes",
+   "fieldtype": "Tab Break",
+   "label": "Configurações"
   },
   {
    "fieldname": "sb_config",
@@ -237,6 +284,16 @@
    "label": "Última Revisão"
   },
   {
+   "fieldname": "tb_versionamento",
+   "fieldtype": "Tab Break",
+   "label": "Versionamento"
+  },
+  {
+   "fieldname": "sb_versioning",
+   "fieldtype": "Section Break",
+   "label": "Versionamento"
+  },
+  {
    "fieldname": "previous_version",
    "fieldtype": "Link",
    "label": "Versão Anterior",
@@ -244,7 +301,7 @@
   }
  ],
  "links": [],
- "modified": "2026-05-19 00:00:00.000000",
+ "modified": "2026-05-21 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Ichis Atlas App",
  "name": "GF Content Registry",

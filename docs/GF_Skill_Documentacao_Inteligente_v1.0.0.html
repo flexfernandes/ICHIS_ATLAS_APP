@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GF Skill — Documentação Inteligente v1.0.0 — Referência de Cadastro</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter","Segoe UI",Arial,sans-serif;background:#f7f8fa;color:#1f2933;font-size:14px}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+/* Header */
+.hdr{background:linear-gradient(135deg,#1f2933,#2f5d50);color:#fff;border-radius:14px;padding:26px 30px;margin-bottom:22px;box-shadow:0 8px 24px rgba(16,24,40,.1)}
+.hdr-brand{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.hdr-logo{width:50px;height:50px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
+.hdr-title{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.hdr-sub{font-size:12px;color:rgba(255,255,255,.72);margin-top:3px}
+.hdr-meta{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:11px;color:rgba(255,255,255,.62)}
+.hdr-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:3px 10px;font-size:11px}
+.dot{width:7px;height:7px;border-radius:50%;background:#94a3b8;flex-shrink:0}
+/* Tab nav */
+.tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:18px}
+.tab{padding:7px 14px;border-radius:8px;border:1px solid #e5e7eb;background:#fff;color:#5f6b7a;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .13s}
+.tab:hover{border-color:#2f5d50;color:#2f5d50}
+.tab.on{background:#2f5d50;color:#fff;border-color:#2f5d50}
+/* Pane */
+.pane{display:none}.pane.on{display:block}
+/* Info card */
+.info-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.info-card-ttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8a94a6;margin-bottom:10px}
+.info-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px}
+.info-row:last-child{margin-bottom:0}
+.info-key{color:#8a94a6;font-family:Consolas,monospace;font-size:11px;min-width:130px}
+.info-val{color:#1f2933;font-weight:500}
+.chip{background:#e7f1ed;color:#2f5d50;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+/* Field block */
+.fblock{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.fhdr{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.flabel{font-size:14px;font-weight:600;color:#1f2933}
+.fname{font-family:Consolas,monospace;font-size:11px;color:#8a94a6;margin-top:2px}
+.fnote{font-size:12px;color:#5f6b7a;background:#fffbeb;border-left:3px solid #c89f3c;padding:7px 10px;border-radius:0 6px 6px 0;margin-bottom:10px}
+textarea.fc{width:100%;border:1px solid #e5e7eb;border-radius:8px;padding:11px 12px;font-family:Consolas,"Courier New",monospace;font-size:12px;color:#1f2933;background:#fafafa;resize:vertical;line-height:1.5}
+textarea.fc:focus{outline:none;border-color:#2f5d50;background:#fff}
+/* Copy btn */
+.btn-cp{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;background:#2f5d50;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .13s}
+.btn-cp:hover{background:#1f2933}
+.btn-cp.ok{background:#2e7d55}
+.alert-i{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:8px;padding:9px 13px;font-size:12px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-logo">GF</div>
+    <div>
+      <div class="hdr-title">Documentação Inteligente — v1.0.0</div>
+      <div class="hdr-sub">Referência de Cadastro — GF Skill / Documentação Inteligente</div>
+    </div>
+  </div>
+  <div class="hdr-meta">
+    <span class="hdr-badge"><span class="dot"></span>Draft</span>
+    <span>Categoria: HTML</span><span>Output: HTML</span>
+    <span>Responsável: flexfernandes@gmail.com</span>
+    <span>Gerado em: 20/05/2026</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab on" onclick="st('geral',this)"><i data-lucide="info" style="width:13px;height:13px"></i>Informações Gerais</button>
+  <button class="tab" onclick="st('inst',this)"><i data-lucide="list-ordered" style="width:13px;height:13px"></i>Instruções</button>
+  <button class="tab" onclick="st('estilo',this)"><i data-lucide="palette" style="width:13px;height:13px"></i>Estilo</button>
+  <button class="tab" onclick="st('css',this)"><i data-lucide="code" style="width:13px;height:13px"></i>Script CSS</button>
+  <button class="tab" onclick="st('cabec',this)"><i data-lucide="layout-template" style="width:13px;height:13px"></i>Cabeçalho</button>
+  <button class="tab" onclick="st('rodape',this)"><i data-lucide="file-text" style="width:13px;height:13px"></i>Rodapé</button>
+  <button class="tab" onclick="st('exemplo',this)"><i data-lucide="eye" style="width:13px;height:13px"></i>Exemplo Completo</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB: INFORMAÇÕES GERAIS
+══════════════════════════════════════════════════════════ -->
+<div class="pane on" id="tab-geral">
+
+  <div class="info-card">
+    <div class="info-card-ttl">Campos de formulário — preencher diretamente no ERPNext</div>
+    <div class="info-row"><span class="info-key">skill_name</span><span class="info-val">Documentação Inteligente</span></div>
+    <div class="info-row"><span class="info-key">internal_name</span><span class="info-val">documentacao-inteligente</span></div>
+    <div class="info-row"><span class="info-key">category</span><span class="chip">HTML</span></div>
+    <div class="info-row"><span class="info-key">status</span><span class="chip">Draft</span></div>
+    <div class="info-row"><span class="info-key">version</span><span class="info-val">1.0.0</span></div>
+    <div class="info-row"><span class="info-key">output_type</span><span class="chip">HTML</span></div>
+    <div class="info-row"><span class="info-key">skill_owner</span><span class="info-val">flexfernandes@gmail.com</span></div>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Descrição Curta</div><div class="fname">short_description</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-sd')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-sd" rows="3">Este Skill estrutura e transforma informações soltas em documentações profissionais, inteligentes e padronizadas, criando conteúdos claros, corporativos e bem formatados a partir de textos, ideias, referências ou dados fornecidos.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Propósito</div><div class="fname">purpose</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-pur')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-pur" rows="7">Skill voltado para transformar qualquer tipo de informação fornecida pelo usuário — sequências de instalação, anotações de campo, estudos, configurações, rotinas operacionais, relatos de manutenção, experiências de projeto ou conhecimentos adquiridos — em uma documentação organizada, clara e profissional no formato HTML, pronta para registro interno, base de conhecimento ou consulta futura.
+
+O Skill identifica automaticamente o tipo de documentação mais adequado ao conteúdo recebido e adapta a estrutura, os componentes visuais e a hierarquia de informações de acordo com o contexto, sempre respeitando o padrão visual GF Atlas.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Quando Usar</div><div class="fname">when_to_use</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-wu')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-wu" rows="13">1. Documentação de Instalação Técnica — sequência realizada em campo com etapas, materiais, observações e recomendações futuras.
+2. Organização de Estudos e Pesquisas — artigos, PDFs, links e vídeos consolidados em documento estruturado para consulta futura.
+3. Registro de Procedimentos Operacionais — anotações de processos e rotinas transformadas em procedimento padronizado.
+4. Consolidação de Informações Técnicas — conteúdos de múltiplas fontes reunidos em documentação única e organizada.
+5. Criação de Base de Conhecimento Corporativa — experiências de projetos, reuniões e testes transformadas em conteúdo reutilizável.
+6. Documentação de Configurações e Parametrizações — configurações realizadas em sistemas, ERPs, CLPs ou equipamentos registradas formalmente.
+7. Registro de Desenvolvimento de Projetos — evolução, decisões, testes e alterações durante o desenvolvimento técnico ou industrial.
+8. Geração de Tutoriais Internos — passo a passo estruturado com observações, dicas e resultado esperado.
+9. Documentação de Manutenção e Correções — diagnósticos e soluções técnicas registradas para histórico e rastreabilidade.
+10. Estruturação de Conhecimento Pessoal e Profissional — aprendizados e experiências do dia a dia transformados em documentações organizadas.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Quando Não Usar</div><div class="fname">when_not_to_use</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-wnu')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-wnu" rows="13">1. Procedimentos operacionais críticos que exigem validação técnica formal e aprovação corporativa específica.
+2. Documentação regulatória para órgãos certificadores, auditorias oficiais ou compliance legal.
+3. Contratos jurídicos, termos legais ou documentos com responsabilidade jurídica formal.
+4. Especificações técnicas de engenharia que dependam de cálculos estruturais, validações normativas ou responsabilidade técnica profissional.
+5. Arquiteturas completas de software, banco de dados ou infraestrutura crítica sem análise técnica especializada.
+6. Procedimentos de segurança operacional, segurança do trabalho ou emergência sem revisão técnica adequada.
+7. Documentação médica, farmacêutica ou laboratorial que exija validação científica oficial.
+8. Documentação financeira, fiscal ou tributária que dependa de validação contábil ou jurídica.
+9. Procedimentos industriais altamente específicos que dependam de engenharia detalhada, validação operacional ou testes reais.
+10. Políticas corporativas oficiais sem aprovação da governança interna da empresa.</textarea>
+  </div>
+
+</div><!-- /tab-geral -->
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB: INSTRUÇÕES
+══════════════════════════════════════════════════════════ -->
+<div class="pane" id="tab-inst">
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Instruções Principais</div><div class="fname">main_instructions</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-mi')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-mi" rows="32">1. Ao receber a entrada do usuário, identificar automaticamente o tipo de documentação com base no conteúdo e adaptar imediatamente a estrutura correspondente:
+   - Instalação técnica: objetivo, ambiente (tabela), pré-requisitos, etapas numeradas (gf-steps), materiais utilizados, observações de campo, ajustes realizados, recomendações futuras.
+   - Estudos e pesquisas: tema, contexto, conceitos-chave, fontes consultadas, insights e conclusões, pontos de atenção.
+   - Procedimentos operacionais: objetivo, escopo, responsável, pré-requisitos, etapas detalhadas (gf-steps), alertas (gf-alert), observações finais.
+   - Configurações e parametrizações: sistema configurado, parâmetros alterados com valores antes e depois (gf-table), validação realizada, impactos identificados.
+   - Tutoriais internos: pré-requisitos, passo a passo numerado com exemplos (gf-steps), avisos e dicas práticas (gf-alert), resultado esperado.
+   - Evolução de projetos: contexto, decisões tomadas, alterações realizadas, problemas enfrentados, próximos passos.
+   - Manutenção e correções: problema identificado, diagnóstico realizado, solução aplicada, validação e prevenção futura.
+   - Base de conhecimento: tema central, conceitos, exemplos práticos, referências.
+
+2. Se a entrada for ambígua, incompleta ou insuficiente para gerar a documentação com qualidade, fazer no máximo 2 perguntas objetivas ao usuário antes de iniciar a geração. Não iniciar a geração com lacunas que comprometam o resultado.
+
+3. Iniciar sempre com o cabeçalho definido no Header Template, preenchendo todas as {{TAGS}} com as informações fornecidas pelo usuário ou inferidas do contexto. Aplicar a classe modificadora correta no gf-header-status-dot conforme o status do documento (ver Formatting Rules).
+
+4. Organizar o conteúdo em seções claras com hierarquia visual bem definida, utilizando exclusivamente as classes CSS do GF Base. Títulos, subtítulos, separadores e agrupamentos devem facilitar a leitura e a navegação no documento.
+
+5. Utilizar elementos visuais (gf-kpi-card, gf-badge, gf-alert, gf-table, gf-steps, gf-analysis) apenas quando o conteúdo justificar e existirem dados reais para preenchê-los. Nunca criar componentes visuais vazios ou com dados fictícios.
+
+6. Quando o conteúdo permitir, incluir uma seção de observações, alertas ou recomendações com informações que agreguem valor prático — pontos de atenção, próximos passos sugeridos ou avisos relevantes.
+
+7. Finalizar com o rodapé definido no Footer Template, preenchendo todas as {{TAGS}} correspondentes.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Regras Obrigatórias</div><div class="fname">mandatory_rules</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-mr')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-mr" rows="11">1. Utilizar exclusivamente as classes CSS do GF Base definido no Script CSS. Não criar estilos inline desnecessários, não alterar variáveis CSS, não remover estruturas existentes e não adicionar bibliotecas ou frameworks externos.
+2. Preencher obrigatoriamente todas as {{TAGS}} do cabeçalho e rodapé. Quando uma informação não for fornecida, inferir do contexto ou aplicar o valor padrão definido nas Regras de Formatação. Nenhuma TAG pode aparecer visível no HTML final.
+3. É proibido aplicar estrutura de relatório gerencial (KPI cards, gráficos de performance, análise de indicadores) em documentação de procedimento, tutorial ou base de conhecimento. A estrutura deve corresponder ao conteúdo, não ao contrário.
+4. Preservar integralmente todas as informações fornecidas pelo usuário. Nada pode ser omitido, resumido sem aviso ou alterado sem justificativa explícita.
+5. Conteúdo técnico e específico (parâmetros de sistema, comandos, código, valores de configuração) deve ser formatado em blocos .gf-analysis ou tabelas .gf-table — nunca em texto corrido que comprometa a precisão.
+6. Gerar HTML completo, limpo e funcional, compatível com navegadores modernos. Única dependência externa permitida: CDN Lucide declarado na seção head do documento.
+7. Manter consistência visual em todo o documento: mesmo espaçamento, hierarquia tipográfica, uso de cores e componentes do início ao fim, sem variações injustificadas de estilo.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Ações Proibidas</div><div class="fname">forbidden_actions</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-fa')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-fa" rows="19">1. Nunca inventar informações, dados técnicos, números, procedimentos, códigos, normas ou conclusões sem base real ou referência confiável.
+2. Nunca complementar conteúdos técnicos utilizando suposições, "achismos" ou interpretações sem validação mínima do contexto informado.
+3. Não utilizar fontes duvidosas, inseguras, desatualizadas ou sem credibilidade técnica para complementar documentações.
+4. Não afirmar que determinada informação é oficial, validada ou certificada sem que exista confirmação explícita disso.
+5. Nunca remover informações importantes fornecidas pelo usuário apenas para simplificar o conteúdo.
+6. Não alterar contexto técnico, sequência operacional ou lógica informada pelo usuário sem orientação explícita.
+7. Não criar procedimentos críticos de segurança, engenharia, saúde, jurídico ou compliance sem deixar claro que validação técnica especializada é necessária.
+8. Não expor informações sensíveis, senhas, chaves, dados privados ou conteúdos confidenciais dentro da documentação gerada.
+9. Não gerar conteúdos desorganizados, sem estrutura lógica, sem hierarquia visual ou difíceis de interpretar.
+10. Não utilizar excesso de efeitos visuais, cores agressivas ou elementos que prejudiquem legibilidade e aparência corporativa.
+11. Não ignorar padrões previamente definidos pelo usuário, templates corporativos ou regras estruturais obrigatórias do projeto.
+12. Não gerar HTML quebrado, incompatível ou dependente de recursos externos desnecessários quando o objetivo for documentação interna estável e portátil.
+13. Não duplicar blocos de conteúdo, repetir informações sem necessidade ou criar documentos excessivamente poluídos visualmente.
+14. Não assumir comportamentos automáticos sem transparência, principalmente em processos de versionamento, substituição ou alteração de conteúdo existente.
+15. Não misturar conteúdos técnicos com opiniões pessoais, interpretações subjetivas ou linguagem informal inadequada para ambiente corporativo.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Checklist de Validação</div><div class="fname">validation_checklist</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-vc')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-vc" rows="11">1. Verificar se o tipo de documentação foi identificado corretamente e se a estrutura utilizada corresponde ao conteúdo recebido — não aplicar estrutura de relatório em documentação de procedimento, tutorial ou base de conhecimento.
+2. Verificar se todas as {{TAGS}} do cabeçalho e rodapé foram preenchidas — nenhum placeholder visível pode aparecer no HTML final.
+3. Verificar se o HTML utiliza exclusivamente as classes do GF CSS Base, sem estilos conflitantes, inline desnecessários ou classes inexistentes.
+4. Verificar se nenhuma informação fornecida pelo usuário foi perdida, omitida ou alterada sem justificativa.
+5. Verificar se o documento está completo: cabeçalho, seções de conteúdo organizadas, seção de observações ou recomendações quando aplicável, e rodapé.
+6. Verificar se o HTML está correto estruturalmente: sem tags abertas sem fechamento, sem atributos inválidos, sem blocos quebrados.
+7. Verificar se a aparência geral transmite profissionalismo e está alinhada com o padrão visual GF Atlas — limpo, organizado e legível.
+8. Verificar se o CDN Lucide está incluído na seção head do documento e se lucide.createIcons() está chamado ao final da seção body.</textarea>
+  </div>
+
+</div><!-- /tab-inst -->
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB: ESTILO
+══════════════════════════════════════════════════════════ -->
+<div class="pane" id="tab-estilo">
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Estilo de Escrita</div><div class="fname">writing_style</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-ws')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-ws" rows="4">Os textos devem ser escritos de forma clara, organizada e profissional, utilizando linguagem técnica e corporativa, porém mantendo fácil entendimento para usuários operacionais e gestores. O conteúdo deve transmitir credibilidade, objetividade e inteligência estrutural, priorizando documentação bem organizada, visualmente limpa e com explicações didáticas quando necessário, evitando excessos técnicos desnecessários, informalidades ou informações soltas sem contexto.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Estilo Visual</div><div class="fname">visual_style</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-vs')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-vs" rows="4">A aparência visual deve seguir um padrão moderno, clean e corporativo, com identidade visual sofisticada no estilo enterprise, priorizando organização, leveza visual, boa hierarquia das informações e excelente legibilidade. O conteúdo deve transmitir profissionalismo e tecnologia, utilizando layouts bem estruturados, espaçamentos equilibrados, componentes elegantes e visual agradável para leitura prolongada, evitando excesso de cores, poluição visual ou elementos desnecessários.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Tom de Voz</div><div class="fname">tone_of_voice</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-tv')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-tv" rows="4">O tom da comunicação deve ser profissional, técnico e confiável, transmitindo segurança, organização e credibilidade em todas as informações apresentadas. A escrita deve manter postura corporativa e inteligente, equilibrando precisão técnica com clareza de entendimento, evitando exageros, informalidades excessivas ou linguagem agressiva, sempre priorizando uma comunicação madura, objetiva e bem estruturada.</textarea>
+  </div>
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Regras de Formatação</div><div class="fname">formatting_rules</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-fr')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <div class="fnote">Contém tags HTML (script, span, i). O botão Copiar entrega o conteúdo com as tags reais para colagem no ERPNext.</div>
+    <textarea class="fc" id="ta-fr" rows="36">ÍCONES — LUCIDE (obrigatório em todos os documentos gerados)
+- Incluir na seção head: &lt;script src="https://unpkg.com/lucide@latest"&gt;&lt;/script&gt;
+- Sintaxe: &lt;i data-lucide="NOME_DO_ICONE" style="width:18px;height:18px;vertical-align:middle"&gt;&lt;/i&gt;
+- Chamar ao final do body: &lt;script&gt;lucide.createIcons();&lt;/script&gt;
+- Nunca usar emojis como ícones de seção, título ou elemento visual. Exclusivamente ícones Lucide.
+- Ícones recomendados: target (objetivo), users (escopo), list-ordered (passos), refresh-cw (revisão), ban (proibido), clipboard-check (checklist), lightbulb (dicas), settings (configuração), download (instalação), shield (segurança), code (código), table (dados), file-text (arquivo), triangle-alert (alerta), circle-check (sucesso), info (informação), hash (estrutura), wrench (manutenção), book-open (estudo), folder (projeto)
+
+STATUS DOT — cor conforme situação do documento
+- Ativo / Concluído: &lt;span class="gf-header-status-dot"&gt;&lt;/span&gt; (padrão — verde #4ade80)
+- Draft / Inativo: &lt;span class="gf-header-status-dot draft"&gt;&lt;/span&gt; (cinza #94a3b8)
+- Em Revisão / Em Desenvolvimento / Em Teste: &lt;span class="gf-header-status-dot review"&gt;&lt;/span&gt; (laranja #fb923c)
+- Submetido: &lt;span class="gf-header-status-dot submitted"&gt;&lt;/span&gt; (azul #60a5fa)
+- Obsoleto / Arquivado: &lt;span class="gf-header-status-dot obsolete"&gt;&lt;/span&gt; (vermelho #f87171)
+
+{{TAGS}} — preencher obrigatoriamente (nenhuma pode aparecer visível no HTML final)
+{{REPORT_LOGO}}           = "GF" — fixo
+{{REPORT_TITLE}}          = Título principal — inferir do assunto central fornecido pelo usuário
+{{REPORT_SUBTITLE}}       = Subtítulo descritivo — resumo em uma linha do conteúdo documentado
+{{REPORT_STATUS}}         = Status do documento (ex: Ativo, Em Revisão, Concluído, Draft)
+{{REPORT_VERSION}}        = Versão do documento — iniciar em v1.0.0 quando não informado
+{{COMPANY_NAME}}          = Nome da empresa — perguntar ao usuário se não informado
+{{REPORT_AREA}}           = Área, setor ou departamento responsável pelo documento
+{{REPORT_GENERATED_AT}}   = Data e hora da geração no formato DD/MM/AAAA HH:MM
+{{REPORT_PRINT_DATE}}     = Mesma data de REPORT_GENERATED_AT quando não informada separadamente
+{{REPORT_CREATED_BY}}     = Nome do responsável — perguntar ao usuário se não informado
+{{REPORT_VERSIONED_BY}}   = Mesmo valor de REPORT_CREATED_BY quando não informado separadamente
+{{SYSTEM_NAME}}           = "GF Atlas" — fixo
+{{REPORT_FOOTER_MESSAGE}} = "Documento interno gerado por GF Skill." — fixo</textarea>
+  </div>
+
+</div><!-- /tab-estilo -->
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB: SCRIPT CSS
+══════════════════════════════════════════════════════════ -->
+<div class="pane" id="tab-css">
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Script CSS</div><div class="fname">css_script</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-css')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <textarea class="fc" id="ta-css" rows="158">:root {
+  --gf-font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  --gf-font-mono: "Consolas", "Courier New", monospace;
+  --gf-bg-page: #f7f8fa;
+  --gf-bg-surface: #ffffff;
+  --gf-bg-muted: #f1f3f5;
+  --gf-bg-soft: #fafafa;
+  --gf-text-main: #1f2933;
+  --gf-text-muted: #5f6b7a;
+  --gf-text-soft: #8a94a6;
+  --gf-text-inverse: #ffffff;
+  --gf-border-light: #e5e7eb;
+  --gf-border-medium: #d1d5db;
+  --gf-border-strong: #9ca3af;
+  --gf-primary: #2f5d50;
+  --gf-primary-soft: #e7f1ed;
+  --gf-primary-muted: #5f7f73;
+  --gf-accent: #c89f3c;
+  --gf-accent-soft: #fbf4df;
+  --gf-success: #2e7d55;
+  --gf-warning: #b7791f;
+  --gf-danger: #b42318;
+  --gf-info: #2563eb;
+  --gf-radius-sm: 6px;
+  --gf-radius-md: 10px;
+  --gf-radius-lg: 14px;
+  --gf-radius-xl: 18px;
+  --gf-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --gf-shadow-md: 0 8px 24px rgba(16, 24, 40, 0.08);
+  --gf-shadow-lg: 0 16px 40px rgba(16, 24, 40, 0.12);
+  --gf-space-xs: 4px;
+  --gf-space-sm: 8px;
+  --gf-space-md: 14px;
+  --gf-space-lg: 22px;
+  --gf-space-xl: 32px;
+  --gf-font-xs: 10px;
+  --gf-font-sm: 12px;
+  --gf-font-md: 14px;
+  --gf-font-lg: 16px;
+  --gf-font-xl: 20px;
+  --gf-font-xxl: 26px;
+}
+
+*,*::before,*::after { box-sizing: border-box; }
+
+.gf-report {
+  font-family: var(--gf-font-family);
+  background: var(--gf-bg-page);
+  color: var(--gf-text-main);
+  padding: 28px;
+  line-height: 1.55;
+}
+
+/* ── Header ── */
+.gf-report-header {
+  background: linear-gradient(135deg, #1f2933, #2f5d50);
+  color: var(--gf-text-inverse);
+  border-radius: var(--gf-radius-xl);
+  padding: 28px 32px;
+  box-shadow: var(--gf-shadow-md);
+  margin-bottom: var(--gf-space-xl);
+}
+.gf-report-title {
+  font-size: var(--gf-font-xxl);
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+.gf-report-subtitle {
+  font-size: var(--gf-font-md);
+  color: rgba(255,255,255,0.82);
+  margin: 0;
+}
+.gf-meta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+  font-size: var(--gf-font-sm);
+  color: rgba(255,255,255,0.72);
+}
+.gf-header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gf-space-lg);
+  flex-wrap: wrap;
+}
+.gf-header-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.gf-header-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--gf-radius-lg);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.gf-header-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: var(--gf-font-sm);
+  color: rgba(255,255,255,0.86);
+}
+.gf-header-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #4ade80;
+  display: inline-block;
+}
+.gf-header-status-dot.draft     { background: #94a3b8; }
+.gf-header-status-dot.review    { background: #fb923c; }
+.gf-header-status-dot.submitted { background: #60a5fa; }
+.gf-header-status-dot.obsolete  { background: #f87171; }
+.gf-header-version {
+  margin-top: 8px;
+  font-size: var(--gf-font-sm);
+  color: rgba(255,255,255,0.72);
+}
+
+/* ── KPI Cards ── */
+.gf-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--gf-space-md);
+  margin-bottom: var(--gf-space-xl);
+}
+.gf-kpi-card {
+  background: var(--gf-bg-surface);
+  border: 1px solid var(--gf-border-light);
+  border-radius: var(--gf-radius-lg);
+  padding: 18px;
+  box-shadow: var(--gf-shadow-sm);
+}
+.gf-kpi-label { font-size: var(--gf-font-sm); color: var(--gf-text-muted); margin-bottom: 8px; }
+.gf-kpi-value { font-size: 28px; font-weight: 700; }
+.gf-kpi-note  { font-size: var(--gf-font-xs); color: var(--gf-text-soft); margin-top: 8px; }
+
+/* ── Section ── */
+.gf-section {
+  background: var(--gf-bg-surface);
+  border: 1px solid var(--gf-border-light);
+  border-radius: var(--gf-radius-lg);
+  padding: 22px;
+  box-shadow: var(--gf-shadow-sm);
+  margin-bottom: var(--gf-space-lg);
+}
+.gf-section-title {
+  font-size: var(--gf-font-xl);
+  font-weight: 600;
+  margin: 0 0 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gf-section-description { font-size: var(--gf-font-md); color: var(--gf-text-muted); }
+
+/* ── Table ── */
+.gf-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--gf-border-light); border-radius: var(--gf-radius-lg); background: var(--gf-bg-surface); }
+.gf-table { width: 100%; border-collapse: collapse; font-size: var(--gf-font-md); }
+.gf-table th { background: var(--gf-bg-muted); text-align: left; padding: 12px 14px; }
+.gf-table td { padding: 11px 14px; border-top: 1px solid var(--gf-border-light); }
+.gf-table tr:nth-child(even) td { background: var(--gf-bg-soft); }
+
+/* ── Badges ── */
+.gf-badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 9px; font-size: var(--gf-font-xs); font-weight: 600; }
+.gf-badge-success { background: #e8f5ee; color: var(--gf-success); }
+.gf-badge-warning { background: #fff7e6; color: var(--gf-warning); }
+.gf-badge-danger  { background: #fde8e8; color: var(--gf-danger);  }
+.gf-badge-info    { background: #dbeafe; color: var(--gf-info);    }
+
+/* ── Steps ── */
+.gf-steps { display: flex; flex-direction: column; gap: 12px; margin: 12px 0; }
+.gf-step { display: flex; align-items: flex-start; gap: 14px; background: var(--gf-bg-surface); border: 1px solid var(--gf-border-light); border-radius: var(--gf-radius-md); padding: 14px 16px; box-shadow: var(--gf-shadow-sm); }
+.gf-step-number { min-width: 28px; height: 28px; border-radius: 50%; background: var(--gf-primary); color: var(--gf-text-inverse); display: flex; align-items: center; justify-content: center; font-size: var(--gf-font-sm); font-weight: 700; flex-shrink: 0; }
+.gf-step-content { flex: 1; font-size: var(--gf-font-md); color: var(--gf-text-main); line-height: 1.5; }
+.gf-step-title { font-weight: 600; margin-bottom: 4px; }
+
+/* ── Alerts ── */
+.gf-alert { display: flex; align-items: flex-start; gap: 12px; border-radius: var(--gf-radius-md); padding: 14px 16px; margin-bottom: var(--gf-space-md); font-size: var(--gf-font-md); }
+.gf-alert-info    { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+.gf-alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+.gf-alert-danger  { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+.gf-alert-success { background: #f0fdf4; border: 1px solid #a7f3d0; color: #065f46; }
+.gf-alert-icon { flex-shrink: 0; margin-top: 1px; }
+
+/* ── Analysis ── */
+.gf-analysis {
+  background: #ffffff;
+  border-left: 4px solid var(--gf-primary);
+  border-radius: var(--gf-radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--gf-shadow-sm);
+  font-family: var(--gf-font-mono);
+  font-size: 13px;
+}
+
+/* ── Footer ── */
+.gf-report-footer {
+  margin-top: var(--gf-space-xl);
+  padding: 18px 22px;
+  background: var(--gf-bg-surface);
+  border: 1px solid var(--gf-border-light);
+  border-radius: var(--gf-radius-lg);
+  color: var(--gf-text-soft);
+  font-size: var(--gf-font-xs);
+  text-align: center;
+  box-shadow: var(--gf-shadow-sm);
+}
+.gf-footer-meta { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 14px; }
+.gf-footer-seal { margin-top: 8px; color: var(--gf-text-muted); font-weight: 600; }</textarea>
+  </div>
+
+</div><!-- /tab-css -->
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB: CABEÇALHO
+══════════════════════════════════════════════════════════ -->
+<div class="pane" id="tab-cabec">
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Cabeçalho — Template</div><div class="fname">header_template</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-ht')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <div class="fnote">O botão Copiar entrega o HTML com as tags reais para colagem no ERPNext.</div>
+    <textarea class="fc" id="ta-ht" rows="42">&lt;header class="gf-report-header"&gt;
+
+  &lt;div class="gf-header-brand"&gt;
+
+    &lt;div style="display:flex;align-items:center;gap:18px"&gt;
+
+      &lt;div class="gf-header-logo"&gt;
+        {{REPORT_LOGO}}
+      &lt;/div&gt;
+
+      &lt;div class="gf-header-title-block"&gt;
+        &lt;h1 class="gf-report-title"&gt;{{REPORT_TITLE}}&lt;/h1&gt;
+        &lt;p class="gf-report-subtitle"&gt;{{REPORT_SUBTITLE}}&lt;/p&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;div class="gf-header-status"&gt;
+        &lt;!-- Use a classe correta no span conforme o status:
+             padrao (verde)    → &lt;span class="gf-header-status-dot"&gt;&lt;/span&gt;
+             Draft / Inativo   → &lt;span class="gf-header-status-dot draft"&gt;&lt;/span&gt;
+             Em Revisao / Dev  → &lt;span class="gf-header-status-dot review"&gt;&lt;/span&gt;
+             Submetido         → &lt;span class="gf-header-status-dot submitted"&gt;&lt;/span&gt;
+             Obsoleto / Arq.   → &lt;span class="gf-header-status-dot obsolete"&gt;&lt;/span&gt;
+        --&gt;
+        &lt;span class="gf-header-status-dot"&gt;&lt;/span&gt;
+        {{REPORT_STATUS}}
+      &lt;/div&gt;
+      &lt;div class="gf-header-version"&gt;Versão: {{REPORT_VERSION}}&lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;div class="gf-meta-bar"&gt;
+    &lt;span&gt;Empresa: {{COMPANY_NAME}}&lt;/span&gt;
+    &lt;span&gt;Área: {{REPORT_AREA}}&lt;/span&gt;
+    &lt;span&gt;Gerado em: {{REPORT_GENERATED_AT}}&lt;/span&gt;
+    &lt;span&gt;Impressão: {{REPORT_PRINT_DATE}}&lt;/span&gt;
+    &lt;span&gt;Criado por: {{REPORT_CREATED_BY}}&lt;/span&gt;
+    &lt;span&gt;Versionado por: {{REPORT_VERSIONED_BY}}&lt;/span&gt;
+  &lt;/div&gt;
+
+&lt;/header&gt;</textarea>
+  </div>
+
+</div><!-- /tab-cabec -->
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB: RODAPÉ
+══════════════════════════════════════════════════════════ -->
+<div class="pane" id="tab-rodape">
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Rodapé — Template</div><div class="fname">footer_template</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-ft')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <div class="fnote">O botão Copiar entrega o HTML com as tags reais para colagem no ERPNext.</div>
+    <textarea class="fc" id="ta-ft" rows="38">&lt;footer class="gf-report-footer"&gt;
+
+  &lt;div style="display:flex;justify-content:space-between;align-items:flex-start;
+              flex-wrap:wrap;gap:12px;margin-bottom:14px"&gt;
+
+    &lt;div style="text-align:left"&gt;
+      &lt;div style="font-size:10px;font-weight:600;color:var(--gf-text-soft);
+                  text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px"&gt;Empresa&lt;/div&gt;
+      &lt;div style="font-size:13px;font-weight:600;color:var(--gf-text-main)"&gt;{{COMPANY_NAME}}&lt;/div&gt;
+      &lt;div style="font-size:11px;color:var(--gf-text-soft);margin-top:2px"&gt;{{REPORT_AREA}}&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div style="text-align:center"&gt;
+      &lt;div style="font-size:15px;font-weight:700;color:var(--gf-primary);
+                  letter-spacing:0.04em"&gt;{{SYSTEM_NAME}}&lt;/div&gt;
+      &lt;div style="font-size:11px;color:var(--gf-text-soft);margin-top:3px"&gt;
+        {{REPORT_FOOTER_MESSAGE}}
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div style="text-align:right"&gt;
+      &lt;div style="font-size:10px;font-weight:600;color:var(--gf-text-soft);
+                  text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px"&gt;Geração&lt;/div&gt;
+      &lt;div style="font-size:13px;font-weight:600;color:var(--gf-text-main)"&gt;{{REPORT_GENERATED_AT}}&lt;/div&gt;
+      &lt;div style="font-size:11px;color:var(--gf-text-soft);margin-top:2px"&gt;{{REPORT_CREATED_BY}}&lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+  &lt;div style="border-top:1px solid var(--gf-border-light);padding-top:10px"&gt;
+    &lt;div class="gf-footer-meta"&gt;
+      &lt;span&gt;Versão: {{REPORT_VERSION}}&lt;/span&gt;
+      &lt;span&gt;Status: {{REPORT_STATUS}}&lt;/span&gt;
+      &lt;span&gt;Versionado por: {{REPORT_VERSIONED_BY}}&lt;/span&gt;
+      &lt;span&gt;Impressão: {{REPORT_PRINT_DATE}}&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+&lt;/footer&gt;</textarea>
+  </div>
+
+</div><!-- /tab-rodape -->
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB: EXEMPLO COMPLETO
+══════════════════════════════════════════════════════════ -->
+<div class="pane" id="tab-exemplo">
+
+  <div class="fblock">
+    <div class="fhdr">
+      <div><div class="flabel">Exemplo Completo</div><div class="fname">full_example</div></div>
+      <button class="btn-cp" onclick="cp(this,'ta-ex')"><i data-lucide="copy" style="width:12px;height:12px"></i>Copiar</button>
+    </div>
+    <div class="fnote">HTML completo e funcional. O botão Copiar entrega o documento com todas as tags reais para colagem no ERPNext.</div>
+    <textarea class="fc" id="ta-ex" rows="160">&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Procedimento de Codificação de Produtos&lt;/title&gt;
+  &lt;script src="https://unpkg.com/lucide@latest"&gt;&lt;/script&gt;
+  &lt;style&gt;
+:root{--gf-font-family:"Inter","Segoe UI",Arial,sans-serif;--gf-font-mono:"Consolas","Courier New",monospace;--gf-bg-page:#f7f8fa;--gf-bg-surface:#ffffff;--gf-bg-muted:#f1f3f5;--gf-bg-soft:#fafafa;--gf-text-main:#1f2933;--gf-text-muted:#5f6b7a;--gf-text-soft:#8a94a6;--gf-text-inverse:#ffffff;--gf-border-light:#e5e7eb;--gf-border-medium:#d1d5db;--gf-border-strong:#9ca3af;--gf-primary:#2f5d50;--gf-primary-soft:#e7f1ed;--gf-primary-muted:#5f7f73;--gf-accent:#c89f3c;--gf-accent-soft:#fbf4df;--gf-success:#2e7d55;--gf-warning:#b7791f;--gf-danger:#b42318;--gf-info:#2563eb;--gf-radius-sm:6px;--gf-radius-md:10px;--gf-radius-lg:14px;--gf-radius-xl:18px;--gf-shadow-sm:0 1px 2px rgba(16,24,40,.06);--gf-shadow-md:0 8px 24px rgba(16,24,40,.08);--gf-shadow-lg:0 16px 40px rgba(16,24,40,.12);--gf-space-xs:4px;--gf-space-sm:8px;--gf-space-md:14px;--gf-space-lg:22px;--gf-space-xl:32px;--gf-font-xs:10px;--gf-font-sm:12px;--gf-font-md:14px;--gf-font-lg:16px;--gf-font-xl:20px;--gf-font-xxl:26px}
+*,*::before,*::after{box-sizing:border-box}
+.gf-report{font-family:var(--gf-font-family);background:var(--gf-bg-page);color:var(--gf-text-main);padding:28px;line-height:1.55}
+.gf-report-header{background:linear-gradient(135deg,#1f2933,#2f5d50);color:var(--gf-text-inverse);border-radius:var(--gf-radius-xl);padding:28px 32px;box-shadow:var(--gf-shadow-md);margin-bottom:var(--gf-space-xl)}
+.gf-header-brand{display:flex;align-items:center;justify-content:space-between;gap:var(--gf-space-lg);flex-wrap:wrap}
+.gf-header-title-block{display:flex;flex-direction:column;gap:6px}
+.gf-header-logo{width:64px;height:64px;border-radius:var(--gf-radius-lg);background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0}
+.gf-report-title{font-size:var(--gf-font-xxl);font-weight:700;margin:0 0 6px 0;letter-spacing:-.02em}
+.gf-report-subtitle{font-size:var(--gf-font-md);color:rgba(255,255,255,.82);margin:0}
+.gf-header-status{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:7px 13px;font-size:var(--gf-font-sm);color:rgba(255,255,255,.86)}
+.gf-header-status-dot{width:9px;height:9px;border-radius:50%;background:#4ade80;display:inline-block}
+.gf-header-status-dot.draft{background:#94a3b8}
+.gf-header-status-dot.review{background:#fb923c}
+.gf-header-status-dot.submitted{background:#60a5fa}
+.gf-header-status-dot.obsolete{background:#f87171}
+.gf-header-version{margin-top:8px;font-size:var(--gf-font-sm);color:rgba(255,255,255,.72)}
+.gf-meta-bar{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;font-size:var(--gf-font-sm);color:rgba(255,255,255,.72)}
+.gf-section{background:var(--gf-bg-surface);border:1px solid var(--gf-border-light);border-radius:var(--gf-radius-lg);padding:22px;box-shadow:var(--gf-shadow-sm);margin-bottom:var(--gf-space-lg)}
+.gf-section-title{font-size:var(--gf-font-xl);font-weight:600;margin:0 0 14px 0;display:flex;align-items:center;gap:8px}
+.gf-section-description{font-size:var(--gf-font-md);color:var(--gf-text-muted)}
+.gf-table-wrap{width:100%;overflow-x:auto;border:1px solid var(--gf-border-light);border-radius:var(--gf-radius-lg);background:var(--gf-bg-surface)}
+.gf-table{width:100%;border-collapse:collapse;font-size:var(--gf-font-md)}
+.gf-table th{background:var(--gf-bg-muted);text-align:left;padding:12px 14px}
+.gf-table td{padding:11px 14px;border-top:1px solid var(--gf-border-light)}
+.gf-table tr:nth-child(even) td{background:var(--gf-bg-soft)}
+.gf-steps{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.gf-step{display:flex;align-items:flex-start;gap:14px;background:var(--gf-bg-surface);border:1px solid var(--gf-border-light);border-radius:var(--gf-radius-md);padding:14px 16px;box-shadow:var(--gf-shadow-sm)}
+.gf-step-number{min-width:28px;height:28px;border-radius:50%;background:var(--gf-primary);color:var(--gf-text-inverse);display:flex;align-items:center;justify-content:center;font-size:var(--gf-font-sm);font-weight:700;flex-shrink:0}
+.gf-step-content{flex:1;font-size:var(--gf-font-md);color:var(--gf-text-main);line-height:1.5}
+.gf-step-title{font-weight:600;margin-bottom:4px}
+.gf-alert{display:flex;align-items:flex-start;gap:12px;border-radius:var(--gf-radius-md);padding:14px 16px;margin-bottom:var(--gf-space-md);font-size:var(--gf-font-md)}
+.gf-alert-warning{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.gf-alert-icon{flex-shrink:0;margin-top:1px}
+.gf-analysis{background:#ffffff;border-left:4px solid var(--gf-primary);border-radius:var(--gf-radius-md);padding:18px 20px;box-shadow:var(--gf-shadow-sm);font-family:var(--gf-font-mono);font-size:13px}
+.gf-report-footer{margin-top:var(--gf-space-xl);padding:18px 22px;background:var(--gf-bg-surface);border:1px solid var(--gf-border-light);border-radius:var(--gf-radius-lg);color:var(--gf-text-soft);font-size:var(--gf-font-xs);text-align:center;box-shadow:var(--gf-shadow-sm)}
+.gf-footer-meta{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 14px}
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="gf-report"&gt;
+
+  &lt;header class="gf-report-header"&gt;
+    &lt;div class="gf-header-brand"&gt;
+      &lt;div style="display:flex;align-items:center;gap:18px"&gt;
+        &lt;div class="gf-header-logo"&gt;GF&lt;/div&gt;
+        &lt;div class="gf-header-title-block"&gt;
+          &lt;h1 class="gf-report-title"&gt;Procedimento de Codificação de Produtos&lt;/h1&gt;
+          &lt;p class="gf-report-subtitle"&gt;Padrão interno para criação e registro de códigos de produtos&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;div class="gf-header-status"&gt;&lt;span class="gf-header-status-dot"&gt;&lt;/span&gt;Ativo&lt;/div&gt;
+        &lt;div class="gf-header-version"&gt;Versão: v1.0.0&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="gf-meta-bar"&gt;
+      &lt;span&gt;Empresa: GREENFARMS&lt;/span&gt;
+      &lt;span&gt;Área: Cadastro de Produtos&lt;/span&gt;
+      &lt;span&gt;Gerado em: 20/05/2026 00:00&lt;/span&gt;
+      &lt;span&gt;Impressão: 20/05/2026 00:00&lt;/span&gt;
+      &lt;span&gt;Criado por: Carlos Fernandes&lt;/span&gt;
+      &lt;span&gt;Versionado por: Carlos Fernandes&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;div class="gf-section"&gt;
+    &lt;h2 class="gf-section-title"&gt;
+      &lt;i data-lucide="target" style="width:18px;height:18px"&gt;&lt;/i&gt;Objetivo
+    &lt;/h2&gt;
+    &lt;p class="gf-section-description"&gt;
+      Definir um padrão simples para codificação de produtos, permitindo que cada item seja identificado
+      de forma organizada, padronizada e fácil de consultar dentro do sistema.
+    &lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;div class="gf-section"&gt;
+    &lt;h2 class="gf-section-title"&gt;
+      &lt;i data-lucide="hash" style="width:18px;height:18px"&gt;&lt;/i&gt;Estrutura do Código
+    &lt;/h2&gt;
+    &lt;div class="gf-table-wrap"&gt;
+      &lt;table class="gf-table"&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;Parte do Código&lt;/th&gt;
+            &lt;th&gt;Dígitos&lt;/th&gt;
+            &lt;th&gt;Significado&lt;/th&gt;
+            &lt;th&gt;Exemplo&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;&lt;td&gt;Empresa&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;Identifica a empresa responsável pelo produto&lt;/td&gt;&lt;td&gt;01&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;Grupo de Produto&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;Identifica o grupo ou família do produto&lt;/td&gt;&lt;td&gt;001&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;Sequência&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;Sequência do produto dentro do grupo&lt;/td&gt;&lt;td&gt;0001&lt;/td&gt;&lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="gf-section"&gt;
+    &lt;h2 class="gf-section-title"&gt;
+      &lt;i data-lucide="code" style="width:18px;height:18px"&gt;&lt;/i&gt;Formato Final
+    &lt;/h2&gt;
+    &lt;p class="gf-section-description" style="margin-bottom:12px"&gt;O código final é formado pela união das três partes separadas por ponto:&lt;/p&gt;
+    &lt;div class="gf-analysis"&gt;EE.GGG.SSSS — Exemplo: 01.001.0001&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="gf-section"&gt;
+    &lt;h2 class="gf-section-title"&gt;
+      &lt;i data-lucide="list-checks" style="width:18px;height:18px"&gt;&lt;/i&gt;Procedimento de Cadastro
+    &lt;/h2&gt;
+    &lt;div class="gf-steps"&gt;
+      &lt;div class="gf-step"&gt;
+        &lt;div class="gf-step-number"&gt;1&lt;/div&gt;
+        &lt;div class="gf-step-content"&gt;
+          &lt;div class="gf-step-title"&gt;Identificar a empresa&lt;/div&gt;
+          Selecione o código de dois dígitos correspondente à empresa responsável pelo produto.
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="gf-step"&gt;
+        &lt;div class="gf-step-number"&gt;2&lt;/div&gt;
+        &lt;div class="gf-step-content"&gt;
+          &lt;div class="gf-step-title"&gt;Definir o grupo do produto&lt;/div&gt;
+          Identifique o grupo ao qual o produto pertence e utilize o código de três dígitos.
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="gf-step"&gt;
+        &lt;div class="gf-step-number"&gt;3&lt;/div&gt;
+        &lt;div class="gf-step-content"&gt;
+          &lt;div class="gf-step-title"&gt;Verificar a próxima sequência disponível&lt;/div&gt;
+          Consulte o último código utilizado dentro daquele grupo e incremente em 1.
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="gf-step"&gt;
+        &lt;div class="gf-step-number"&gt;4&lt;/div&gt;
+        &lt;div class="gf-step-content"&gt;
+          &lt;div class="gf-step-title"&gt;Montar o código&lt;/div&gt;
+          Una empresa, grupo e sequência no formato EE.GGG.SSSS.
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="gf-step"&gt;
+        &lt;div class="gf-step-number"&gt;5&lt;/div&gt;
+        &lt;div class="gf-step-content"&gt;
+          &lt;div class="gf-step-title"&gt;Registrar no sistema&lt;/div&gt;
+          Cadastre o produto com o código gerado. Não reutilize códigos de produtos excluídos.
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="gf-section"&gt;
+    &lt;h2 class="gf-section-title"&gt;
+      &lt;i data-lucide="lightbulb" style="width:18px;height:18px"&gt;&lt;/i&gt;Exemplo Prático
+    &lt;/h2&gt;
+    &lt;p class="gf-section-description" style="margin-bottom:12px"&gt;
+      Empresa GREENFARMS (01) · Grupo biorreatores (001) · Primeiro produto do grupo:
+    &lt;/p&gt;
+    &lt;div class="gf-analysis"&gt;01.001.0001&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="gf-alert gf-alert-warning"&gt;
+    &lt;div class="gf-alert-icon"&gt;&lt;i data-lucide="triangle-alert" style="width:18px;height:18px"&gt;&lt;/i&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;strong&gt;Atenção:&lt;/strong&gt; Códigos de produto são únicos e imutáveis após o primeiro registro no sistema. Verifique a sequência correta antes de salvar para evitar duplicidades.&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;footer class="gf-report-footer"&gt;
+    &lt;div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px"&gt;
+      &lt;div style="text-align:left"&gt;
+        &lt;div style="font-size:10px;font-weight:600;color:var(--gf-text-soft);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px"&gt;Empresa&lt;/div&gt;
+        &lt;div style="font-size:13px;font-weight:600;color:var(--gf-text-main)"&gt;GREENFARMS&lt;/div&gt;
+        &lt;div style="font-size:11px;color:var(--gf-text-soft);margin-top:2px"&gt;Cadastro de Produtos&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style="text-align:center"&gt;
+        &lt;div style="font-size:15px;font-weight:700;color:var(--gf-primary);letter-spacing:0.04em"&gt;GF Atlas&lt;/div&gt;
+        &lt;div style="font-size:11px;color:var(--gf-text-soft);margin-top:3px"&gt;Documento interno gerado por GF Skill.&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style="text-align:right"&gt;
+        &lt;div style="font-size:10px;font-weight:600;color:var(--gf-text-soft);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px"&gt;Geração&lt;/div&gt;
+        &lt;div style="font-size:13px;font-weight:600;color:var(--gf-text-main)"&gt;20/05/2026 00:00&lt;/div&gt;
+        &lt;div style="font-size:11px;color:var(--gf-text-soft);margin-top:2px"&gt;Carlos Fernandes&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div style="border-top:1px solid var(--gf-border-light);padding-top:10px"&gt;
+      &lt;div class="gf-footer-meta"&gt;
+        &lt;span&gt;Versão: v1.0.0&lt;/span&gt;
+        &lt;span&gt;Status: Ativo&lt;/span&gt;
+        &lt;span&gt;Versionado por: Carlos Fernandes&lt;/span&gt;
+        &lt;span&gt;Impressão: 20/05/2026 00:00&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/footer&gt;
+
+&lt;/div&gt;
+&lt;script&gt;lucide.createIcons();&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+  </div>
+
+</div><!-- /tab-exemplo -->
+
+</div><!-- /wrap -->
+
+<script>
+function st(id, btn) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-' + id).classList.add('on');
+  btn.classList.add('on');
+}
+
+function cp(btn, id) {
+  const ta = document.getElementById(id);
+  navigator.clipboard.writeText(ta.value).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i data-lucide="check" style="width:12px;height:12px"></i>Copiado!';
+    btn.classList.add('ok');
+    lucide.createIcons();
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.classList.remove('ok');
+      lucide.createIcons();
+    }, 2500);
+  }).catch(() => {
+    ta.select();
+    document.execCommand('copy');
+  });
+}
+
+lucide.createIcons();
+</script>
+</body>
+</html>
