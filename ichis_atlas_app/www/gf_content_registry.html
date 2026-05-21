@@ -22,7 +22,10 @@
   --mono:'JetBrains Mono','Fira Code','Cascadia Code',Consolas,monospace;
   --sidebar:272px;--header:56px
 }
-html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+html,body{height:100%;overflow:hidden;font-family:var(--font);background:#080e1c;color:#e2e8f0;font-size:14px;line-height:1.5}
+
+/* ═══ DARK THEME GLOBAL — paleta única para toda a página ══════ */
+#gfcr{--bg:#080e1c;--surface:#0d1526;--surface2:#0b1320;--border:#162035;--border-h:#1e3a5f;--text:#e2e8f0;--text-m:#4b6a94;--text-l:#2d4a6d;--primary:#1e3a8a;--primary-h:#1d4ed8;--primary-l:#60a5fa;--primary-pale:#0f1e33;--shadow-md:0 4px 12px rgba(0,0,0,.4)}
 
 /* ── Layout ───────────────────────────────────────── */
 #gfcr{display:flex;flex-direction:column;height:100vh;overflow:hidden}
@@ -421,76 +424,108 @@ select.form-control{cursor:pointer}
 .cfg-form-divider{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;color:#2d4a6d;text-transform:uppercase;letter-spacing:.7px;margin-bottom:13px}
 .cfg-form-divider::after{content:'';flex:1;height:1px;background:#162035}
 .cfg-form-divider i{flex-shrink:0}
-.gfcr-tab-body.cfg-active .form-label{color:#4b6a94!important}
-.gfcr-tab-body.cfg-active .form-control{background:#0e1825!important;border-color:#162035!important;color:#cbd5e1!important}
-.gfcr-tab-body.cfg-active .form-control:focus{border-color:#2563eb!important;box-shadow:0 0 0 3px rgba(37,99,235,.15)!important;background:#0f1e33!important}
-.gfcr-tab-body.cfg-active select.form-control option{background:#0e1825;color:#cbd5e1}
-.gfcr-tab-body.cfg-active .form-check label{color:#64748b}
-.gfcr-tab-body.cfg-active .form-desc{color:#2d4a6d!important}
-.gfcr-tab-body.cfg-active .cr-tree-panel{background:#0d1526!important;border-color:#162035!important}
-.gfcr-tab-body.cfg-active .cr-tree-header{background:#0b1320!important;border-color:#162035!important}
-.gfcr-tab-body.cfg-active .cr-tree-title{color:#4b6a94!important}
-.gfcr-tab-body.cfg-active .cr-tree-search{background:#0e1825!important;border-color:#162035!important}
-.gfcr-tab-body.cfg-active .cr-tree-search input{color:#cbd5e1!important}
-.gfcr-tab-body.cfg-active .cr-tree-search input::placeholder{color:#1e3a5f!important}
-.gfcr-tab-body.cfg-active .cr-tree-sel-pill{background:#1e3a8a!important;border-color:#3b82f6!important;color:#93c5fd!important}
-.gfcr-tab-body.cfg-active .cr-tree-sel-pill .clear-sel{color:#60a5fa!important}
-.gfcr-tab-body.cfg-active .cg-node:hover{background:#0f1e33!important;border-color:#162035!important}
-.gfcr-tab-body.cfg-active .cg-node.selected{background:#1e3a8a!important;border-color:#3b82f6!important}
-.gfcr-tab-body.cfg-active .cg-name{color:#94a3b8!important}
-.gfcr-tab-body.cfg-active .cg-node.selected .cg-name{color:#93c5fd!important}
-.gfcr-tab-body.cfg-active .cg-desc{color:#2d4a6d!important}
-.gfcr-tab-body.cfg-active .cg-order{background:#0f1e33!important;border-color:#162035!important;color:#4b6a94!important}
-.gfcr-tab-body.cfg-active .cr-tree-body::-webkit-scrollbar-thumb{background:#1e3a5f!important}
-.gfcr-tab-body.cfg-active .cr-links-right-hdr{color:#4b6a94!important;border-color:#162035!important}
-.gfcr-tab-body.cfg-active .icon-picker-trigger{background:#0e1825!important;border-color:#162035!important}
-.gfcr-tab-body.cfg-active .icon-picker-trigger-name{color:#64748b!important}
-.gfcr-tab-body.cfg-active .icon-picker-panel{background:#0d1526!important;border-color:#162035!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important}
-.gfcr-tab-body.cfg-active .icon-picker-search-bar{border-color:#162035!important}
-.gfcr-tab-body.cfg-active .icon-picker-search-bar input{color:#cbd5e1!important}
-.gfcr-tab-body.cfg-active .icon-picker-close{color:#4b6a94!important}
-.gfcr-tab-body.cfg-active .icon-grid-item:hover{background:#162035!important;border-color:#1e3a5f!important}
-.gfcr-tab-body.cfg-active .icon-grid-item.selected{background:#1e3a8a!important;border-color:#3b82f6!important}
-.gfcr-tab-body.cfg-active .icon-grid-item span{color:#2d4a6d!important}
-
-/* ── Settings dark-mode — header/toolbar/tabs ─────── */
-.gfcr-main.cfg-dark-mode .gfcr-det-hdr{background:#0d1526!important;border-color:#162035!important}
-.gfcr-main.cfg-dark-mode .gfcr-det-hdr-name{color:#f1f5f9!important}
-.gfcr-main.cfg-dark-mode .gfcr-det-hdr-meta span{color:#4b6a94!important}
-.gfcr-main.cfg-dark-mode .gfcr-det-hdr-meta .sep{color:#162035!important}
-.gfcr-main.cfg-dark-mode .gfcr-det-hdr-desc{color:#4b6a94!important;border-color:#162035!important}
-.gfcr-main.cfg-dark-mode .gfcr-det-hdr-icon{background:#0f1e33!important;color:#2d4a6d!important}
-.gfcr-main.cfg-dark-mode .ver-panel{background:#0b1320!important;border-color:#162035!important}
-.gfcr-main.cfg-dark-mode .ver-panel-item{color:#2d4a6d!important}
-.gfcr-main.cfg-dark-mode .ver-panel-item strong{color:#94a3b8!important}
-.gfcr-main.cfg-dark-mode .gfcr-toolbar{background:#0d1526!important;border-color:#162035!important}
-.gfcr-main.cfg-dark-mode .gfcr-toolbar-sep{background:#162035!important}
-.gfcr-main.cfg-dark-mode .btn-act{background:#0f1e33!important;border-color:#162035!important;color:#4b6a94!important}
-.gfcr-main.cfg-dark-mode .btn-act:hover{background:#162035!important;border-color:#1e3a5f!important;color:#94a3b8!important}
-.gfcr-main.cfg-dark-mode .btn-act:disabled{opacity:.3!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-primary{background:#1e3a8a!important;border-color:#2563eb!important;color:#93c5fd!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-primary:hover{background:#1d4ed8!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-outline{background:#0f1e33!important;border-color:#2563eb!important;color:#60a5fa!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-outline:hover{background:#162035!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-accent{background:#064e3b!important;border-color:#059669!important;color:#4ade80!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-accent:hover{background:#065f46!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-danger{color:#f87171!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-danger:hover{background:#7f1d1d!important;border-color:#dc2626!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-warn{color:#fbbf24!important}
-.gfcr-main.cfg-dark-mode .btn-act.btn-warn:hover{background:#713f12!important;border-color:#d97706!important}
-.gfcr-main.cfg-dark-mode .cr-locked-notice{background:#1a1800!important;border-color:#713f12!important;color:#fbbf24!important}
-.gfcr-main.cfg-dark-mode .gfcr-tabs{background:#0d1526!important;border-color:#162035!important}
-.gfcr-main.cfg-dark-mode .gfcr-tab{color:#2d4a6d!important}
-.gfcr-main.cfg-dark-mode .gfcr-tab:hover{background:#0f1e33!important;color:#64748b!important}
-.gfcr-main.cfg-dark-mode .gfcr-tab.active{color:#60a5fa!important;border-bottom-color:#2563eb!important}
-.gfcr-main.cfg-dark-mode .gfcr-form-hdr{background:#0d1526!important;border-color:#162035!important}
-.gfcr-main.cfg-dark-mode .gfcr-form-hdr-title{color:#f1f5f9!important}
-.gfcr-main.cfg-dark-mode .gfcr-form-hdr-sub{color:#2d4a6d!important}
-.gfcr-main.cfg-dark-mode .gfcr-form-foot{background:#0d1526!important;border-color:#162035!important}
-.gfcr-main.cfg-dark-mode .btn-cancel{background:#0f1e33!important;border-color:#162035!important;color:#4b6a94!important}
-.gfcr-main.cfg-dark-mode .btn-cancel:hover{background:#162035!important}
-.gfcr-main.cfg-dark-mode .btn-save{background:#1e3a8a!important;color:#93c5fd!important}
-.gfcr-main.cfg-dark-mode .btn-save:hover{background:#1d4ed8!important}
+/* ══ DARK OVERRIDES GLOBAIS — #gfcr ══════════════════════════
+   Bloco único que substitui todos os overrides de escopo restrito.
+   Cobre: tabs, botões, forms, tree, icon picker, badges, cards.
+   ══════════════════════════════════════════════════════════ */
+/* Tabs */
+#gfcr .gfcr-tabs{border-bottom-color:#162035!important}
+#gfcr .gfcr-tab.active{color:#60a5fa!important;border-bottom-color:#2563eb!important}
+/* Botões */
+#gfcr .btn-act.btn-primary{background:#1e3a8a!important;color:#93c5fd!important;border-color:#2563eb!important}
+#gfcr .btn-act.btn-primary:hover{background:#1d4ed8!important}
+#gfcr .btn-act.btn-outline{border-color:#2563eb!important;color:#60a5fa!important}
+#gfcr .btn-act.btn-outline:hover{background:#0f1e33!important}
+#gfcr .btn-act.btn-accent{background:#064e3b!important;border-color:#059669!important;color:#4ade80!important}
+#gfcr .btn-act.btn-accent:hover{background:#065f46!important}
+#gfcr .btn-act.btn-danger{color:#f87171!important}
+#gfcr .btn-act.btn-danger:hover{background:#7f1d1d!important;border-color:#dc2626!important;color:#f87171!important}
+#gfcr .btn-act.btn-warn{color:#fbbf24!important}
+#gfcr .btn-act.btn-warn:hover{background:#713f12!important;border-color:#d97706!important}
+#gfcr .btn-save{background:#1e3a8a!important;color:#93c5fd!important}
+#gfcr .btn-save:hover{background:#1d4ed8!important}
+#gfcr .btn-cancel{background:#0f1e33!important;border-color:#162035!important;color:#4b6a94!important}
+#gfcr .btn-cancel:hover{background:#162035!important}
+#gfcr .cr-locked-notice{background:#1a1800!important;border-color:#713f12!important;color:#fbbf24!important}
+/* Form controls */
+#gfcr .form-control{background:#0e1825!important;border-color:#162035!important;color:#cbd5e1!important}
+#gfcr .form-control:focus{background:#0f1e33!important;border-color:#2563eb!important;box-shadow:0 0 0 3px rgba(37,99,235,.15)!important}
+#gfcr select.form-control option{background:#0e1825;color:#cbd5e1}
+#gfcr .form-label{color:#4b6a94!important}
+#gfcr .form-check label{color:#64748b}
+#gfcr .form-desc{color:#2d4a6d!important}
+/* Icon picker */
+#gfcr .icon-picker-trigger{background:#0e1825!important;border-color:#162035!important}
+#gfcr .icon-picker-trigger-name{color:#64748b!important}
+#gfcr .icon-picker-panel{background:#0d1526!important;border-color:#162035!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important}
+#gfcr .icon-picker-search-bar{border-color:#162035!important;background:#0d1526}
+#gfcr .icon-picker-search-bar input{color:#cbd5e1!important;background:transparent}
+#gfcr .icon-picker-close{color:#4b6a94!important}
+#gfcr .icon-grid-item:hover{background:#162035!important;border-color:#1e3a5f!important}
+#gfcr .icon-grid-item.selected{background:#1e3a8a!important;border-color:#3b82f6!important}
+#gfcr .icon-grid-item span{color:#2d4a6d!important}
+/* Content group tree */
+#gfcr .cr-tree-panel{background:#0d1526!important;border-color:#162035!important}
+#gfcr .cr-tree-header{background:#0b1320!important;border-color:#162035!important}
+#gfcr .cr-tree-title{color:#4b6a94!important}
+#gfcr .cr-tree-search{background:#0e1825!important;border-color:#162035!important}
+#gfcr .cr-tree-search input{color:#cbd5e1!important}
+#gfcr .cr-tree-search input::placeholder{color:#1e3a5f!important}
+#gfcr .cr-tree-sel-pill{background:#1e3a8a!important;border-color:#3b82f6!important;color:#93c5fd!important}
+#gfcr .cr-tree-sel-pill .clear-sel{color:#60a5fa!important}
+#gfcr .cr-tree-body::-webkit-scrollbar-thumb{background:#1e3a5f!important}
+#gfcr .cr-links-right-hdr{color:#4b6a94!important;border-color:#162035!important}
+#gfcr .cg-node:hover{background:#0f1e33!important;border-color:#162035!important}
+#gfcr .cg-node.selected{background:#1e3a8a!important;border-color:#3b82f6!important}
+#gfcr .cg-name{color:#94a3b8!important}
+#gfcr .cg-node.selected .cg-name{color:#93c5fd!important}
+#gfcr .cg-desc{color:#2d4a6d!important}
+#gfcr .cg-order{background:#0f1e33!important;border-color:#162035!important;color:#4b6a94!important}
+/* Badges */
+#gfcr .badge-draft{background:#1e293b;color:#64748b;border:1px solid #334155}
+#gfcr .badge-dev{background:#1e3a8a;color:#93c5fd;border:none}
+#gfcr .badge-test{background:#7c2d12;color:#fed7aa;border:none}
+#gfcr .badge-submetido{background:#312e81;color:#c7d2fe;border:none}
+#gfcr .badge-obsoleto{background:#713f12;color:#fde68a;border:none}
+#gfcr .badge-arquivado{background:#7f1d1d;color:#fca5a5;border:none}
+#gfcr .badge-type{background:#2d1b69;color:#c4b5fd;border:none}
+#gfcr .badge-group{background:#1e3a8a;color:#93c5fd;border:none}
+/* View cards */
+#gfcr .cr-desc-card{background:#0d1526;border-color:#162035}
+#gfcr .cr-desc-hdr{background:#0b1320;border-color:#162035;color:#4b6a94}
+#gfcr .cr-desc-body{color:#94a3b8}
+#gfcr .cr-bottom-card{background:#0d1526;border-color:#162035}
+#gfcr .cr-bottom-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.35)}
+#gfcr .cr-bottom-hdr{color:#2d4a6d}
+#gfcr .cr-bottom-body{color:#e2e8f0}
+#gfcr .cr-tech-strip{background:#0b1320;border-color:#162035}
+#gfcr .cr-tech-chip{background:#0d1526;border-color:#162035;color:#4b6a94}
+#gfcr .cr-tech-sep{background:#162035}
+#gfcr .cr-tag{background:#1a2540;color:#60a5fa}
+/* VK cards (view mode) */
+#gfcr .vk-green,#gfcr .vk-blue,#gfcr .vk-purple,
+#gfcr .vk-amber,#gfcr .vk-slate,#gfcr .vk-teal{background:#0d1526;border-color:#162035}
+#gfcr .vk-card-icon{background:#0f1e33!important;color:#4b6a94!important}
+#gfcr .vk-card-lbl{color:#2d4a6d!important}
+#gfcr .vk-card-val{color:#94a3b8!important}
+#gfcr .vk-section{color:#2d4a6d}
+#gfcr .vk-section::after{background:#162035}
+/* Reference URL */
+#gfcr .ref-url-card{background:#0d1526;border-color:#162035}
+#gfcr .ref-url-card-hdr{background:#0b1320;border-color:#162035;color:#4b6a94}
+#gfcr .ref-url-card-body{background:#0d1526;color:#38bdf8}
+#gfcr .ref-url-card-empty{color:#2d4a6d}
+#gfcr .ref-url-actions{background:#0b1320;border-color:#162035}
+/* Versioning */
+#gfcr .vk-ver-hdr{background:#0a1f14;border-color:#1a3a26}
+#gfcr .vk-ver-main{color:#4ade80}
+#gfcr .vk-ver-label{color:#4ade80}
+/* Scrollbar */
+#gfcr .gfcr-tab-body::-webkit-scrollbar-thumb{background:#1e3a5f!important}
+/* Natural Studio — ocultar cabeçalho superior da página */
+#gfcr-main.ns-mode .gfcr-det-hdr,
+#gfcr-main.ns-mode .ver-panel,
+#gfcr-main.ns-mode .gfcr-toolbar{display:none!important}
 
 /* ── Natural Studio — file section wrapper ────────── */
 .ns-file-section{flex-shrink:0;max-height:220px;display:flex;flex-direction:column;overflow:hidden;border-bottom:1px solid #1a2540}
@@ -817,7 +852,7 @@ class GFContentRegistryApp {
   // ── Render empty ──────────────────────────────────
   _renderEmpty() {
     const $main = document.getElementById('gfcr-main');
-    $main.classList.remove('cfg-dark-mode');
+    $main.classList.remove('ns-mode');
     $main.innerHTML = `
       <div class="gfcr-empty">
         <div class="gfcr-empty-icon"><i data-lucide="book-open" style="width:32px;height:32px"></i></div>
@@ -1846,16 +1881,20 @@ class GFContentRegistryApp {
     const $main = document.getElementById('gfcr-main');
     if (idx === 1) {
       $body.classList.add('ns-active');
-      if ($main) $main.classList.remove('cfg-dark-mode');
+      if ($main) $main.classList.add('ns-mode');
     } else {
       $body.classList.add('cfg-active');
-      if ($main) $main.classList.add('cfg-dark-mode');
+      if ($main) $main.classList.remove('ns-mode');
     }
   }
 
   _nsInit() {
     const intName = (this.selected || {}).internal_name;
     if (!intName) return;
+    frappe.call({
+      method: 'ichis_atlas_app.api.natural_studio.ensure_record_directories',
+      args: { internal_name: intName, route_url: (this.selected || {}).route_url || '' }
+    });
     const $gal = document.getElementById('ns-gallery');
     if ($gal) $gal.innerHTML = `
       <div class="ns-gallery-loading">

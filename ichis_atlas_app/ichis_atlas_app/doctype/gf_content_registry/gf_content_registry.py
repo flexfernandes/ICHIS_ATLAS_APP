@@ -39,6 +39,19 @@ class GFContentRegistry(Document):
         if self.content_group:
             self._resolve_drive_path()
 
+    def after_insert(self):
+        self._ensure_ns_directories()
+
+    def on_update(self):
+        self._ensure_ns_directories()
+
+    def _ensure_ns_directories(self):
+        if not self.internal_name:
+            return
+        import os
+        ns_path = frappe.get_site_path('public', 'files', 'natural_studio', self.internal_name)
+        os.makedirs(ns_path, exist_ok=True)
+
     def _resolve_drive_path(self):
         external_ref = frappe.db.get_value("GF Content Group", self.content_group, "external_reference")
         if not external_ref:
