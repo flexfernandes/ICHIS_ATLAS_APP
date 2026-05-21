@@ -91,12 +91,9 @@ class GFContentRegistry(Document):
 
         files = resp.json().get("files", [])
         if not files:
-            frappe.throw(
-                f"Pasta '<b>{external_ref}</b>' não encontrada no Google Drive. "
-                "Verifique o campo <b>Referência Externa (Google Drive)</b> no Grupo de Conteúdo selecionado."
-            )
-
-        folder_id = files[0]["id"]
+            folder_id = _create_folder(access_token, external_ref, "root")
+        else:
+            folder_id = files[0]["id"]
         auth_headers = {"Authorization": f"Bearer {access_token}"}
         self.route_url = self._build_drive_path(folder_id, auth_headers)
 
