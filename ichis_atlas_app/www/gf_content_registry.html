@@ -392,13 +392,13 @@ select.form-control{cursor:pointer}
 .ns-lightbox-info{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:7px 16px;color:#94a3b8;font-size:11.5px;font-family:var(--mono);white-space:nowrap;max-width:80vw;overflow:hidden;text-overflow:ellipsis}
 
 /* ── Settings Tab — dark mode ─────────────────────── */
-.gfcr-tab-body.cfg-active{padding:0!important;background:#080e1c!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important}
+.gfcr-tab-body.cfg-active{padding:0!important;background:#080e1c!important;overflow-y:auto!important}
 .cfg-wrap{display:flex;flex-direction:column;background:#080e1c;color:#e2e8f0;padding:20px;min-height:100%}
 .cfg-section{background:#0d1526;border:1px solid #162035;border-radius:12px;margin-bottom:14px;overflow:hidden}
 .cfg-section-hdr{display:flex;align-items:center;gap:8px;padding:11px 18px;background:#0b1320;border-bottom:1px solid #162035;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#3b5280}
 .cfg-section-hdr i{color:#2d4a6d;flex-shrink:0}
 .cfg-rows{display:flex;flex-direction:column}
-.cfg-row{display:flex;align-items:flex-start;gap:16px;padding:11px 18px;border-bottom:1px solid #0f1e33;transition:background 120ms}
+.cfg-row{display:flex;align-items:flex-start;gap:16px;padding:14px 20px;border-bottom:1px solid #0f1e33;transition:background 120ms}
 .cfg-row:last-child{border-bottom:none}
 .cfg-row:hover{background:#0f1e33}
 .cfg-row-lbl{width:160px;flex-shrink:0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#2d4a6d;padding-top:2px;line-height:1.3}
@@ -452,6 +452,75 @@ select.form-control{cursor:pointer}
 .gfcr-tab-body.cfg-active .icon-grid-item:hover{background:#162035!important;border-color:#1e3a5f!important}
 .gfcr-tab-body.cfg-active .icon-grid-item.selected{background:#1e3a8a!important;border-color:#3b82f6!important}
 .gfcr-tab-body.cfg-active .icon-grid-item span{color:#2d4a6d!important}
+
+/* ── Settings dark-mode — header/toolbar/tabs ─────── */
+.gfcr-main.cfg-dark-mode .gfcr-det-hdr{background:#0d1526!important;border-color:#162035!important}
+.gfcr-main.cfg-dark-mode .gfcr-det-hdr-name{color:#f1f5f9!important}
+.gfcr-main.cfg-dark-mode .gfcr-det-hdr-meta span{color:#4b6a94!important}
+.gfcr-main.cfg-dark-mode .gfcr-det-hdr-meta .sep{color:#162035!important}
+.gfcr-main.cfg-dark-mode .gfcr-det-hdr-desc{color:#4b6a94!important;border-color:#162035!important}
+.gfcr-main.cfg-dark-mode .gfcr-det-hdr-icon{background:#0f1e33!important;color:#2d4a6d!important}
+.gfcr-main.cfg-dark-mode .ver-panel{background:#0b1320!important;border-color:#162035!important}
+.gfcr-main.cfg-dark-mode .ver-panel-item{color:#2d4a6d!important}
+.gfcr-main.cfg-dark-mode .ver-panel-item strong{color:#94a3b8!important}
+.gfcr-main.cfg-dark-mode .gfcr-toolbar{background:#0d1526!important;border-color:#162035!important}
+.gfcr-main.cfg-dark-mode .gfcr-toolbar-sep{background:#162035!important}
+.gfcr-main.cfg-dark-mode .btn-act{background:#0f1e33!important;border-color:#162035!important;color:#4b6a94!important}
+.gfcr-main.cfg-dark-mode .btn-act:hover{background:#162035!important;border-color:#1e3a5f!important;color:#94a3b8!important}
+.gfcr-main.cfg-dark-mode .btn-act:disabled{opacity:.3!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-primary{background:#1e3a8a!important;border-color:#2563eb!important;color:#93c5fd!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-primary:hover{background:#1d4ed8!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-outline{background:#0f1e33!important;border-color:#2563eb!important;color:#60a5fa!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-outline:hover{background:#162035!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-accent{background:#064e3b!important;border-color:#059669!important;color:#4ade80!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-accent:hover{background:#065f46!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-danger{color:#f87171!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-danger:hover{background:#7f1d1d!important;border-color:#dc2626!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-warn{color:#fbbf24!important}
+.gfcr-main.cfg-dark-mode .btn-act.btn-warn:hover{background:#713f12!important;border-color:#d97706!important}
+.gfcr-main.cfg-dark-mode .cr-locked-notice{background:#1a1800!important;border-color:#713f12!important;color:#fbbf24!important}
+.gfcr-main.cfg-dark-mode .gfcr-tabs{background:#0d1526!important;border-color:#162035!important}
+.gfcr-main.cfg-dark-mode .gfcr-tab{color:#2d4a6d!important}
+.gfcr-main.cfg-dark-mode .gfcr-tab:hover{background:#0f1e33!important;color:#64748b!important}
+.gfcr-main.cfg-dark-mode .gfcr-tab.active{color:#60a5fa!important;border-bottom-color:#2563eb!important}
+.gfcr-main.cfg-dark-mode .gfcr-form-hdr{background:#0d1526!important;border-color:#162035!important}
+.gfcr-main.cfg-dark-mode .gfcr-form-hdr-title{color:#f1f5f9!important}
+.gfcr-main.cfg-dark-mode .gfcr-form-hdr-sub{color:#2d4a6d!important}
+.gfcr-main.cfg-dark-mode .gfcr-form-foot{background:#0d1526!important;border-color:#162035!important}
+.gfcr-main.cfg-dark-mode .btn-cancel{background:#0f1e33!important;border-color:#162035!important;color:#4b6a94!important}
+.gfcr-main.cfg-dark-mode .btn-cancel:hover{background:#162035!important}
+.gfcr-main.cfg-dark-mode .btn-save{background:#1e3a8a!important;color:#93c5fd!important}
+.gfcr-main.cfg-dark-mode .btn-save:hover{background:#1d4ed8!important}
+
+/* ── Natural Studio — file section wrapper ────────── */
+.ns-file-section{flex-shrink:0;max-height:220px;display:flex;flex-direction:column;overflow:hidden;border-bottom:1px solid #1a2540}
+.ns-file-section .ns-gallery{flex:1;overflow-y:auto;padding:12px 20px 14px;min-height:0}
+
+/* ── Natural Studio — AI interface ───────────────── */
+.ns-ai-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;background:#080e1c}
+.ns-ai-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 20px;border-bottom:1px solid #0d1a30;flex-shrink:0}
+.ns-ai-hdr-title{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#2d4a6d}
+.ns-ai-chat{flex:1;overflow-y:auto;min-height:0;display:flex;align-items:center;justify-content:center}
+.ns-ai-chat::-webkit-scrollbar{width:4px}
+.ns-ai-chat::-webkit-scrollbar-thumb{background:#1a2540;border-radius:4px}
+.ns-ai-welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px 20px;text-align:center}
+.ns-ai-welcome-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,rgba(109,40,217,.22),rgba(37,99,235,.18));border:1px solid rgba(99,102,241,.22);display:flex;align-items:center;justify-content:center;color:#818cf8;margin-bottom:2px}
+.ns-ai-welcome-title{font-size:14px;font-weight:700;color:#f1f5f9;letter-spacing:-.2px}
+.ns-ai-welcome-sub{font-size:11.5px;color:#334155;line-height:1.5}
+.ns-ai-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:4px}
+.ns-ai-chip{padding:5px 12px;background:#0d1526;border:1px solid #1e3a5f;border-radius:20px;color:#60a5fa;font-size:11px;cursor:pointer;transition:all 150ms;white-space:nowrap;font-family:var(--font)}
+.ns-ai-chip:hover{background:#162035;border-color:#3b82f6;color:#93c5fd}
+.ns-ai-input-area{padding:8px 16px 12px;flex-shrink:0;background:#080e1c}
+.ns-ai-input-box{background:#0d1526;border:1px solid #1a2540;border-radius:11px;overflow:hidden;transition:border-color 150ms}
+.ns-ai-input-box:focus-within{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.ns-ai-textarea{width:100%;background:transparent;border:none;outline:none;padding:10px 14px 5px;font-size:13px;color:#e2e8f0;resize:none;font-family:var(--font);line-height:1.6;min-height:40px;max-height:100px}
+.ns-ai-textarea::placeholder{color:#2d4a6d}
+.ns-ai-input-actions{display:flex;align-items:center;justify-content:space-between;padding:5px 10px 7px}
+.ns-ai-icon-btn{width:27px;height:27px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;color:#334155;border-radius:6px;transition:all 120ms}
+.ns-ai-icon-btn:hover{background:#162035;color:#64748b}
+.ns-ai-model-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:600;color:#1e3a5f;background:#0a1020;border:1px solid #0f1e33;border-radius:20px;padding:2px 8px;margin-left:4px;font-family:var(--mono)}
+.ns-ai-btn-send{width:31px;height:31px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#6d28d9,#2563eb);border:none;border-radius:8px;color:#fff;cursor:pointer;transition:opacity 150ms;flex-shrink:0}
+.ns-ai-btn-send:hover{opacity:.85}
 </style>
 {% endblock %}
 
@@ -748,6 +817,7 @@ class GFContentRegistryApp {
   // ── Render empty ──────────────────────────────────
   _renderEmpty() {
     const $main = document.getElementById('gfcr-main');
+    $main.classList.remove('cfg-dark-mode');
     $main.innerHTML = `
       <div class="gfcr-empty">
         <div class="gfcr-empty-icon"><i data-lucide="book-open" style="width:32px;height:32px"></i></div>
@@ -987,10 +1057,55 @@ class GFContentRegistryApp {
               <div class="ns-upload-bar-fill" id="ns-upload-fill"></div>
             </div>
           </div>
-          <div class="ns-gallery" id="ns-gallery">
-            <div class="ns-gallery-loading">
-              <div class="spinner" style="width:24px;height:24px;border-color:#1a2540;border-top-color:#38bdf8"></div>
-              <span style="color:#475569;font-size:13px;margin-left:8px">Carregando arquivos...</span>
+          <div class="ns-file-section">
+            <div class="ns-gallery" id="ns-gallery">
+              <div class="ns-gallery-loading">
+                <div class="spinner" style="width:24px;height:24px;border-color:#1a2540;border-top-color:#38bdf8"></div>
+                <span style="color:#475569;font-size:13px;margin-left:8px">Carregando arquivos...</span>
+              </div>
+            </div>
+          </div>
+          <div class="ns-ai-wrap">
+            <div class="ns-ai-hdr">
+              <div class="ns-ai-hdr-title">
+                <i data-lucide="sparkles" style="width:11px;height:11px"></i> Studio AI
+              </div>
+              <span class="ns-ai-model-badge" style="margin-left:0">
+                <i data-lucide="cpu" style="width:9px;height:9px"></i> Atlas AI · Beta
+              </span>
+            </div>
+            <div class="ns-ai-chat" id="ns-ai-chat">
+              <div class="ns-ai-welcome">
+                <div class="ns-ai-welcome-icon">
+                  <i data-lucide="sparkles" style="width:22px;height:22px"></i>
+                </div>
+                <div class="ns-ai-welcome-title">Studio AI</div>
+                <div class="ns-ai-welcome-sub">Assistente inteligente vinculado a este conteúdo</div>
+                <div class="ns-ai-chips">
+                  <button class="ns-ai-chip" onclick="document.getElementById('ns-ai-textarea').value='Gerar documento para este conteúdo';document.getElementById('ns-ai-textarea').focus()">Gerar documento</button>
+                  <button class="ns-ai-chip" onclick="document.getElementById('ns-ai-textarea').value='Analisar o conteúdo e identificar pontos de melhoria';document.getElementById('ns-ai-textarea').focus()">Analisar conteúdo</button>
+                  <button class="ns-ai-chip" onclick="document.getElementById('ns-ai-textarea').value='Descrever as imagens enviadas neste registro';document.getElementById('ns-ai-textarea').focus()">Descrever imagens</button>
+                  <button class="ns-ai-chip" onclick="document.getElementById('ns-ai-textarea').value='Criar uma revisão atualizada deste conteúdo';document.getElementById('ns-ai-textarea').focus()">Criar revisão</button>
+                </div>
+              </div>
+            </div>
+            <div class="ns-ai-input-area">
+              <div class="ns-ai-input-box">
+                <textarea class="ns-ai-textarea" id="ns-ai-textarea" placeholder="Pergunte algo sobre este conteúdo..." rows="2"></textarea>
+                <div class="ns-ai-input-actions">
+                  <div style="display:flex;gap:4px;align-items:center">
+                    <button class="ns-ai-icon-btn" title="Anexar arquivo"><i data-lucide="paperclip" style="width:14px;height:14px"></i></button>
+                    <button class="ns-ai-icon-btn" title="Adicionar imagem"><i data-lucide="image" style="width:14px;height:14px"></i></button>
+                    <button class="ns-ai-icon-btn" title="Inserir link"><i data-lucide="link-2" style="width:14px;height:14px"></i></button>
+                    <span class="ns-ai-model-badge">
+                      <i data-lucide="cpu" style="width:9px;height:9px"></i> Atlas AI
+                    </span>
+                  </div>
+                  <button class="ns-ai-btn-send" title="Enviar">
+                    <i data-lucide="send" style="width:13px;height:13px"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="ns-info-bar" id="ns-info-bar">
@@ -1401,6 +1516,12 @@ class GFContentRegistryApp {
             const saved = r.message;
             const finish = () => {
               this._saving = false;
+              if (saved.internal_name) {
+                frappe.call({
+                  method: 'ichis_atlas_app.api.natural_studio.ensure_record_directories',
+                  args: { internal_name: saved.internal_name, route_url: saved.route_url || '' }
+                });
+              }
               this._loadRecords().then(() => {
                 this.selected  = saved;
                 this.mode      = 'view';
@@ -1722,8 +1843,14 @@ class GFContentRegistryApp {
   _applyTabClass($body, idx) {
     if (!$body) return;
     $body.classList.remove('ns-active', 'cfg-active');
-    if (idx === 1) $body.classList.add('ns-active');
-    else $body.classList.add('cfg-active');
+    const $main = document.getElementById('gfcr-main');
+    if (idx === 1) {
+      $body.classList.add('ns-active');
+      if ($main) $main.classList.remove('cfg-dark-mode');
+    } else {
+      $body.classList.add('cfg-active');
+      if ($main) $main.classList.add('cfg-dark-mode');
+    }
   }
 
   _nsInit() {

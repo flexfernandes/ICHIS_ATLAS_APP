@@ -1,5 +1,6 @@
 import frappe
 import os
+import re
 from werkzeug.utils import secure_filename
 
 NS_URL_BASE = '/files/natural_studio/'
@@ -82,3 +83,27 @@ def upload_file(internal_name):
         'name': final_name,
         'url':  NS_URL_BASE + internal_name + '/' + final_name,
     }
+
+
+@frappe.whitelist()
+def ensure_record_directories(internal_name, route_url=None):
+    _safe_name(internal_name)
+
+    # Sempre garante: public/files/natural_studio/{internal_name}/
+    ns_path = _get_ns_path(internal_name)
+    os.makedirs(ns_path, exist_ok=True)
+
+    created = [ns_path]
+
+    if route_url:
+        # Sanitiza route_url em nome de diretório seguro
+        clean = re.sub(r'[^a-zA-Z0-9._-]', '_', route_url.strip('/'))
+        clean = re.sub(r'_+', '_', clean).strip('_')
+        if clean and '..' not in clean and len(clean) <= 200:
+            route_base = frappe.get_site_path('public', 'files', clean)
+            os.makedirs(route_base, exist_ok=True)
+            route_sub = os.path.join(route_base, internal_name)
+            os.makedirs(route_sub, exist_ok=True)
+            created.extend([route_base, route_sub])
+
+    return {'ok': True, 'created': created}
