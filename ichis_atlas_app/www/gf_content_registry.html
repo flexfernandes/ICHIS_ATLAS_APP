@@ -390,6 +390,68 @@ select.form-control{cursor:pointer}
 .ns-lightbox-close{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:#fff;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;transition:background 150ms}
 .ns-lightbox-close:hover{background:rgba(255,255,255,.28)}
 .ns-lightbox-info{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:7px 16px;color:#94a3b8;font-size:11.5px;font-family:var(--mono);white-space:nowrap;max-width:80vw;overflow:hidden;text-overflow:ellipsis}
+
+/* ── Settings Tab — dark mode ─────────────────────── */
+.gfcr-tab-body.cfg-active{padding:0!important;background:#080e1c!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important}
+.cfg-wrap{display:flex;flex-direction:column;background:#080e1c;color:#e2e8f0;padding:20px;min-height:100%}
+.cfg-section{background:#0d1526;border:1px solid #162035;border-radius:12px;margin-bottom:14px;overflow:hidden}
+.cfg-section-hdr{display:flex;align-items:center;gap:8px;padding:11px 18px;background:#0b1320;border-bottom:1px solid #162035;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#3b5280}
+.cfg-section-hdr i{color:#2d4a6d;flex-shrink:0}
+.cfg-rows{display:flex;flex-direction:column}
+.cfg-row{display:flex;align-items:flex-start;gap:16px;padding:11px 18px;border-bottom:1px solid #0f1e33;transition:background 120ms}
+.cfg-row:last-child{border-bottom:none}
+.cfg-row:hover{background:#0f1e33}
+.cfg-row-lbl{width:160px;flex-shrink:0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#2d4a6d;padding-top:2px;line-height:1.3}
+.cfg-row-val{flex:1;font-size:13px;color:#cbd5e1;line-height:1.5;word-break:break-word;min-width:0}
+.cfg-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.cfg-badge-draft{background:#1e293b;color:#64748b;border:1px solid #334155}
+.cfg-badge-dev{background:#1e3a8a;color:#93c5fd}
+.cfg-badge-test{background:#7c2d12;color:#fed7aa}
+.cfg-badge-submetido{background:#312e81;color:#c7d2fe}
+.cfg-badge-obsoleto{background:#713f12;color:#fde68a}
+.cfg-badge-arquivado{background:#7f1d1d;color:#fca5a5}
+.cfg-tag{display:inline-flex;font-size:10.5px;background:#1a2540;color:#60a5fa;border:1px solid #1e3a5f;border-radius:20px;padding:2px 9px;margin:2px 3px 2px 0}
+.cfg-color-dot{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.12);display:inline-block;flex-shrink:0}
+.cfg-bool-yes{display:inline-flex;align-items:center;gap:4px;color:#4ade80;font-size:12.5px}
+.cfg-bool-no{display:inline-flex;align-items:center;gap:4px;color:#2d4a6d;font-size:12.5px}
+.cfg-url-btn{padding:4px 10px;background:#0f1e33;border:1px solid #1e3a5f;border-radius:6px;color:#60a5fa;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:background 120ms;font-family:var(--font);white-space:nowrap}
+.cfg-url-btn:hover{background:#162035;color:#93c5fd}
+.cfg-icon-box{width:30px;height:30px;background:#1a2540;border:1px solid #1e3a5f;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;color:#60a5fa;flex-shrink:0}
+.cfg-form-section{margin-bottom:22px}
+.cfg-form-divider{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;color:#2d4a6d;text-transform:uppercase;letter-spacing:.7px;margin-bottom:13px}
+.cfg-form-divider::after{content:'';flex:1;height:1px;background:#162035}
+.cfg-form-divider i{flex-shrink:0}
+.gfcr-tab-body.cfg-active .form-label{color:#4b6a94!important}
+.gfcr-tab-body.cfg-active .form-control{background:#0e1825!important;border-color:#162035!important;color:#cbd5e1!important}
+.gfcr-tab-body.cfg-active .form-control:focus{border-color:#2563eb!important;box-shadow:0 0 0 3px rgba(37,99,235,.15)!important;background:#0f1e33!important}
+.gfcr-tab-body.cfg-active select.form-control option{background:#0e1825;color:#cbd5e1}
+.gfcr-tab-body.cfg-active .form-check label{color:#64748b}
+.gfcr-tab-body.cfg-active .form-desc{color:#2d4a6d!important}
+.gfcr-tab-body.cfg-active .cr-tree-panel{background:#0d1526!important;border-color:#162035!important}
+.gfcr-tab-body.cfg-active .cr-tree-header{background:#0b1320!important;border-color:#162035!important}
+.gfcr-tab-body.cfg-active .cr-tree-title{color:#4b6a94!important}
+.gfcr-tab-body.cfg-active .cr-tree-search{background:#0e1825!important;border-color:#162035!important}
+.gfcr-tab-body.cfg-active .cr-tree-search input{color:#cbd5e1!important}
+.gfcr-tab-body.cfg-active .cr-tree-search input::placeholder{color:#1e3a5f!important}
+.gfcr-tab-body.cfg-active .cr-tree-sel-pill{background:#1e3a8a!important;border-color:#3b82f6!important;color:#93c5fd!important}
+.gfcr-tab-body.cfg-active .cr-tree-sel-pill .clear-sel{color:#60a5fa!important}
+.gfcr-tab-body.cfg-active .cg-node:hover{background:#0f1e33!important;border-color:#162035!important}
+.gfcr-tab-body.cfg-active .cg-node.selected{background:#1e3a8a!important;border-color:#3b82f6!important}
+.gfcr-tab-body.cfg-active .cg-name{color:#94a3b8!important}
+.gfcr-tab-body.cfg-active .cg-node.selected .cg-name{color:#93c5fd!important}
+.gfcr-tab-body.cfg-active .cg-desc{color:#2d4a6d!important}
+.gfcr-tab-body.cfg-active .cg-order{background:#0f1e33!important;border-color:#162035!important;color:#4b6a94!important}
+.gfcr-tab-body.cfg-active .cr-tree-body::-webkit-scrollbar-thumb{background:#1e3a5f!important}
+.gfcr-tab-body.cfg-active .cr-links-right-hdr{color:#4b6a94!important;border-color:#162035!important}
+.gfcr-tab-body.cfg-active .icon-picker-trigger{background:#0e1825!important;border-color:#162035!important}
+.gfcr-tab-body.cfg-active .icon-picker-trigger-name{color:#64748b!important}
+.gfcr-tab-body.cfg-active .icon-picker-panel{background:#0d1526!important;border-color:#162035!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important}
+.gfcr-tab-body.cfg-active .icon-picker-search-bar{border-color:#162035!important}
+.gfcr-tab-body.cfg-active .icon-picker-search-bar input{color:#cbd5e1!important}
+.gfcr-tab-body.cfg-active .icon-picker-close{color:#4b6a94!important}
+.gfcr-tab-body.cfg-active .icon-grid-item:hover{background:#162035!important;border-color:#1e3a5f!important}
+.gfcr-tab-body.cfg-active .icon-grid-item.selected{background:#1e3a8a!important;border-color:#3b82f6!important}
+.gfcr-tab-body.cfg-active .icon-grid-item span{color:#2d4a6d!important}
 </style>
 {% endblock %}
 
@@ -458,13 +520,8 @@ select.form-control{cursor:pointer}
    ════════════════════════════════════════════════════ */
 
 const TABS = [
-  { id:'general',        label:'Geral',           icon:'info' },
+  { id:'settings',       label:'Settings',         icon:'settings-2' },
   { id:'natural_studio', label:'Natural Studio',   icon:'sparkles', viewOnly:true },
-  { id:'links',          label:'Vínculos',         icon:'link-2' },
-  { id:'reference',      label:'Referência',       icon:'globe' },
-  { id:'visual',         label:'Apresentação',     icon:'palette' },
-  { id:'config',         label:'Configurações',    icon:'settings-2' },
-  { id:'versioning',     label:'Versionamento',    icon:'git-branch' },
 ];
 
 const STATUS_COLORS = {
@@ -779,9 +836,10 @@ class GFContentRegistryApp {
 
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
     this._syncNewBtn();
-    if (this.activeTab === 1) {
-      const $body = document.getElementById('gfcr-tab-body');
-      if ($body) { this._nsApplyTabStyle($body, true); this._nsInit(); }
+    const $viewBody = document.getElementById('gfcr-tab-body');
+    if ($viewBody) {
+      this._applyTabClass($viewBody, this.activeTab);
+      if (this.activeTab === 1) this._nsInit();
     }
   }
 
@@ -808,84 +866,84 @@ class GFContentRegistryApp {
     });
     const $body = document.getElementById('gfcr-tab-body');
     if ($body) {
-      const isNS = (idx === 1 && this.mode === 'view');
-      this._nsApplyTabStyle($body, isNS);
+      this._applyTabClass($body, idx);
       $body.innerHTML = (this.mode==='edit'||this.mode==='new')
         ? this._renderTabForm(idx)
         : this._renderTabContent(idx);
       if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
-      if (isNS) this._nsInit();
+      if (idx === 1 && this.mode === 'view') this._nsInit();
     }
   }
 
   // ── Tab content (view) ────────────────────────────
   _renderTabContent(idx) {
-    const s   = this.selected || {};
-    const v   = (f) => s[f] !== undefined && s[f] !== null ? s[f] : '';
-    const fld = (label, val, mono=false) => {
-      const empty = val === '' || val === null || val === undefined;
-      return `<div class="fld-box"><div class="fld-lbl">${label}</div>
-        <div class="fld-val${mono?' mono':''}${empty?' empty':''}">${empty?'—':this._esc(String(val))}</div></div>`;
-    };
-    const chk = (label, val) => `<div class="fld-box"><div class="fld-lbl">${label}</div>
-      <div class="fld-val check">${val
-        ? `<i data-lucide="check-circle" style="width:14px;height:14px" class="fld-check-yes"></i><span>Sim</span>`
-        : `<i data-lucide="x-circle" style="width:14px;height:14px" class="fld-check-no"></i><span>Não</span>`
-      }</div></div>`;
-    const mkCard = (cls, icon, label, val) =>
-      `<div class="vk-card ${cls}">
-        <div class="vk-card-icon"><i data-lucide="${icon}" style="width:20px;height:20px"></i></div>
-        <div class="vk-card-body">
-          <div class="vk-card-lbl">${label}</div>
-          <div class="vk-card-val${!val?' empty':''}">${val ? this._esc(val) : '—'}</div>
-        </div>
-      </div>`;
-
     switch(idx) {
       case 0: {
-        const tags = (v('tags')||'').split(',').map(t=>t.trim()).filter(Boolean);
+        const s = this.selected || {};
+        const v = (f) => { const x = s[f]; return (x !== undefined && x !== null) ? x : ''; };
+        const stCls    = STATUS_COLORS[v('status')] || 'draft';
         const typeIcon = ITEM_TYPE_ICONS[v('item_type')] || 'file';
         const typeLbl  = ITEM_TYPE_LABELS[v('item_type')] || v('item_type');
-        const stCls    = STATUS_COLORS[v('status')] || 'draft';
-        return `<div class="cr-view-body">
-          <div class="cr-tech-strip">
-            <div class="cr-tech-chip" style="font-family:var(--mono);font-size:11px">
-              <i data-lucide="code-2" style="width:11px;height:11px"></i>
-              ${this._esc(v('internal_name')||'—')}
-              <button class="cr-tech-id-copy" title="Copiar Internal Name" onclick="app._copyText('${this._escJs(v('internal_name'))}',this)">
-                <i data-lucide="copy" style="width:10px;height:10px"></i>
-              </button>
+        const tags     = (v('tags')||'').split(',').map(t=>t.trim()).filter(Boolean);
+        const url      = v('route_url');
+        const fullUrl  = url ? (/^https?:\/\//.test(url) ? url : location.origin + url) : '';
+        const icon     = v('icon');
+        const color    = v('color');
+        const ver      = v('version') || '1.0.0';
+        const sortOrder = s.sort_order;
+        const hasSort  = sortOrder !== '' && sortOrder !== null && sortOrder !== undefined;
+        const row = (lbl, html) =>
+          `<div class="cfg-row"><div class="cfg-row-lbl">${lbl}</div><div class="cfg-row-val">${html}</div></div>`;
+        return `<div class="cfg-wrap">
+          <div class="cfg-section">
+            <div class="cfg-section-hdr"><i data-lucide="info" style="width:11px;height:11px"></i>Identificação</div>
+            <div class="cfg-rows">
+              ${row('Título', v('title') ? `<span style="font-size:14px;font-weight:600;color:#f1f5f9">${this._esc(v('title'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Internal Name', `<span style="font-family:var(--mono);font-size:12px;color:#38bdf8">${this._esc(v('internal_name')||'—')}</span>`)}
+              ${row('Tipo', typeLbl ? `<span style="display:inline-flex;align-items:center;gap:5px;color:#94a3b8"><i data-lucide="${typeIcon}" style="width:12px;height:12px;color:#60a5fa;flex-shrink:0"></i>${this._esc(typeLbl)}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Status', v('status') ? `<span class="cfg-badge cfg-badge-${stCls}">${this._esc(v('status'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Descrição', v('description') ? `<span style="color:#94a3b8;white-space:pre-wrap;line-height:1.6">${this._esc(v('description'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Tags', tags.length ? tags.map(t=>`<span class="cfg-tag">${this._esc(t)}</span>`).join('') : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
             </div>
-            <div class="cr-tech-sep"></div>
-            <div class="cr-tech-chip">
-              <i data-lucide="${typeIcon}" style="width:11px;height:11px"></i>${this._esc(typeLbl)}
-            </div>
-            <span class="badge badge-${stCls}">${this._esc(v('status')||'Draft')}</span>
-            <div class="cr-tech-chip">
-              <i data-lucide="tag" style="width:11px;height:11px"></i>v${this._esc(v('version')||'1.0.0')}
-            </div>
-            ${v('favorite') ? `<div class="cr-tech-chip fav-yes"><i data-lucide="star" style="width:11px;height:11px"></i>Favorito</div>` : ''}
-            ${v('show_on_home') ? `<div class="cr-tech-chip"><i data-lucide="home" style="width:11px;height:11px"></i>Na Home</div>` : ''}
-            ${v('route_url') ? `
-            <div class="cr-tech-sep"></div>
-            <div class="cr-tech-chip" style="font-family:var(--mono);font-size:11px;max-width:260px;overflow:hidden;text-overflow:ellipsis" title="${this._esc(v('route_url'))}">
-              <i data-lucide="link" style="width:11px;height:11px;flex-shrink:0"></i>${this._esc(v('route_url'))}
-            </div>` : ''}
           </div>
-
-          <div class="vk-grid">
-            ${v('content_group') ? mkCard('vk-green',  'folder', 'Grupo de Conteúdo', v('content_group')) : ''}
-            ${v('access_group')  ? mkCard('vk-blue',   'shield', 'Grupo de Acesso',   v('access_group'))  : ''}
-            ${v('skill')         ? mkCard('vk-purple', 'zap',    'Skill',             v('skill'))         : ''}
-            ${v('web_page')      ? mkCard('vk-amber',  'globe',  'Web Page',          this._webPageTitle(v('web_page'))) : ''}
-            ${v('responsible_user') ? mkCard('vk-slate', 'user', 'Responsável', v('responsible_user')) : ''}
-            ${tags.length ? `<div class="vk-card vk-slate">
-              <div class="vk-card-icon"><i data-lucide="tag" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Tags</div>
-                <div class="vk-card-val"><div class="cr-tag-list" style="padding:0">${tags.map(t=>`<span class="cr-tag">${this._esc(t)}</span>`).join('')}</div></div>
-              </div>
-            </div>` : ''}
+          <div class="cfg-section">
+            <div class="cfg-section-hdr"><i data-lucide="link-2" style="width:11px;height:11px"></i>Vínculos</div>
+            <div class="cfg-rows">
+              ${row('Grupo de Conteúdo', v('content_group') ? `<span>${this._esc(v('content_group'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Grupo de Acesso', v('access_group') ? `<span>${this._esc(v('access_group'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Skill', v('skill') ? `<span>${this._esc(v('skill'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Web Page', v('web_page') ? `<span>${this._esc(this._webPageTitle(v('web_page')))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Responsável', v('responsible_user') ? `<span>${this._esc(v('responsible_user'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+            </div>
+          </div>
+          <div class="cfg-section">
+            <div class="cfg-section-hdr"><i data-lucide="globe" style="width:11px;height:11px"></i>Referência</div>
+            <div class="cfg-rows">
+              ${row('URL / Rota', url ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span style="font-family:var(--mono);font-size:12px;color:#38bdf8">${this._esc(url)}</span>
+                  <button class="cfg-url-btn" onclick="app._copyText('${this._escJs(url)}',this)"><i data-lucide="copy" style="width:10px;height:10px"></i>Copiar</button>
+                  <button class="cfg-url-btn" onclick="window.open('${this._escJs(fullUrl)}','_blank')"><i data-lucide="external-link" style="width:10px;height:10px"></i>Abrir</button>
+                </div>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('DocType Referência', v('reference_doctype') ? `<span style="font-family:var(--mono);font-size:12px;color:#38bdf8">${this._esc(v('reference_doctype'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+            </div>
+          </div>
+          <div class="cfg-section">
+            <div class="cfg-section-hdr"><i data-lucide="palette" style="width:11px;height:11px"></i>Aparência & Configurações</div>
+            <div class="cfg-rows">
+              ${row('Ícone', icon ? `<span style="display:inline-flex;align-items:center;gap:8px"><span class="cfg-icon-box"><i data-lucide="${this._esc(icon)}" style="width:14px;height:14px"></i></span><span style="color:#94a3b8">${this._esc(icon)}</span></span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Cor', color ? `<span style="display:inline-flex;align-items:center;gap:7px"><span class="cfg-color-dot" style="background:${this._esc(color)}"></span><span style="font-family:var(--mono);font-size:12px;color:#38bdf8">${this._esc(color)}</span></span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+              ${row('Exibir na Home', v('show_on_home') ? `<span class="cfg-bool-yes"><i data-lucide="check-circle" style="width:13px;height:13px"></i>Sim</span>` : `<span class="cfg-bool-no"><i data-lucide="x-circle" style="width:13px;height:13px"></i>Não</span>`)}
+              ${row('Favorito', v('favorite') ? `<span class="cfg-bool-yes"><i data-lucide="star" style="width:13px;height:13px"></i>Sim</span>` : `<span class="cfg-bool-no"><i data-lucide="minus" style="width:13px;height:13px"></i>Não</span>`)}
+              ${row('Ordem de Exibição', hasSort ? `<span style="font-family:var(--mono);font-size:12px;color:#38bdf8">${this._esc(String(sortOrder))}</span>` : '<span style="color:#1e3a5f;font-style:italic">—</span>')}
+            </div>
+          </div>
+          <div class="cfg-section">
+            <div class="cfg-section-hdr"><i data-lucide="git-branch" style="width:11px;height:11px"></i>Versionamento</div>
+            <div class="cfg-rows">
+              ${row('Versão Atual', `<span style="font-size:26px;font-weight:800;font-family:var(--mono);color:#4ade80;line-height:1">v${this._esc(ver)}</span>`)}
+              ${row('Versão Anterior', v('previous_version') ? `<span style="font-family:var(--mono);font-size:12px;color:#38bdf8">${this._esc(v('previous_version'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">Versão inicial</span>')}
+              ${row('Última Revisão', v('last_reviewed_on') ? `<span style="color:#94a3b8">${this._esc(v('last_reviewed_on'))}</span>` : '<span style="color:#1e3a5f;font-style:italic">Não revisado</span>')}
+            </div>
           </div>
         </div>`;
       }
@@ -942,169 +1000,6 @@ class GFContentRegistryApp {
         </div>`;
       }
 
-      case 2: {
-        const wpTitle = v('web_page') ? this._webPageTitle(v('web_page')) : '';
-        return `<div class="vk-grid">
-          ${mkCard('vk-green',  'folder',  'Grupo de Conteúdo', v('content_group'))}
-          ${mkCard('vk-blue',   'shield',  'Grupo de Acesso',   v('access_group'))}
-          ${mkCard('vk-purple', 'zap',     'Skill',             v('skill'))}
-          ${mkCard('vk-amber',  'globe',   'Web Page',          wpTitle)}
-          ${mkCard('vk-slate',  'user',    'Responsável',       v('responsible_user'))}
-        </div>`;
-      }
-
-      case 3: {
-        const url = v('route_url');
-        const ref = v('reference_doctype');
-        const fullUrl = url ? (/^https?:\/\//.test(url) ? url : location.origin + url) : '';
-        return `
-          <div class="ref-url-card">
-            <div class="ref-url-card-hdr">
-              <i data-lucide="link-2" style="width:12px;height:12px"></i>URL / Rota
-            </div>
-            ${url ? `
-              <div class="ref-url-card-body">
-                <i data-lucide="link" style="width:12px;height:12px;color:#94a3b8;flex-shrink:0;margin-top:2px"></i>
-                <span>${this._esc(url)}</span>
-              </div>
-              <div class="ref-url-actions">
-                <button class="btn-act" style="font-size:11px;padding:4px 10px" onclick="app._copyText('${this._escJs(url)}',this)">
-                  <i data-lucide="copy" style="width:11px;height:11px"></i>Copiar
-                </button>
-                <button class="btn-act" style="font-size:11px;padding:4px 10px" onclick="window.open('${this._escJs(fullUrl)}','_blank')">
-                  <i data-lucide="external-link" style="width:11px;height:11px"></i>Abrir
-                </button>
-              </div>` : `<div class="ref-url-card-empty">Nenhuma URL informada</div>`}
-          </div>
-          <div class="vk-grid">
-            <div class="vk-card vk-slate">
-              <div class="vk-card-icon"><i data-lucide="file" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">DocType de Referência</div>
-                <div class="vk-card-val${!ref?' empty':''}">${ref ? this._esc(ref) : '—'}</div>
-              </div>
-            </div>
-          </div>`;
-      }
-
-      case 4: {
-        const icon     = v('icon');
-        const color    = v('color');
-        const showHome = v('show_on_home');
-        const fav      = v('favorite');
-        return `
-          <div class="vk-section"><i data-lucide="palette" style="width:11px;height:11px"></i>Aparência Visual</div>
-          <div class="vk-grid">
-            <div class="vk-card vk-purple">
-              <div class="vk-card-icon">
-                ${icon ? `<i data-lucide="${this._esc(icon)}" style="width:20px;height:20px"></i>` : `<i data-lucide="image" style="width:20px;height:20px;opacity:.35"></i>`}
-              </div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Ícone</div>
-                <div class="vk-card-val${!icon?' empty':''}">${icon ? this._esc(icon) : '— Não definido'}</div>
-              </div>
-            </div>
-            <div class="vk-card vk-slate" style="${color?`border-left:4px solid ${this._esc(color)}`:''}">
-              <div class="vk-card-icon" style="${color?`background:${this._esc(color)}22;color:${this._esc(color)}`:''}">
-                <i data-lucide="palette" style="width:20px;height:20px"></i>
-              </div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Cor</div>
-                <div class="vk-card-val${!color?' empty':''}" style="${color?`color:${this._esc(color)};font-family:var(--mono);font-size:13px`:''}">
-                  ${color ? this._esc(color) : '— Não definida'}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="vk-section"><i data-lucide="layout" style="width:11px;height:11px"></i>Exibição</div>
-          <div class="vk-grid">
-            <div class="vk-card ${showHome?'vk-green':'vk-slate'}">
-              <div class="vk-card-icon"><i data-lucide="${showHome?'check-circle':'x-circle'}" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Exibir na Home</div>
-                <div class="vk-card-val">${showHome ? 'Sim' : 'Não'}</div>
-              </div>
-            </div>
-            <div class="vk-card ${fav?'vk-amber':'vk-slate'}">
-              <div class="vk-card-icon"><i data-lucide="star" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Favorito</div>
-                <div class="vk-card-val">${fav ? 'Sim' : 'Não'}</div>
-              </div>
-            </div>
-          </div>`;
-      }
-
-      case 5: {
-        const sortOrder = v('sort_order');
-        const showHome  = v('show_on_home');
-        const fav       = v('favorite');
-        const hasSort   = sortOrder !== '' && sortOrder !== null && sortOrder !== undefined;
-        return `
-          <div class="vk-section"><i data-lucide="sliders" style="width:11px;height:11px"></i>Ordenação e Visibilidade</div>
-          <div class="vk-grid">
-            <div class="vk-card vk-teal">
-              <div class="vk-card-icon"><i data-lucide="list" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Ordem de Exibição</div>
-                <div class="vk-card-val${!hasSort?' empty':''}">${hasSort ? this._esc(String(sortOrder)) : '— Não definida'}</div>
-              </div>
-            </div>
-            <div class="vk-card ${showHome?'vk-green':'vk-slate'}">
-              <div class="vk-card-icon"><i data-lucide="home" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Exibir na Home</div>
-                <div class="vk-card-val">${showHome ? 'Sim' : 'Não'}</div>
-              </div>
-            </div>
-            <div class="vk-card ${fav?'vk-amber':'vk-slate'}">
-              <div class="vk-card-icon"><i data-lucide="star" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Favorito</div>
-                <div class="vk-card-val">${fav ? 'Sim' : 'Não'}</div>
-              </div>
-            </div>
-          </div>`;
-      }
-
-      case 6: {
-        const ver        = v('version') || '1.0.0';
-        const reviewed   = v('last_reviewed_on');
-        const prevVer    = v('previous_version');
-        const intName    = v('internal_name');
-        return `
-          <div class="vk-ver-hdr">
-            <div>
-              <div class="vk-ver-label">Versão Atual</div>
-              <div class="vk-ver-main">v${this._esc(ver)}</div>
-            </div>
-            <i data-lucide="git-branch" style="width:32px;height:32px;color:#059669;opacity:.5"></i>
-          </div>
-          <div class="vk-grid">
-            <div class="vk-card vk-teal">
-              <div class="vk-card-icon"><i data-lucide="clock" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Última Revisão</div>
-                <div class="vk-card-val${!reviewed?' empty':''}">${reviewed ? this._esc(reviewed) : '— Não revisado'}</div>
-              </div>
-            </div>
-            <div class="vk-card ${prevVer?'vk-blue':'vk-slate'}">
-              <div class="vk-card-icon"><i data-lucide="git-branch" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Versão Anterior</div>
-                <div class="vk-card-val${!prevVer?' empty':''}">${prevVer ? this._esc(prevVer) : '— Versão inicial'}</div>
-              </div>
-            </div>
-            <div class="vk-card vk-slate">
-              <div class="vk-card-icon"><i data-lucide="code-2" style="width:20px;height:20px"></i></div>
-              <div class="vk-card-body">
-                <div class="vk-card-lbl">Internal Name</div>
-                <div class="vk-card-val" style="font-family:var(--mono);font-size:12.5px">${this._esc(intName||'—')}</div>
-              </div>
-            </div>
-          </div>`;
-      }
-
       default: return '';
     }
   }
@@ -1153,136 +1048,137 @@ class GFContentRegistryApp {
        </div>`;
 
     switch(idx) {
-      case 0: return `
-        <div class="form-grid cols2">
-          ${grp('Título', inp('title','Ex: Relatório de Produção Mensal'), 'Nome principal do conteúdo.', true)}
-          ${grp('Internal Name',
-            `<div class="form-control" style="background:#f1f5f9;color:${d.internal_name?'#0f172a':'#94a3b8'};cursor:default;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px">
-               <i data-lucide="lock" style="width:12px;height:12px;flex-shrink:0;color:#94a3b8"></i>
-               <span id="fld_internal_name">${this._esc(d.internal_name)||'Gerado automaticamente...'}</span>
-             </div>`,
-            this.mode==='new' ? 'Gerado automaticamente a partir do Título. Permanente após criação.' : 'Identificador técnico — permanente após criação.',
-            true)}
-        </div>
-        <div class="form-grid">
-          ${grp('Tipo do Item', ddStatic('item_type', ITEM_TYPES, k=>ITEM_TYPE_LABELS[k]||k), 'Categoria técnica do conteúdo.', true)}
-          ${grp('Status', ddStatic('status', STATUSES), 'Situação atual do registro.', true)}
-        </div>
-        <div class="form-grid full">
-          ${grp('Descrição', ta('description',4), 'Descrição detalhada do conteúdo.')}
-          ${grp('Tags', inp('tags','Ex: produção, mensal, relatório'), 'Palavras-chave separadas por vírgula.')}
-        </div>`;
-
-      case 1: return ''; // Natural Studio — somente em modo de visualização
-
-      case 2: {
+      case 0: {
         const selNode  = this.editData.content_group
           ? (this._contentGroups||[]).find(n => n.name === this.editData.content_group)
           : null;
         const selLabel = selNode ? (selNode.display_name || selNode.name) : '';
         const selPath  = selNode ? this._getCGPath(selNode, this._contentGroups) : [];
-        return `
-        <div class="cr-links-layout">
-
-          <!-- ── LEFT: árvore de Grupos de Conteúdo ── -->
-          <div class="cr-tree-panel">
-            <div class="cr-tree-header">
-              <div class="cr-tree-title">
-                <i data-lucide="folder-tree" style="width:13px;height:13px"></i>
-                Grupo de Conteúdo <span class="req">*</span>
-              </div>
-              <div class="cr-tree-search">
-                <i data-lucide="search" style="width:13px;height:13px;color:#94a3b8;flex-shrink:0"></i>
-                <input type="text" id="cg-search-inp"
-                       placeholder="Buscar por nome, código ou descrição..."
-                       oninput="app._filterTree(this.value)" autocomplete="off"
-                       value="${this._esc(this._cgSearchQuery||'')}">
-                <button id="cg-search-clear"
-                        onclick="app._clearCGSearch()"
-                        style="display:${this._cgSearchQuery?'flex':'none'};background:none;border:none;cursor:pointer;align-items:center;color:#94a3b8;padding:0">
-                  <i data-lucide="x" style="width:12px;height:12px"></i>
-                </button>
-              </div>
-              <div id="cg-sel-pill" class="cr-tree-sel-pill" style="display:${selNode?'flex':'none'}">
-                <i data-lucide="folder-check" style="width:13px;height:13px;flex-shrink:0"></i>
-                <div style="flex:1;min-width:0;overflow:hidden">
-                  <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._esc(selLabel)}</div>
-                  ${selPath.length > 1 ? `<div style="font-size:10px;opacity:.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._esc(selPath.join(' › '))}</div>` : ''}
+        return `<div class="cfg-wrap" style="padding:20px">
+          <div class="cfg-form-section">
+            <div class="cfg-form-divider"><i data-lucide="info" style="width:10px;height:10px"></i>Identificação</div>
+            <div class="form-grid cols2">
+              ${grp('Título', inp('title','Ex: Relatório de Produção Mensal'), 'Nome principal do conteúdo.', true)}
+              ${grp('Internal Name',
+                `<div class="form-control" style="cursor:default;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px">
+                   <i data-lucide="lock" style="width:12px;height:12px;flex-shrink:0;color:#94a3b8"></i>
+                   <span id="fld_internal_name">${this._esc(d.internal_name)||'Gerado automaticamente...'}</span>
+                 </div>`,
+                this.mode==='new' ? 'Gerado automaticamente. Permanente após criação.' : 'Identificador técnico — permanente após criação.',
+                true)}
+            </div>
+            <div class="form-grid">
+              ${grp('Tipo do Item', ddStatic('item_type', ITEM_TYPES, k=>ITEM_TYPE_LABELS[k]||k), 'Categoria técnica do conteúdo.', true)}
+              ${grp('Status', ddStatic('status', STATUSES), 'Situação atual do registro.', true)}
+            </div>
+            <div class="form-grid full">
+              ${grp('Descrição', ta('description',3), 'Descrição detalhada do conteúdo.')}
+              ${grp('Tags', inp('tags','Ex: produção, mensal, relatório'), 'Palavras-chave separadas por vírgula.')}
+            </div>
+          </div>
+          <div class="cfg-form-section">
+            <div class="cfg-form-divider"><i data-lucide="link-2" style="width:10px;height:10px"></i>Vínculos</div>
+            <div class="cr-links-layout" style="min-height:280px;margin-bottom:14px">
+              <div class="cr-tree-panel">
+                <div class="cr-tree-header">
+                  <div class="cr-tree-title">
+                    <i data-lucide="folder-tree" style="width:13px;height:13px"></i>
+                    Grupo de Conteúdo <span class="req">*</span>
+                  </div>
+                  <div class="cr-tree-search">
+                    <i data-lucide="search" style="width:13px;height:13px;color:#94a3b8;flex-shrink:0"></i>
+                    <input type="text" id="cg-search-inp"
+                           placeholder="Buscar por nome, código ou descrição..."
+                           oninput="app._filterTree(this.value)" autocomplete="off"
+                           value="${this._esc(this._cgSearchQuery||'')}">
+                    <button id="cg-search-clear"
+                            onclick="app._clearCGSearch()"
+                            style="display:${this._cgSearchQuery?'flex':'none'};background:none;border:none;cursor:pointer;align-items:center;color:#94a3b8;padding:0">
+                      <i data-lucide="x" style="width:12px;height:12px"></i>
+                    </button>
+                  </div>
+                  <div id="cg-sel-pill" class="cr-tree-sel-pill" style="display:${selNode?'flex':'none'}">
+                    <i data-lucide="folder-check" style="width:13px;height:13px;flex-shrink:0"></i>
+                    <div style="flex:1;min-width:0;overflow:hidden">
+                      <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._esc(selLabel)}</div>
+                      ${selPath.length > 1 ? `<div style="font-size:10px;opacity:.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._esc(selPath.join(' › '))}</div>` : ''}
+                    </div>
+                    <button class="clear-sel" onclick="event.stopPropagation();app._clearCGSelection()" title="Limpar seleção">
+                      <i data-lucide="x" style="width:11px;height:11px"></i>
+                    </button>
+                  </div>
                 </div>
-                <button class="clear-sel" onclick="event.stopPropagation();app._clearCGSelection()" title="Limpar seleção">
-                  <i data-lucide="x" style="width:11px;height:11px"></i>
-                </button>
+                <div class="cr-tree-body" id="cg-tree-body">
+                  ${this._renderCGTree()}
+                </div>
+              </div>
+              <div class="cr-links-right">
+                <div class="cr-links-right-hdr">
+                  <i data-lucide="link-2" style="width:11px;height:11px"></i> Outros Vínculos
+                </div>
+                ${grp('Grupo de Acesso',
+                  dd('access_group', this._accessGroups, o=>o.name, o=>o.display_name||o.name),
+                  'Controla quem pode visualizar este conteúdo.', true)}
+                ${grp('Skill',
+                  dd('skill', this._skills, o=>o.name, o=>o.skill_name||o.name),
+                  'Skill corporativo associado.', true)}
+                ${grp('Web Page',
+                  dd('web_page', this._webPages, o=>o.name, o=>o.title||o.name),
+                  'Página web do ERPNext vinculada.')}
+                ${grp('Responsável',
+                  inp('responsible_user','usuario@empresa.com'),
+                  'Usuário responsável pelo conteúdo.')}
               </div>
             </div>
-            <div class="cr-tree-body" id="cg-tree-body">
-              ${this._renderCGTree()}
+          </div>
+          <div class="cfg-form-section">
+            <div class="cfg-form-divider"><i data-lucide="globe" style="width:10px;height:10px"></i>Referência</div>
+            <div class="form-grid">
+              ${grp('URL / Rota', inp('route_url','Ex: /app/query-report/timesheet'), 'Rota interna do ERPNext ou URL externa completa.')}
+              ${grp('DocType de Referência', inp('reference_doctype','Ex: Timesheet'), 'DocType do Frappe relacionado a este conteúdo.')}
             </div>
           </div>
-
-          <!-- ── RIGHT: outros vínculos ── -->
-          <div class="cr-links-right">
-            <div class="cr-links-right-hdr">
-              <i data-lucide="link-2" style="width:11px;height:11px"></i> Outros Vínculos
+          <div class="cfg-form-section">
+            <div class="cfg-form-divider"><i data-lucide="palette" style="width:10px;height:10px"></i>Aparência & Configurações</div>
+            <div class="form-grid">
+              ${grp('Ícone (Lucide)', this._renderIconPickerField(), 'Clique para selecionar um ícone Lucide.')}
+              ${grp('Cor', inp('color','Ex: #059669','color'), 'Cor de destaque para o conteúdo.')}
             </div>
-            ${grp('Grupo de Acesso',
-              dd('access_group', this._accessGroups, o=>o.name, o=>o.display_name||o.name),
-              'Controla quem pode visualizar este conteúdo.', true)}
-            ${grp('Skill',
-              dd('skill', this._skills, o=>o.name, o=>o.skill_name||o.name),
-              'Skill corporativo associado.', true)}
-            ${grp('Web Page',
-              dd('web_page', this._webPages, o=>o.name, o=>o.title||o.name),
-              'Página web do ERPNext vinculada.')}
-            ${grp('Responsável',
-              inp('responsible_user','usuario@empresa.com'),
-              'Usuário responsável pelo conteúdo.')}
+            <div class="form-grid">
+              ${grp('Ordem de Exibição', inp('sort_order','Ex: 10'), 'Menor valor = exibido primeiro na listagem.')}
+              <div style="display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding-bottom:4px">
+                ${chk('show_on_home','Exibir na Home')}
+                ${chk('favorite','Favorito')}
+              </div>
+            </div>
           </div>
-
+          <div class="cfg-form-section">
+            <div class="cfg-form-divider"><i data-lucide="git-branch" style="width:10px;height:10px"></i>Versionamento</div>
+            <div class="form-grid">
+              ${grp('Versão',
+                `<div class="form-control" style="cursor:default;display:flex;align-items:center;gap:6px;font-family:var(--mono)">
+                   <i data-lucide="tag" style="width:12px;height:12px;flex-shrink:0;color:#94a3b8"></i>
+                   ${this._esc(d.version||'1.0.0')}
+                 </div>`,
+                'Gerada automaticamente — incrementada a cada Nova Revisão.')}
+              ${grp('Última Revisão',
+                `<div class="form-control" style="cursor:default;display:flex;align-items:center;gap:6px">
+                   <i data-lucide="calendar" style="width:12px;height:12px;flex-shrink:0;color:#94a3b8"></i>
+                   ${d.last_reviewed_on ? this._esc(d.last_reviewed_on) : 'Preenchido automaticamente ao salvar'}
+                 </div>`,
+                'Atualizado automaticamente a cada salvamento.')}
+              ${grp('Versão Anterior',
+                `<div class="form-control" style="cursor:default;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px">
+                   <i data-lucide="git-branch" style="width:12px;height:12px;flex-shrink:0;color:#94a3b8"></i>
+                   ${d.previous_version ? this._esc(d.previous_version) : '— Versão inicial'}
+                 </div>`,
+                'Preenchido automaticamente ao criar Nova Revisão — somente leitura.')}
+            </div>
+          </div>
         </div>`;
       }
 
-      case 3: return `
-        <div class="form-grid">
-          ${grp('URL / Rota', inp('route_url','Ex: /app/query-report/timesheet'), 'Rota interna do ERPNext ou URL externa completa.')}
-          ${grp('DocType de Referência', inp('reference_doctype','Ex: Timesheet'), 'DocType do Frappe relacionado a este conteúdo.')}
-        </div>`;
-
-      case 4: return `
-        <div class="form-grid">
-          ${grp('Ícone (Lucide)', this._renderIconPickerField(), 'Clique para selecionar um ícone Lucide.')}
-          ${grp('Cor', inp('color','Ex: #059669','color'), 'Cor de destaque para o conteúdo.')}
-          ${chk('show_on_home','Exibir na Home')}
-          ${chk('favorite','Favorito')}
-        </div>`;
-
-      case 5: return `
-        <div class="form-grid">
-          ${grp('Ordem de Exibição', inp('sort_order','Ex: 10'), 'Menor valor = exibido primeiro.')}
-          ${chk('show_on_home','Exibir na Home')}
-          ${chk('favorite','Favorito')}
-        </div>`;
-
-      case 6: return `
-        <div class="form-grid">
-          ${grp('Versão',
-            `<div class="form-control" style="background:#f1f5f9;color:#0f172a;cursor:default;display:flex;align-items:center;gap:6px;font-family:var(--mono)">
-               <i data-lucide="tag" style="width:12px;height:12px;flex-shrink:0;color:#94a3b8"></i>
-               ${this._esc(d.version||'1.0.0')}
-             </div>`,
-            'Gerada automaticamente — 1.0.0 na criação, incrementada a cada Nova Revisão.')}
-          ${grp('Última Revisão',
-            `<div class="form-control" style="background:#f1f5f9;color:${d.last_reviewed_on?'#0f172a':'#94a3b8'};cursor:default;display:flex;align-items:center;gap:6px">
-               <i data-lucide="calendar" style="width:12px;height:12px;flex-shrink:0;color:#94a3b8"></i>
-               ${d.last_reviewed_on ? this._esc(d.last_reviewed_on) : 'Preenchido automaticamente ao salvar'}
-             </div>`,
-            'Atualizado automaticamente a cada salvamento.')}
-          ${grp('Versão Anterior',
-            `<div class="form-control" style="background:#f1f5f9;color:${d.previous_version?'#0f172a':'#94a3b8'};cursor:default;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px">
-               <i data-lucide="git-branch" style="width:12px;height:12px;flex-shrink:0;color:#94a3b8"></i>
-               ${d.previous_version ? this._esc(d.previous_version) : '— Versão inicial (sem origem)'}
-             </div>`,
-            'Preenchido automaticamente ao criar Nova Revisão — somente leitura.')}
-        </div>`;
+      case 1: return ''; // Natural Studio — somente em modo de visualização
 
       default: return '';
     }
@@ -1422,6 +1318,8 @@ class GFContentRegistryApp {
       </div>`;
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
     this._syncNewBtn();
+    const $editBody = document.getElementById('gfcr-tab-body');
+    if ($editBody) this._applyTabClass($editBody, 0);
   }
 
   // ── Field data ────────────────────────────────────
@@ -1821,13 +1719,11 @@ class GFContentRegistryApp {
   }
 
   // ── Natural Studio ─────────────────────────────────
-  _nsApplyTabStyle($body, active) {
+  _applyTabClass($body, idx) {
     if (!$body) return;
-    if (active) {
-      $body.classList.add('ns-active');
-    } else {
-      $body.classList.remove('ns-active');
-    }
+    $body.classList.remove('ns-active', 'cfg-active');
+    if (idx === 1) $body.classList.add('ns-active');
+    else $body.classList.add('cfg-active');
   }
 
   _nsInit() {
