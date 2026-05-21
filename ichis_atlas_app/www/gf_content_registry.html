@@ -342,6 +342,54 @@ select.form-control{cursor:pointer}
 /* painel direito */
 .cr-links-right{flex:1;display:flex;flex-direction:column;gap:12px;min-width:200px;max-width:280px;overflow-y:auto}
 .cr-links-right-hdr{font-size:10.5px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:5px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+
+/* ── Natural Studio — dark mode ───────────────────── */
+.gfcr-tab-body.ns-active{padding:0!important;background:#080e1c!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
+.ns-wrap{display:flex;flex-direction:column;height:100%;background:#080e1c;color:#e2e8f0;overflow:hidden;min-height:0}
+.ns-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#0d1526;border-bottom:1px solid #1a2540;flex-shrink:0}
+.ns-topbar-left{display:flex;align-items:center;gap:12px}
+.ns-topbar-icon{width:38px;height:38px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.ns-topbar-title{font-size:15px;font-weight:700;color:#f1f5f9;letter-spacing:-.2px}
+.ns-topbar-sub{font-size:11px;color:#475569;margin-top:2px}
+.ns-mono{font-family:var(--mono);color:#38bdf8}
+.ns-topbar-right{display:flex;align-items:center;gap:8px}
+.ns-btn-upload{display:flex;align-items:center;gap:6px;padding:7px 16px;background:linear-gradient(135deg,#6d28d9,#4338ca);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity 150ms;white-space:nowrap}
+.ns-btn-upload:hover{opacity:.85}
+.ns-btn-refresh{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#0f1e38;border:1px solid #1e3a5f;border-radius:7px;color:#64748b;cursor:pointer;transition:all 150ms}
+.ns-btn-refresh:hover{background:#1e3a5f;color:#93c5fd}
+.ns-dropzone{margin:14px 20px 0;border:2px dashed #1a3560;border-radius:12px;padding:18px 20px;display:flex;align-items:center;justify-content:center;gap:10px;color:#334155;font-size:13px;cursor:pointer;transition:all 200ms;flex-shrink:0}
+.ns-dropzone:hover,.ns-drag-active{border-color:#3b82f6;background:rgba(59,130,246,.06);color:#93c5fd}
+.ns-gallery{flex:1;overflow-y:auto;padding:14px 20px 20px;min-height:0}
+.ns-gallery::-webkit-scrollbar{width:4px}
+.ns-gallery::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
+.ns-gallery-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:48px 20px}
+.ns-gallery-empty{text-align:center;padding:56px 20px;color:#1e3a5f;line-height:1.7}
+.ns-gallery-empty strong{display:block;color:#334155;font-size:14px;margin-bottom:6px}
+.ns-gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
+.ns-img-card{background:#0d1526;border:1px solid #1a2540;border-radius:10px;overflow:hidden;transition:all 180ms;position:relative;cursor:pointer}
+.ns-img-card:hover{border-color:#2563eb;box-shadow:0 4px 20px rgba(37,99,235,.2)}
+.ns-img-card:hover .ns-img-overlay{opacity:1}
+.ns-img-thumb{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#0a1020}
+.ns-img-thumb-icon{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#0a1020;color:#1e3a5f}
+.ns-img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity 180ms}
+.ns-img-overlay-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:#fff;cursor:pointer;transition:background 150ms}
+.ns-img-overlay-btn:hover{background:rgba(255,255,255,.28)}
+.ns-img-overlay-btn.del:hover{background:rgba(220,38,38,.55);border-color:rgba(220,38,38,.5)}
+.ns-img-info{padding:8px 10px;border-top:1px solid #1a2540}
+.ns-img-name{font-size:11px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ns-img-size{font-size:10px;color:#334155;margin-top:2px}
+.ns-upload-bar-wrap{margin:10px 20px 0;background:#0d1526;border:1px solid #1a2540;border-radius:8px;padding:10px 14px;display:none;flex-shrink:0}
+.ns-upload-bar-label{font-size:11px;color:#64748b;margin-bottom:6px}
+.ns-upload-bar-track{background:#1a2540;border-radius:10px;height:4px;overflow:hidden}
+.ns-upload-bar-fill{height:100%;background:linear-gradient(90deg,#6d28d9,#2563eb);border-radius:10px;transition:width 200ms;width:0%}
+.ns-info-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:#0a1020;border-top:1px solid #1a2540;flex-shrink:0;font-size:10.5px;color:#334155}
+.ns-info-bar span{font-family:var(--mono)}
+/* Lightbox */
+.ns-lightbox{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.94);display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}
+.ns-lightbox-img{max-width:90vw;max-height:86vh;border-radius:8px;object-fit:contain;cursor:default;box-shadow:0 0 60px rgba(0,0,0,.8)}
+.ns-lightbox-close{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:#fff;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;transition:background 150ms}
+.ns-lightbox-close:hover{background:rgba(255,255,255,.28)}
+.ns-lightbox-info{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.72);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:7px 16px;color:#94a3b8;font-size:11.5px;font-family:var(--mono);white-space:nowrap;max-width:80vw;overflow:hidden;text-overflow:ellipsis}
 </style>
 {% endblock %}
 
@@ -410,12 +458,13 @@ select.form-control{cursor:pointer}
    ════════════════════════════════════════════════════ */
 
 const TABS = [
-  { id:'general',    label:'Geral',         icon:'info' },
-  { id:'links',      label:'Vínculos',      icon:'link-2' },
-  { id:'reference',  label:'Referência',    icon:'globe' },
-  { id:'visual',     label:'Apresentação',  icon:'palette' },
-  { id:'config',     label:'Configurações', icon:'settings-2' },
-  { id:'versioning', label:'Versionamento', icon:'git-branch' },
+  { id:'general',        label:'Geral',           icon:'info' },
+  { id:'natural_studio', label:'Natural Studio',   icon:'sparkles', viewOnly:true },
+  { id:'links',          label:'Vínculos',         icon:'link-2' },
+  { id:'reference',      label:'Referência',       icon:'globe' },
+  { id:'visual',         label:'Apresentação',     icon:'palette' },
+  { id:'config',         label:'Configurações',    icon:'settings-2' },
+  { id:'versioning',     label:'Versionamento',    icon:'git-branch' },
 ];
 
 const STATUS_COLORS = {
@@ -730,23 +779,42 @@ class GFContentRegistryApp {
 
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
     this._syncNewBtn();
+    if (this.activeTab === 1) {
+      const $body = document.getElementById('gfcr-tab-body');
+      if ($body) { this._nsApplyTabStyle($body, true); this._nsInit(); }
+    }
   }
 
   // ── Tab bar ───────────────────────────────────────
   _buildTabBar() {
-    return `<div class="gfcr-tabs">${TABS.map((t,i)=>`
-      <div class="gfcr-tab${i===this.activeTab?' active':''}" onclick="app._switchTab(${i})">
+    const isView = this.mode === 'view';
+    return `<div class="gfcr-tabs">${TABS.map((t,i) => {
+      if (t.viewOnly && !isView) return '';
+      const active = i === this.activeTab ? ' active' : '';
+      const nsStyle = t.id === 'natural_studio'
+        ? ';background:linear-gradient(90deg,rgba(109,40,217,.08),rgba(37,99,235,.08))'
+        : '';
+      return `<div class="gfcr-tab${active}" data-tab-idx="${i}"
+        style="${nsStyle}" onclick="app._switchTab(${i})">
         <i data-lucide="${t.icon}" style="width:11px;height:11px"></i>${t.label}
-      </div>`).join('')}</div>`;
+      </div>`;
+    }).join('')}</div>`;
   }
 
   _switchTab(idx) {
     this.activeTab = idx;
-    document.querySelectorAll('.gfcr-tab').forEach((el,i) => el.classList.toggle('active', i===idx));
+    document.querySelectorAll('.gfcr-tab').forEach(el => {
+      el.classList.toggle('active', parseInt(el.dataset.tabIdx) === idx);
+    });
     const $body = document.getElementById('gfcr-tab-body');
     if ($body) {
-      $body.innerHTML = (this.mode==='edit'||this.mode==='new') ? this._renderTabForm(idx) : this._renderTabContent(idx);
+      const isNS = (idx === 1 && this.mode === 'view');
+      this._nsApplyTabStyle($body, isNS);
+      $body.innerHTML = (this.mode==='edit'||this.mode==='new')
+        ? this._renderTabForm(idx)
+        : this._renderTabContent(idx);
       if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+      if (isNS) this._nsInit();
     }
   }
 
@@ -823,6 +891,58 @@ class GFContentRegistryApp {
       }
 
       case 1: {
+        // ── Natural Studio ──────────────────────────
+        const nsName = (this.selected || {}).internal_name || '';
+        return `<div class="ns-wrap" id="ns-wrap">
+          <div class="ns-topbar">
+            <div class="ns-topbar-left">
+              <div class="ns-topbar-icon">
+                <i data-lucide="sparkles" style="width:17px;height:17px"></i>
+              </div>
+              <div>
+                <div class="ns-topbar-title">Natural Studio</div>
+                <div class="ns-topbar-sub">Mídia vinculada a <span class="ns-mono">${this._esc(nsName)}</span></div>
+              </div>
+            </div>
+            <div class="ns-topbar-right">
+              <button class="ns-btn-upload" onclick="app._nsTriggerUpload()">
+                <i data-lucide="upload" style="width:13px;height:13px"></i> Upload
+              </button>
+              <button class="ns-btn-refresh" id="ns-btn-refresh" onclick="app._nsRefresh()" title="Atualizar lista">
+                <i data-lucide="refresh-cw" style="width:13px;height:13px"></i>
+              </button>
+            </div>
+          </div>
+          <div class="ns-dropzone" id="ns-dropzone"
+               ondragover="event.preventDefault();document.getElementById('ns-dropzone').classList.add('ns-drag-active')"
+               ondragleave="document.getElementById('ns-dropzone').classList.remove('ns-drag-active')"
+               ondrop="app._nsDrop(event)"
+               onclick="app._nsTriggerUpload()">
+            <i data-lucide="image-plus" style="width:20px;height:20px"></i>
+            <span>Arraste arquivos aqui ou clique para fazer upload</span>
+          </div>
+          <input type="file" id="ns-file-input" multiple style="display:none"
+                 onchange="app._nsUploadFiles(this.files)">
+          <div class="ns-upload-bar-wrap" id="ns-upload-bar">
+            <div class="ns-upload-bar-label" id="ns-upload-label">Enviando arquivos...</div>
+            <div class="ns-upload-bar-track">
+              <div class="ns-upload-bar-fill" id="ns-upload-fill"></div>
+            </div>
+          </div>
+          <div class="ns-gallery" id="ns-gallery">
+            <div class="ns-gallery-loading">
+              <div class="spinner" style="width:24px;height:24px;border-color:#1a2540;border-top-color:#38bdf8"></div>
+              <span style="color:#475569;font-size:13px;margin-left:8px">Carregando arquivos...</span>
+            </div>
+          </div>
+          <div class="ns-info-bar" id="ns-info-bar">
+            <span id="ns-file-count" style="color:#334155">—</span>
+            <span style="color:#1a2540">Natural Studio · ${this._esc(nsName)}</span>
+          </div>
+        </div>`;
+      }
+
+      case 2: {
         const wpTitle = v('web_page') ? this._webPageTitle(v('web_page')) : '';
         return `<div class="vk-grid">
           ${mkCard('vk-green',  'folder',  'Grupo de Conteúdo', v('content_group'))}
@@ -833,7 +953,7 @@ class GFContentRegistryApp {
         </div>`;
       }
 
-      case 2: {
+      case 3: {
         const url = v('route_url');
         const ref = v('reference_doctype');
         const fullUrl = url ? (/^https?:\/\//.test(url) ? url : location.origin + url) : '';
@@ -867,7 +987,7 @@ class GFContentRegistryApp {
           </div>`;
       }
 
-      case 3: {
+      case 4: {
         const icon     = v('icon');
         const color    = v('color');
         const showHome = v('show_on_home');
@@ -915,7 +1035,7 @@ class GFContentRegistryApp {
           </div>`;
       }
 
-      case 4: {
+      case 5: {
         const sortOrder = v('sort_order');
         const showHome  = v('show_on_home');
         const fav       = v('favorite');
@@ -947,7 +1067,7 @@ class GFContentRegistryApp {
           </div>`;
       }
 
-      case 5: {
+      case 6: {
         const ver        = v('version') || '1.0.0';
         const reviewed   = v('last_reviewed_on');
         const prevVer    = v('previous_version');
@@ -1053,7 +1173,9 @@ class GFContentRegistryApp {
           ${grp('Tags', inp('tags','Ex: produção, mensal, relatório'), 'Palavras-chave separadas por vírgula.')}
         </div>`;
 
-      case 1: {
+      case 1: return ''; // Natural Studio — somente em modo de visualização
+
+      case 2: {
         const selNode  = this.editData.content_group
           ? (this._contentGroups||[]).find(n => n.name === this.editData.content_group)
           : null;
@@ -1119,13 +1241,13 @@ class GFContentRegistryApp {
         </div>`;
       }
 
-      case 2: return `
+      case 3: return `
         <div class="form-grid">
           ${grp('URL / Rota', inp('route_url','Ex: /app/query-report/timesheet'), 'Rota interna do ERPNext ou URL externa completa.')}
           ${grp('DocType de Referência', inp('reference_doctype','Ex: Timesheet'), 'DocType do Frappe relacionado a este conteúdo.')}
         </div>`;
 
-      case 3: return `
+      case 4: return `
         <div class="form-grid">
           ${grp('Ícone (Lucide)', this._renderIconPickerField(), 'Clique para selecionar um ícone Lucide.')}
           ${grp('Cor', inp('color','Ex: #059669','color'), 'Cor de destaque para o conteúdo.')}
@@ -1133,14 +1255,14 @@ class GFContentRegistryApp {
           ${chk('favorite','Favorito')}
         </div>`;
 
-      case 4: return `
+      case 5: return `
         <div class="form-grid">
           ${grp('Ordem de Exibição', inp('sort_order','Ex: 10'), 'Menor valor = exibido primeiro.')}
           ${chk('show_on_home','Exibir na Home')}
           ${chk('favorite','Favorito')}
         </div>`;
 
-      case 5: return `
+      case 6: return `
         <div class="form-grid">
           ${grp('Versão',
             `<div class="form-control" style="background:#f1f5f9;color:#0f172a;cursor:default;display:flex;align-items:center;gap:6px;font-family:var(--mono)">
@@ -1696,6 +1818,189 @@ class GFContentRegistryApp {
     if (!$body) return;
     $body.innerHTML = this._renderCGTree();
     if (window.lucide) lucide.createIcons({attrs:{style:'display:block'}});
+  }
+
+  // ── Natural Studio ─────────────────────────────────
+  _nsApplyTabStyle($body, active) {
+    if (!$body) return;
+    if (active) {
+      $body.classList.add('ns-active');
+    } else {
+      $body.classList.remove('ns-active');
+    }
+  }
+
+  _nsInit() {
+    const intName = (this.selected || {}).internal_name;
+    if (!intName) return;
+    const $gal = document.getElementById('ns-gallery');
+    if ($gal) $gal.innerHTML = `
+      <div class="ns-gallery-loading">
+        <div class="spinner" style="width:24px;height:24px;border-color:#1a2540;border-top-color:#38bdf8"></div>
+        <span style="color:#475569;font-size:13px;margin-left:8px">Carregando arquivos...</span>
+      </div>`;
+    frappe.call({
+      method: 'ichis_atlas_app.api.natural_studio.list_files',
+      args: { internal_name: intName },
+      callback: (r) => { this._nsRenderGallery(r.message || []); },
+      error: () => {
+        if ($gal) $gal.innerHTML = `<div class="ns-gallery-empty">
+          <strong>Erro ao carregar arquivos</strong>Verifique as permissões e tente novamente.</div>`;
+      }
+    });
+  }
+
+  _nsRefresh() {
+    const $btn = document.getElementById('ns-btn-refresh');
+    if ($btn) { $btn.style.transition = 'none'; $btn.querySelector('i').style.animation = 'spin 600ms linear'; }
+    this._nsInit();
+    setTimeout(() => { if ($btn) $btn.querySelector('i').style.animation = ''; }, 650);
+  }
+
+  _nsRenderGallery(files) {
+    const $gal  = document.getElementById('ns-gallery');
+    const $cnt  = document.getElementById('ns-file-count');
+    if (!$gal) return;
+    if ($cnt) $cnt.textContent = files.length
+      ? `${files.length} arquivo${files.length > 1 ? 's' : ''}`
+      : 'Nenhum arquivo';
+    if (!files.length) {
+      $gal.innerHTML = `<div class="ns-gallery-empty">
+        <i data-lucide="image" style="width:52px;height:52px;display:block;margin:0 auto 14px;color:#1a2540"></i>
+        <strong>Nenhum arquivo ainda</strong>
+        Arraste imagens para a área acima ou clique em Upload para começar.
+      </div>`;
+      if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+      return;
+    }
+    $gal.innerHTML = `<div class="ns-gallery-grid">${files.map(f => this._nsFileCard(f)).join('')}</div>`;
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+  }
+
+  _nsFileCard(f) {
+    const sz = f.size < 1024 ? f.size + ' B'
+      : f.size < 1048576 ? (f.size / 1024).toFixed(1) + ' KB'
+      : (f.size / 1048576).toFixed(1) + ' MB';
+    const thumb = f.is_image
+      ? `<img class="ns-img-thumb" src="${this._esc(f.url)}" alt="${this._esc(f.name)}" loading="lazy">`
+      : `<div class="ns-img-thumb-icon"><i data-lucide="file" style="width:36px;height:36px"></i></div>`;
+    const viewBtn = f.is_image
+      ? `<button class="ns-img-overlay-btn" onclick="event.stopPropagation();app._nsLightbox('${this._escJs(f.url)}','${this._escJs(f.name)}')" title="Visualizar">
+           <i data-lucide="zoom-in" style="width:14px;height:14px"></i>
+         </button>` : '';
+    return `<div class="ns-img-card">
+      ${thumb}
+      <div class="ns-img-overlay">
+        ${viewBtn}
+        <button class="ns-img-overlay-btn" onclick="event.stopPropagation();app._nsCopyUrl('${this._escJs(f.url)}')" title="Copiar URL">
+          <i data-lucide="copy" style="width:14px;height:14px"></i>
+        </button>
+        <button class="ns-img-overlay-btn del" onclick="event.stopPropagation();app._nsDelete('${this._escJs(f.name)}')" title="Excluir">
+          <i data-lucide="trash-2" style="width:14px;height:14px"></i>
+        </button>
+      </div>
+      <div class="ns-img-info">
+        <div class="ns-img-name" title="${this._esc(f.name)}">${this._esc(f.name)}</div>
+        <div class="ns-img-size">${sz}</div>
+      </div>
+    </div>`;
+  }
+
+  _nsTriggerUpload() {
+    const $inp = document.getElementById('ns-file-input');
+    if ($inp) { $inp.value = ''; $inp.click(); }
+  }
+
+  _nsDrop(event) {
+    event.preventDefault();
+    const dz = document.getElementById('ns-dropzone');
+    if (dz) dz.classList.remove('ns-drag-active');
+    const files = event.dataTransfer && event.dataTransfer.files;
+    if (files && files.length) this._nsUploadFiles(files);
+  }
+
+  async _nsUploadFiles(files) {
+    if (!files || !files.length) return;
+    const intName = (this.selected || {}).internal_name;
+    if (!intName) return;
+    const $bar   = document.getElementById('ns-upload-bar');
+    const $fill  = document.getElementById('ns-upload-fill');
+    const $label = document.getElementById('ns-upload-label');
+    if ($bar) $bar.style.display = 'block';
+    const total = files.length;
+    let done = 0, failed = 0;
+    for (const file of Array.from(files)) {
+      if ($label) $label.textContent = `Enviando ${done + 1} de ${total}: ${file.name}`;
+      try {
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('internal_name', intName);
+        await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', '/api/method/ichis_atlas_app.api.natural_studio.upload_file');
+          xhr.setRequestHeader('X-Frappe-CSRF-Token', frappe.csrf_token);
+          xhr.onload  = () => xhr.status === 200 ? resolve() : reject();
+          xhr.onerror = reject;
+          xhr.send(fd);
+        });
+        done++;
+      } catch(e) {
+        failed++;
+        this._toast(`Erro ao enviar: ${file.name}`, 'error');
+      }
+      if ($fill) $fill.style.width = (((done + failed) / total) * 100) + '%';
+    }
+    setTimeout(() => {
+      if ($bar)  $bar.style.display = 'none';
+      if ($fill) $fill.style.width = '0%';
+    }, 600);
+    if (done > 0) {
+      this._toast(
+        done === total ? `${done} arquivo${done > 1 ? 's' : ''} enviado${done > 1 ? 's' : ''} com sucesso!` :
+        `${done}/${total} arquivos enviados.`,
+        done === total ? 'success' : 'info'
+      );
+      this._nsInit();
+    }
+  }
+
+  _nsDelete(filename) {
+    const intName = (this.selected || {}).internal_name;
+    if (!intName) return;
+    frappe.confirm(`Excluir o arquivo "<strong>${this._esc(filename)}</strong>"?<br>Esta ação não pode ser desfeita.`, () => {
+      frappe.call({
+        method: 'ichis_atlas_app.api.natural_studio.delete_file',
+        args: { internal_name: intName, filename },
+        callback: () => { this._toast('Arquivo excluído.', 'info'); this._nsInit(); },
+        error:    () => this._toast('Erro ao excluir o arquivo.', 'error')
+      });
+    });
+  }
+
+  _nsCopyUrl(url) {
+    const full = /^https?:\/\//.test(url) ? url : location.origin + url;
+    navigator.clipboard.writeText(full)
+      .then(() => this._toast('URL copiada para a área de transferência!', 'success'))
+      .catch(() => this._toast('Erro ao copiar URL.', 'error'));
+  }
+
+  _nsLightbox(url, name) {
+    document.getElementById('ns-lightbox')?.remove();
+    const el = document.createElement('div');
+    el.id = 'ns-lightbox';
+    el.className = 'ns-lightbox';
+    el.innerHTML = `
+      <button class="ns-lightbox-close" onclick="document.getElementById('ns-lightbox').remove()" title="Fechar">
+        <i data-lucide="x" style="width:18px;height:18px"></i>
+      </button>
+      <img class="ns-lightbox-img" src="${this._esc(url)}" alt="${this._esc(name)}">
+      <div class="ns-lightbox-info">${this._esc(name)}</div>`;
+    el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+    document.addEventListener('keydown', function esc(e) {
+      if (e.key === 'Escape') { el.remove(); document.removeEventListener('keydown', esc); }
+    });
+    document.body.appendChild(el);
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
   }
 
   // ── Helpers ───────────────────────────────────────
