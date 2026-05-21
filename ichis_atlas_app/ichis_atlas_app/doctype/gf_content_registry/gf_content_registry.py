@@ -15,10 +15,25 @@ class GFContentRegistry(Document):
             self.internal_name = self._generate_internal_name(self.title) + "_v" + ver_slug
 
     def validate(self):
+        # Campos obrigatórios são hidden no DocType, então a validação é manual aqui
+        if not self.title:
+            frappe.throw("O campo <b>Título</b> é obrigatório.")
+        if not self.internal_name:
+            frappe.throw("O campo <b>Internal Name</b> é obrigatório.")
+        if not self.item_type:
+            frappe.throw("O campo <b>Tipo do Item</b> é obrigatório.")
+        if not self.content_group:
+            frappe.throw("O campo <b>Grupo de Conteúdo</b> é obrigatório.")
+        if not self.skill:
+            frappe.throw("O campo <b>Skill</b> é obrigatório.")
+
         if self.content_group and not self.access_group:
             default_ag = frappe.db.get_value("GF Content Group", self.content_group, "default_access_group")
             if default_ag:
                 self.access_group = default_ag
+
+        if not self.access_group:
+            frappe.throw("O campo <b>Grupo de Acesso</b> é obrigatório.")
 
     def before_save(self):
         if self.content_group:

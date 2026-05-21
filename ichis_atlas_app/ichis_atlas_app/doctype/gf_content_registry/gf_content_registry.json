@@ -10,45 +10,30 @@
  "field_order": [
   "tb_natural_studio",
   "ns_workspace",
-  "tb_geral",
-  "sb_identif",
+  "tb_settings",
+  "settings_workspace",
   "title",
-  "cb_title_int",
   "internal_name",
-  "sb_class",
   "item_type",
   "status",
   "version",
-  "cb_col1",
   "content_group",
   "access_group",
   "responsible_user",
-  "tb_vinculos",
-  "sb_skill_row",
   "skill",
-  "cb_skill_web",
   "web_page",
-  "tb_referencia",
-  "sb_reference",
   "route_url",
   "reference_doctype",
   "reference_name",
-  "tb_apresentacao",
-  "sb_details",
   "description",
   "tags",
-  "cb_details2",
   "icon",
   "color",
-  "tb_configuracoes",
-  "sb_config",
   "sort_order",
   "show_on_home",
   "favorite",
   "active",
   "last_reviewed_on",
-  "tb_versionamento",
-  "sb_versioning",
   "previous_version"
  ],
  "fields": [
@@ -65,39 +50,29 @@
    "options": "<div id=\"gf-ns-root\"></div>"
   },
   {
-   "fieldname": "tb_geral",
+   "fieldname": "tb_settings",
    "fieldtype": "Tab Break",
-   "label": "Geral"
+   "label": "Settings"
   },
   {
-   "fieldname": "sb_identif",
-   "fieldtype": "Section Break",
-   "label": "Identificação"
+   "fieldname": "settings_workspace",
+   "fieldtype": "HTML",
+   "label": "Settings Workspace",
+   "options": "<div id=\"gf-st-root\"></div>"
   },
   {
    "fieldname": "title",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Título",
-   "reqd": 1
-  },
-  {
-   "fieldname": "cb_title_int",
-   "fieldtype": "Column Break"
+   "hidden": 1
   },
   {
    "fieldname": "internal_name",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Internal Name",
-   "reqd": 1,
-   "read_only_depends_on": "eval:!doc.__islocal",
-   "description": "Identificador técnico único. Gerado automaticamente na criação — não pode ser alterado após salvo."
-  },
-  {
-   "fieldname": "sb_class",
-   "fieldtype": "Section Break",
-   "label": "Classificação"
+   "hidden": 1
   },
   {
    "fieldname": "item_type",
@@ -105,7 +80,7 @@
    "in_list_view": 1,
    "label": "Tipo do Item",
    "options": "WEB_PAGE\nREPORT\nDASHBOARD\nPDF\nHTML\nDOCUMENT\nAPPLICATION\nWORKFLOW\nEXTERNAL_LINK\nAPI\nSCRIPT\nOTHER",
-   "reqd": 1
+   "hidden": 1
   },
   {
    "fieldname": "status",
@@ -113,7 +88,8 @@
    "in_list_view": 1,
    "label": "Status",
    "options": "Draft\nEm Desenvolvimento\nEm Teste\nSubmetido\nObsoleto\nArquivado",
-   "default": "Draft"
+   "default": "Draft",
+   "hidden": 1
   },
   {
    "fieldname": "version",
@@ -121,11 +97,7 @@
    "label": "Versão",
    "default": "1.0.0",
    "read_only": 1,
-   "description": "Gerada automaticamente — 1.0.0 na criação. Não edite manualmente."
-  },
-  {
-   "fieldname": "cb_col1",
-   "fieldtype": "Column Break"
+   "hidden": 1
   },
   {
    "fieldname": "content_group",
@@ -133,7 +105,7 @@
    "in_list_view": 1,
    "label": "Grupo de Conteúdo",
    "options": "GF Content Group",
-   "reqd": 1
+   "hidden": 1
   },
   {
    "fieldname": "access_group",
@@ -141,134 +113,92 @@
    "in_list_view": 1,
    "label": "Grupo de Acesso",
    "options": "GF Access Group",
-   "reqd": 1,
-   "description": "Pré-preenchido automaticamente pelo Grupo de Conteúdo. Editável para exceções."
+   "hidden": 1
   },
   {
    "fieldname": "responsible_user",
    "fieldtype": "Link",
    "label": "Responsável",
-   "options": "User"
-  },
-  {
-   "fieldname": "tb_vinculos",
-   "fieldtype": "Tab Break",
-   "label": "Vínculos"
-  },
-  {
-   "fieldname": "sb_skill_row",
-   "fieldtype": "Section Break",
-   "label": "Skill"
+   "options": "User",
+   "hidden": 1
   },
   {
    "fieldname": "skill",
    "fieldtype": "Link",
    "label": "Skill",
    "options": "GF Skill",
-   "reqd": 1
-  },
-  {
-   "fieldname": "cb_skill_web",
-   "fieldtype": "Column Break"
+   "hidden": 1
   },
   {
    "fieldname": "web_page",
    "fieldtype": "Link",
    "label": "Web Page",
    "options": "Web Page",
-   "description": "Página Web do ERPNext vinculada a este conteúdo. Pesquise pelo título da página."
-  },
-  {
-   "fieldname": "tb_referencia",
-   "fieldtype": "Tab Break",
-   "label": "Referência"
-  },
-  {
-   "fieldname": "sb_reference",
-   "fieldtype": "Section Break",
-   "label": "Localização"
+   "hidden": 1
   },
   {
    "fieldname": "route_url",
    "fieldtype": "Data",
    "label": "URL / Rota",
    "read_only": 1,
-   "description": "Preenchido automaticamente com o caminho hierárquico da pasta no Google Drive ao salvar."
+   "hidden": 1
   },
   {
    "fieldname": "reference_doctype",
    "fieldtype": "Data",
-   "label": "DocType de Referência"
+   "label": "DocType de Referência",
+   "hidden": 1
   },
   {
    "fieldname": "reference_name",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Nome de Referência",
-   "description": "Nome do documento, relatório ou recurso referenciado por este item."
-  },
-  {
-   "fieldname": "tb_apresentacao",
-   "fieldtype": "Tab Break",
-   "label": "Apresentação"
-  },
-  {
-   "fieldname": "sb_details",
-   "fieldtype": "Section Break",
-   "label": "Detalhes"
+   "hidden": 1
   },
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "label": "Descrição"
+   "label": "Descrição",
+   "hidden": 1
   },
   {
    "fieldname": "tags",
    "fieldtype": "Small Text",
-   "label": "Tags"
-  },
-  {
-   "fieldname": "cb_details2",
-   "fieldtype": "Column Break"
+   "label": "Tags",
+   "hidden": 1
   },
   {
    "fieldname": "icon",
    "fieldtype": "Data",
    "label": "Ícone",
-   "read_only": 1,
-   "description": "Selecione via botão 'Escolher Ícone' abaixo. Utiliza ícones Lucide."
+   "hidden": 1
   },
   {
    "fieldname": "color",
    "fieldtype": "Color",
-   "label": "Cor"
-  },
-  {
-   "fieldname": "tb_configuracoes",
-   "fieldtype": "Tab Break",
-   "label": "Configurações"
-  },
-  {
-   "fieldname": "sb_config",
-   "fieldtype": "Section Break",
-   "label": "Configurações"
+   "label": "Cor",
+   "hidden": 1
   },
   {
    "fieldname": "sort_order",
    "fieldtype": "Int",
-   "label": "Ordem"
+   "label": "Ordem",
+   "hidden": 1
   },
   {
    "fieldname": "show_on_home",
    "fieldtype": "Check",
    "label": "Exibir na Home",
-   "default": "0"
+   "default": "0",
+   "hidden": 1
   },
   {
    "fieldname": "favorite",
    "fieldtype": "Check",
    "label": "Favorito",
-   "default": "0"
+   "default": "0",
+   "hidden": 1
   },
   {
    "fieldname": "active",
@@ -276,28 +206,20 @@
    "in_list_view": 1,
    "label": "Ativo",
    "default": "1",
-   "description": "Desmarque para ocultar este item do portal sem excluí-lo."
+   "hidden": 1
   },
   {
    "fieldname": "last_reviewed_on",
    "fieldtype": "Date",
-   "label": "Última Revisão"
-  },
-  {
-   "fieldname": "tb_versionamento",
-   "fieldtype": "Tab Break",
-   "label": "Versionamento"
-  },
-  {
-   "fieldname": "sb_versioning",
-   "fieldtype": "Section Break",
-   "label": "Versionamento"
+   "label": "Última Revisão",
+   "hidden": 1
   },
   {
    "fieldname": "previous_version",
    "fieldtype": "Link",
    "label": "Versão Anterior",
-   "options": "GF Content Registry"
+   "options": "GF Content Registry",
+   "hidden": 1
   }
  ],
  "links": [],

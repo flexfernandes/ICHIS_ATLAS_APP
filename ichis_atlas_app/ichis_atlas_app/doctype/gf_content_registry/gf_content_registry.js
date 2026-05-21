@@ -204,41 +204,11 @@ function gf_test_url(frm) {
 frappe.ui.form.on('GF Content Registry', {
 
     refresh(frm) {
-        // ── Botão Escolher Ícone
-        frm.fields_dict.icon.$wrapper
-            .find('.control-input-wrapper')
-            .after(
-                `<button class="btn btn-xs btn-default" style="margin-top:4px"
-                    onclick="gf_open_icon_picker(cur_frm)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11"
-                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                         style="margin-right:3px;vertical-align:-1px">
-                         <circle cx="12" cy="12" r="10"/>
-                         <circle cx="12" cy="10" r="3"/>
-                         <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
-                    </svg>
-                    Escolher Ícone
-                </button>`
-            );
-        gf_refresh_icon_preview(frm);
+        // ── Settings workspace (sempre visível)
+        gf_st_ensure_styles();
+        gf_st_render(frm);
 
-        // ── Botão Testar URL
-        frm.fields_dict.route_url.$wrapper
-            .find('.control-input-wrapper')
-            .after(
-                `<button class="btn btn-xs btn-default" style="margin-top:4px"
-                    onclick="gf_test_url(cur_frm)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11"
-                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                         style="margin-right:3px;vertical-align:-1px">
-                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                         <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                    Testar URL
-                </button>`
-            );
-
-        // ── Natural Studio
+        // ── Natural Studio (somente após criação)
         if (!frm.doc.__islocal) {
             gf_ns_ensure_styles();
             gf_ns_render(frm);
@@ -246,7 +216,6 @@ frappe.ui.form.on('GF Content Registry', {
     },
 
     title(frm) {
-        // Auto-preenche internal_name apenas em documentos novos (antes de salvar)
         if (frm.doc.__islocal) {
             const ver  = (frm.doc.version || '1.0.0').replace(/\./g, '_');
             const slug = (frm.doc.title || '')
@@ -254,12 +223,22 @@ frappe.ui.form.on('GF Content Registry', {
                 .normalize('NFD').replace(/[̀-ͯ]/g, '')
                 .replace(/[^a-z0-9]+/g, '_')
                 .replace(/^_+|_+$/g, '');
-            frm.set_value('internal_name', slug ? `${slug}_v${ver}` : '');
+            const newName = slug ? `${slug}_v${ver}` : '';
+            frm.set_value('internal_name', newName);
+            // Atualiza a exibição no Settings workspace sem re-renderizar tudo
+            const $stRoot = frm.fields_dict.settings_workspace
+                ? frm.fields_dict.settings_workspace.$wrapper.find('#gf-st-root')
+                : $();
+            $stRoot.find('[data-st-field="internal_name"]').val(newName);
         }
     },
 
     icon(frm) {
-        gf_refresh_icon_preview(frm);
+        // Atualiza o preview de ícone no Settings workspace
+        const $stRoot = frm.fields_dict.settings_workspace
+            ? frm.fields_dict.settings_workspace.$wrapper.find('#gf-st-root')
+            : $();
+        gf_st_update_icon_preview($stRoot, frm.doc.icon);
     },
 
     content_group(frm) {
@@ -975,4 +954,859 @@ function gf_ns_add_doc_context(frm) {
     $input[0].style.height = Math.min($input[0].scrollHeight, 120) + 'px';
     $input.focus();
     frappe.show_alert({ message: 'Contexto do registro adicionado ao prompt.', indicator: 'blue' }, 3);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SETTINGS WORKSPACE
+// ═══════════════════════════════════════════════════════════════════════════
+
+function gf_st_ensure_styles() {
+    if (document.getElementById('gf-st-styles')) return;
+    const css = `
+        #gf-st-root *,#gf-st-root *::before,#gf-st-root *::after{box-sizing:border-box;margin:0;padding:0}
+        #gf-st-root{
+            --st-bg:       #0d1117;
+            --st-surface:  #161b22;
+            --st-card:     #1c2128;
+            --st-border:   #30363d;
+            --st-border2:  #21262d;
+            --st-text:     #e6edf3;
+            --st-text2:    #8b949e;
+            --st-text3:    #484f58;
+            --st-label:    #6e7681;
+            --st-blue:     #1f6feb;
+            --st-blue-h:   #388bfd;
+            --st-green:    #238636;
+            --st-green-h:  #2ea043;
+            --st-amber:    #d29922;
+            --st-red:      #da3633;
+            --st-radius:   8px;
+            --st-radius-sm:5px;
+            background: var(--st-bg);
+            color: var(--st-text);
+            font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+            font-size: 13px;
+            border-radius: 10px;
+            border: 1px solid var(--st-border);
+            overflow: hidden;
+        }
+        /* Header */
+        .st-header{
+            display:flex;align-items:center;gap:10px;
+            padding:13px 18px;
+            background:var(--st-surface);
+            border-bottom:1px solid var(--st-border);
+        }
+        .st-header-logo{
+            display:flex;align-items:center;gap:7px;
+            font-size:13px;font-weight:600;color:var(--st-text);letter-spacing:.2px;
+        }
+        .st-header-meta{
+            margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text2);
+        }
+        .st-header-meta span{
+            background:var(--st-bg);border:1px solid var(--st-border2);
+            border-radius:4px;padding:2px 8px;
+        }
+        .st-header-meta .st-version{color:var(--st-blue-h)}
+        .st-badge-new{
+            font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+            padding:2px 7px;border-radius:20px;background:rgba(31,111,235,.15);
+            color:var(--st-blue-h);border:1px solid rgba(56,139,253,.25);
+        }
+        .st-badge-saved{
+            font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+            padding:2px 7px;border-radius:20px;background:rgba(35,134,54,.15);
+            color:#3fb950;border:1px solid rgba(63,185,80,.25);
+        }
+        /* Body scroll */
+        .st-body{
+            padding:18px;overflow-y:auto;
+            max-height:calc(100vh - 240px);
+            min-height:400px;
+        }
+        .st-body::-webkit-scrollbar{width:5px}
+        .st-body::-webkit-scrollbar-track{background:transparent}
+        .st-body::-webkit-scrollbar-thumb{background:var(--st-border);border-radius:3px}
+        /* Card */
+        .st-card{
+            background:var(--st-card);
+            border:1px solid var(--st-border2);
+            border-radius:var(--st-radius);
+            overflow:visible;
+            margin-bottom:14px;
+        }
+        .st-card:last-child{margin-bottom:0}
+        .st-card-hd{
+            display:flex;align-items:center;gap:8px;
+            padding:11px 16px;
+            border-bottom:1px solid var(--st-border2);
+            background:rgba(255,255,255,.018);
+        }
+        .st-card-hd-icon{
+            width:22px;height:22px;border-radius:5px;
+            display:flex;align-items:center;justify-content:center;
+            background:rgba(255,255,255,.05);flex-shrink:0;
+        }
+        .st-card-hd-title{
+            font-size:11px;font-weight:600;color:var(--st-text2);
+            letter-spacing:.5px;text-transform:uppercase;
+        }
+        .st-card-hd-desc{
+            margin-left:auto;font-size:10.5px;color:var(--st-text3);
+        }
+        .st-card-body{padding:16px}
+        /* Grid row */
+        .st-row{
+            display:grid;
+            grid-template-columns:repeat(var(--cols,1),1fr);
+            gap:14px;
+            margin-bottom:14px;
+        }
+        .st-row:last-child{margin-bottom:0}
+        /* Field */
+        .st-field{display:flex;flex-direction:column;gap:5px;position:relative}
+        .st-label{
+            font-size:11px;font-weight:500;color:var(--st-label);
+            letter-spacing:.3px;display:flex;align-items:center;gap:5px;
+        }
+        .st-label .st-req{color:var(--st-red);font-size:10px}
+        .st-desc{font-size:10.5px;color:var(--st-text3);margin-top:2px;line-height:1.4}
+        /* Inputs */
+        .st-input,.st-select,.st-textarea{
+            background:var(--st-bg);
+            border:1px solid var(--st-border);
+            border-radius:var(--st-radius-sm);
+            color:var(--st-text);
+            font-size:13px;
+            padding:8px 11px;
+            outline:none;
+            width:100%;
+            font-family:inherit;
+            transition:border-color .15s,box-shadow .15s;
+            line-height:1.4;
+        }
+        .st-input:focus,.st-select:focus,.st-textarea:focus{
+            border-color:var(--st-blue);
+            box-shadow:0 0 0 3px rgba(31,111,235,.12);
+        }
+        .st-input[readonly],.st-input:disabled{
+            color:var(--st-text2);cursor:default;
+            background:rgba(255,255,255,.025);
+        }
+        .st-input::placeholder,.st-textarea::placeholder{color:var(--st-text3)}
+        .st-select{
+            appearance:none;
+            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236e7681'/%3E%3C/svg%3E");
+            background-repeat:no-repeat;
+            background-position:right 10px center;
+            padding-right:28px;cursor:pointer;
+        }
+        .st-select option{background:#1c2128}
+        .st-textarea{resize:vertical;min-height:72px}
+        /* Read-only row with action */
+        .st-input-row{display:flex;gap:6px;align-items:center}
+        .st-input-row .st-input{flex:1}
+        /* Link field */
+        .st-link-wrap{position:relative}
+        .st-link-icon{
+            position:absolute;right:9px;top:50%;transform:translateY(-50%);
+            color:var(--st-text3);pointer-events:none;
+        }
+        .st-link-wrap .st-input{padding-right:28px}
+        .st-dd{
+            position:absolute;top:calc(100% + 3px);left:0;right:0;z-index:9999;
+            background:var(--st-surface);border:1px solid var(--st-border);
+            border-radius:var(--st-radius-sm);overflow:hidden;
+            box-shadow:0 8px 24px rgba(0,0,0,.5);
+        }
+        .st-dd-item{
+            padding:8px 12px;font-size:12.5px;cursor:pointer;
+            color:var(--st-text);transition:background .1s;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+            display:flex;align-items:center;gap:8px;
+        }
+        .st-dd-item:hover,.st-dd-item.active{background:rgba(56,139,253,.15);color:var(--st-blue-h)}
+        .st-dd-empty{padding:10px 12px;font-size:12px;color:var(--st-text3)}
+        /* Toggle */
+        .st-toggle-row{
+            display:flex;align-items:center;justify-content:space-between;
+            padding:10px 0;border-bottom:1px solid var(--st-border2);
+        }
+        .st-toggle-row:last-child{border-bottom:none;padding-bottom:0}
+        .st-toggle-row:first-child{padding-top:0}
+        .st-toggle-info{display:flex;flex-direction:column;gap:2px}
+        .st-toggle-title{font-size:13px;color:var(--st-text)}
+        .st-toggle-desc{font-size:11px;color:var(--st-text3)}
+        .st-toggle{
+            position:relative;width:38px;height:22px;flex-shrink:0;cursor:pointer;
+        }
+        .st-toggle input{opacity:0;width:0;height:0;position:absolute}
+        .st-toggle-track{
+            position:absolute;inset:0;border-radius:11px;
+            background:var(--st-border);transition:background .2s;
+        }
+        .st-toggle input:checked + .st-toggle-track{background:var(--st-green)}
+        .st-toggle-thumb{
+            position:absolute;top:3px;left:3px;
+            width:16px;height:16px;border-radius:50%;
+            background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);
+            transition:transform .2s;
+        }
+        .st-toggle input:checked ~ .st-toggle-thumb{transform:translateX(16px)}
+        /* Color field */
+        .st-color-wrap{display:flex;align-items:center;gap:10px}
+        .st-color-swatch{
+            width:36px;height:36px;border-radius:var(--st-radius-sm);
+            border:1px solid var(--st-border);cursor:pointer;flex-shrink:0;
+            background:#888;transition:border-color .15s;
+        }
+        .st-color-swatch:hover{border-color:var(--st-blue-h)}
+        .st-color-input-native{
+            position:absolute;opacity:0;width:36px;height:36px;cursor:pointer;
+        }
+        .st-color-hex{flex:1}
+        /* Icon field */
+        .st-icon-wrap{display:flex;align-items:center;gap:8px}
+        .st-icon-preview{
+            display:flex;align-items:center;gap:6px;
+            padding:7px 10px;border-radius:var(--st-radius-sm);
+            background:var(--st-bg);border:1px solid var(--st-border2);
+            font-size:12px;color:var(--st-text2);flex:1;min-height:36px;
+        }
+        .st-icon-preview svg,.st-icon-preview i{color:#3fb950;flex-shrink:0}
+        .st-btn{
+            display:inline-flex;align-items:center;gap:5px;
+            padding:7px 12px;border-radius:var(--st-radius-sm);
+            font-size:11.5px;font-weight:500;cursor:pointer;border:1px solid transparent;
+            transition:all .15s;white-space:nowrap;font-family:inherit;
+        }
+        .st-btn-ghost{
+            background:transparent;color:var(--st-text2);border-color:var(--st-border);
+        }
+        .st-btn-ghost:hover{background:rgba(255,255,255,.05);color:var(--st-text);border-color:var(--st-border2)}
+        .st-btn-blue{
+            background:rgba(31,111,235,.15);color:var(--st-blue-h);border-color:rgba(56,139,253,.3);
+        }
+        .st-btn-blue:hover{background:rgba(31,111,235,.25)}
+        /* Separator */
+        .st-sep{border:none;border-top:1px solid var(--st-border2);margin:4px 0 14px}
+        /* Route url special */
+        .st-route-display{
+            flex:1;padding:8px 11px;border-radius:var(--st-radius-sm);
+            background:rgba(255,255,255,.025);border:1px solid var(--st-border2);
+            color:var(--st-text2);font-size:12.5px;font-family:monospace;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+        }
+        /* Status chip */
+        .st-status-chip{
+            display:inline-flex;align-items:center;gap:5px;
+            font-size:10px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;
+            padding:3px 9px;border-radius:20px;
+        }
+        .st-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+        /* Inline two-col for config toggles */
+        .st-toggles-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+        @media(max-width:600px){.st-toggles-grid{grid-template-columns:1fr}}
+    `;
+    const el = document.createElement('style');
+    el.id = 'gf-st-styles';
+    el.textContent = css;
+    document.head.appendChild(el);
+}
+
+// ── Render principal ─────────────────────────────────────────────────────────
+
+function gf_st_render(frm) {
+    const $fd = frm.fields_dict.settings_workspace;
+    if (!$fd) return;
+    const $root = $fd.$wrapper.find('#gf-st-root');
+    if (!$root.length) return;
+
+    const doc   = frm.doc;
+    const isNew = !!doc.__islocal;
+
+    const ITEM_TYPES = ['','WEB_PAGE','REPORT','DASHBOARD','PDF','HTML','DOCUMENT',
+        'APPLICATION','WORKFLOW','EXTERNAL_LINK','API','SCRIPT','OTHER'];
+    const STATUSES   = ['Draft','Em Desenvolvimento','Em Teste','Submetido','Obsoleto','Arquivado'];
+
+    function opt(arr, val) {
+        return arr.map(o => `<option value="${o}"${o===val?' selected':''}>${o||'—'}</option>`).join('');
+    }
+
+    function stChip(status) {
+        const map = {
+            'Draft':             ['#768390','Draft'],
+            'Em Desenvolvimento':['#d29922','Dev'],
+            'Em Teste':          ['#388bfd','Teste'],
+            'Submetido':         ['#3fb950','Ativo'],
+            'Obsoleto':          ['#da3633','Obsoleto'],
+            'Arquivado':         ['#484f58','Arquivado'],
+        };
+        const [color, label] = map[status] || ['#768390', status];
+        return `<span class="st-status-chip" style="background:${color}22;color:${color};border:1px solid ${color}44">
+            <span class="st-dot"></span>${label}
+        </span>`;
+    }
+
+    $root.html(`
+        <div class="st-header">
+            <div class="st-header-logo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#388bfd" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+                </svg>
+                Settings
+                <span class="${isNew ? 'st-badge-new' : 'st-badge-saved'}">${isNew ? 'NOVO' : 'SALVO'}</span>
+            </div>
+            <div class="st-header-meta">
+                ${doc.name && !isNew ? `<span style="font-family:monospace;font-size:10px">${doc.name}</span>` : ''}
+                ${doc.version ? `<span class="st-version">v${doc.version}</span>` : ''}
+            </div>
+        </div>
+
+        <div class="st-body">
+
+            <!-- ── Identidade ── -->
+            <div class="st-card">
+                <div class="st-card-hd">
+                    <div class="st-card-hd-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <span class="st-card-hd-title">Identidade</span>
+                </div>
+                <div class="st-card-body">
+                    <div class="st-row" style="--cols:1;margin-bottom:14px">
+                        <div class="st-field">
+                            <label class="st-label">Título <span class="st-req">*</span></label>
+                            <input class="st-input" data-st-field="title" type="text"
+                                placeholder="Nome exibido no portal"
+                                value="${frappe.utils.escape_html(doc.title || '')}">
+                        </div>
+                    </div>
+                    <div class="st-row" style="--cols:2">
+                        <div class="st-field">
+                            <label class="st-label">Internal Name <span class="st-req">*</span></label>
+                            <input class="st-input" data-st-field="internal_name" type="text"
+                                placeholder="auto-gerado"
+                                value="${frappe.utils.escape_html(doc.internal_name || '')}"
+                                ${isNew ? '' : 'readonly'}>
+                            <span class="st-desc">Identificador técnico único — gerado ao digitar o título.</span>
+                        </div>
+                        <div class="st-field">
+                            <label class="st-label">Versão</label>
+                            <input class="st-input" type="text" readonly
+                                value="${frappe.utils.escape_html(doc.version || '1.0.0')}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Classificação ── -->
+            <div class="st-card">
+                <div class="st-card-hd">
+                    <div class="st-card-hd-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2">
+                            <path d="M4 6h16M4 10h16M4 14h16M4 18h7"/>
+                        </svg>
+                    </div>
+                    <span class="st-card-hd-title">Classificação</span>
+                    ${stChip(doc.status || 'Draft')}
+                </div>
+                <div class="st-card-body">
+                    <div class="st-row" style="--cols:2">
+                        <div class="st-field">
+                            <label class="st-label">Tipo do Item <span class="st-req">*</span></label>
+                            <select class="st-select" data-st-field="item_type">${opt(ITEM_TYPES, doc.item_type)}</select>
+                        </div>
+                        <div class="st-field">
+                            <label class="st-label">Status</label>
+                            <select class="st-select" data-st-field="status">${opt(STATUSES, doc.status || 'Draft')}</select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Grupos & Acesso ── -->
+            <div class="st-card">
+                <div class="st-card-hd">
+                    <div class="st-card-hd-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <span class="st-card-hd-title">Grupos &amp; Acesso</span>
+                </div>
+                <div class="st-card-body">
+                    <div class="st-row" style="--cols:2;margin-bottom:14px">
+                        <div class="st-field">
+                            <label class="st-label">Grupo de Conteúdo <span class="st-req">*</span></label>
+                            <div class="st-link-wrap" data-doctype="GF Content Group" data-field="content_group">
+                                <input class="st-input" data-st-field="content_group" type="text"
+                                    placeholder="Buscar grupo…"
+                                    value="${frappe.utils.escape_html(doc.content_group || '')}">
+                                <svg class="st-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="st-field">
+                            <label class="st-label">Grupo de Acesso <span class="st-req">*</span></label>
+                            <div class="st-link-wrap" data-doctype="GF Access Group" data-field="access_group">
+                                <input class="st-input" data-st-field="access_group" type="text"
+                                    placeholder="Buscar grupo…"
+                                    value="${frappe.utils.escape_html(doc.access_group || '')}">
+                                <svg class="st-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                            </div>
+                            <span class="st-desc">Pré-preenchido pelo Grupo de Conteúdo. Editável para exceções.</span>
+                        </div>
+                    </div>
+                    <div class="st-row" style="--cols:2">
+                        <div class="st-field">
+                            <label class="st-label">Responsável</label>
+                            <div class="st-link-wrap" data-doctype="User" data-field="responsible_user">
+                                <input class="st-input" data-st-field="responsible_user" type="text"
+                                    placeholder="Buscar usuário…"
+                                    value="${frappe.utils.escape_html(doc.responsible_user || '')}">
+                                <svg class="st-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Skill & Vínculos ── -->
+            <div class="st-card">
+                <div class="st-card-hd">
+                    <div class="st-card-hd-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                    </div>
+                    <span class="st-card-hd-title">Skill &amp; Vínculos</span>
+                </div>
+                <div class="st-card-body">
+                    <div class="st-row" style="--cols:2">
+                        <div class="st-field">
+                            <label class="st-label">Skill <span class="st-req">*</span></label>
+                            <div class="st-link-wrap" data-doctype="GF Skill" data-field="skill">
+                                <input class="st-input" data-st-field="skill" type="text"
+                                    placeholder="Buscar skill…"
+                                    value="${frappe.utils.escape_html(doc.skill || '')}">
+                                <svg class="st-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="st-field">
+                            <label class="st-label">Web Page</label>
+                            <div class="st-link-wrap" data-doctype="Web Page" data-field="web_page">
+                                <input class="st-input" data-st-field="web_page" type="text"
+                                    placeholder="Buscar página…"
+                                    value="${frappe.utils.escape_html(doc.web_page || '')}">
+                                <svg class="st-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Localização ── -->
+            <div class="st-card">
+                <div class="st-card-hd">
+                    <div class="st-card-hd-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <span class="st-card-hd-title">Localização &amp; Referência</span>
+                </div>
+                <div class="st-card-body">
+                    <div class="st-row" style="--cols:1;margin-bottom:14px">
+                        <div class="st-field">
+                            <label class="st-label">URL / Rota Google Drive</label>
+                            <div class="st-input-row">
+                                <span class="st-route-display" id="gf-st-route-display">${frappe.utils.escape_html(doc.route_url || '— Será preenchida ao salvar —')}</span>
+                                <button class="st-btn st-btn-ghost" id="gf-st-test-url" title="Abrir no navegador"
+                                    style="${doc.route_url ? '' : 'opacity:.4;cursor:default'}">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                    Testar
+                                </button>
+                            </div>
+                            <span class="st-desc">Caminho hierárquico da pasta no Google Drive. Preenchido automaticamente ao salvar.</span>
+                        </div>
+                    </div>
+                    <div class="st-row" style="--cols:2">
+                        <div class="st-field">
+                            <label class="st-label">DocType de Referência</label>
+                            <input class="st-input" data-st-field="reference_doctype" type="text"
+                                placeholder="Ex: Sales Invoice"
+                                value="${frappe.utils.escape_html(doc.reference_doctype || '')}">
+                        </div>
+                        <div class="st-field">
+                            <label class="st-label">Nome de Referência</label>
+                            <input class="st-input" data-st-field="reference_name" type="text"
+                                placeholder="Nome do documento referenciado"
+                                value="${frappe.utils.escape_html(doc.reference_name || '')}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Apresentação ── -->
+            <div class="st-card">
+                <div class="st-card-hd">
+                    <div class="st-card-hd-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+                        </svg>
+                    </div>
+                    <span class="st-card-hd-title">Apresentação</span>
+                </div>
+                <div class="st-card-body">
+                    <div class="st-row" style="--cols:1;margin-bottom:14px">
+                        <div class="st-field">
+                            <label class="st-label">Descrição</label>
+                            <textarea class="st-textarea" data-st-field="description"
+                                placeholder="Descreva o conteúdo ou finalidade deste item…">${frappe.utils.escape_html(doc.description || '')}</textarea>
+                        </div>
+                    </div>
+                    <div class="st-row" style="--cols:1;margin-bottom:14px">
+                        <div class="st-field">
+                            <label class="st-label">Tags</label>
+                            <input class="st-input" data-st-field="tags" type="text"
+                                placeholder="Ex: relatório, mensal, produção"
+                                value="${frappe.utils.escape_html(doc.tags || '')}">
+                        </div>
+                    </div>
+                    <div class="st-row" style="--cols:2">
+                        <div class="st-field">
+                            <label class="st-label">Ícone</label>
+                            <div class="st-icon-wrap">
+                                <div class="st-icon-preview" id="gf-st-icon-preview">
+                                    <span style="opacity:.4;font-size:11.5px">Nenhum ícone</span>
+                                </div>
+                                <button class="st-btn st-btn-ghost" onclick="gf_open_icon_picker(cur_frm)"
+                                    title="Escolher ícone Lucide">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                        <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
+                                    </svg>
+                                    Escolher
+                                </button>
+                            </div>
+                        </div>
+                        <div class="st-field">
+                            <label class="st-label">Cor</label>
+                            <div class="st-color-wrap">
+                                <div style="position:relative;flex-shrink:0">
+                                    <input type="color" class="st-color-input-native" id="gf-st-color-native"
+                                        value="${doc.color || '#888888'}">
+                                    <div class="st-color-swatch" id="gf-st-color-swatch"
+                                        style="background:${doc.color || '#888888'}"></div>
+                                </div>
+                                <input class="st-input st-color-hex" data-st-field="color" type="text"
+                                    placeholder="#RRGGBB"
+                                    value="${frappe.utils.escape_html(doc.color || '')}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Configurações ── -->
+            <div class="st-card">
+                <div class="st-card-hd">
+                    <div class="st-card-hd-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+                        </svg>
+                    </div>
+                    <span class="st-card-hd-title">Configurações</span>
+                </div>
+                <div class="st-card-body">
+                    <div class="st-row" style="--cols:2;margin-bottom:16px">
+                        <div class="st-field">
+                            <label class="st-label">Ordem de Exibição</label>
+                            <input class="st-input" data-st-field="sort_order" type="number"
+                                placeholder="0"
+                                value="${doc.sort_order != null ? doc.sort_order : ''}">
+                        </div>
+                        <div class="st-field">
+                            <label class="st-label">Última Revisão</label>
+                            <input class="st-input" data-st-field="last_reviewed_on" type="date"
+                                value="${doc.last_reviewed_on || ''}">
+                        </div>
+                    </div>
+                    <div class="st-toggle-row">
+                        <div class="st-toggle-info">
+                            <span class="st-toggle-title">Ativo</span>
+                            <span class="st-toggle-desc">Desmarque para ocultar do portal sem excluir.</span>
+                        </div>
+                        <label class="st-toggle">
+                            <input type="checkbox" data-st-field="active" ${doc.active ? 'checked' : ''}>
+                            <div class="st-toggle-track"></div>
+                            <div class="st-toggle-thumb"></div>
+                        </label>
+                    </div>
+                    <div class="st-toggle-row">
+                        <div class="st-toggle-info">
+                            <span class="st-toggle-title">Exibir na Home</span>
+                            <span class="st-toggle-desc">Mostra este item no painel inicial do portal.</span>
+                        </div>
+                        <label class="st-toggle">
+                            <input type="checkbox" data-st-field="show_on_home" ${doc.show_on_home ? 'checked' : ''}>
+                            <div class="st-toggle-track"></div>
+                            <div class="st-toggle-thumb"></div>
+                        </label>
+                    </div>
+                    <div class="st-toggle-row">
+                        <div class="st-toggle-info">
+                            <span class="st-toggle-title">Favorito</span>
+                            <span class="st-toggle-desc">Marca este item como favorito.</span>
+                        </div>
+                        <label class="st-toggle">
+                            <input type="checkbox" data-st-field="favorite" ${doc.favorite ? 'checked' : ''}>
+                            <div class="st-toggle-track"></div>
+                            <div class="st-toggle-thumb"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Versionamento ── -->
+            <div class="st-card">
+                <div class="st-card-hd">
+                    <div class="st-card-hd-icon">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2">
+                            <circle cx="12" cy="12" r="4"/>
+                            <line x1="1.05" y1="12" x2="7" y2="12"/>
+                            <line x1="17.01" y1="12" x2="22.96" y2="12"/>
+                        </svg>
+                    </div>
+                    <span class="st-card-hd-title">Versionamento</span>
+                </div>
+                <div class="st-card-body">
+                    <div class="st-field">
+                        <label class="st-label">Versão Anterior</label>
+                        <div class="st-link-wrap" data-doctype="GF Content Registry" data-field="previous_version">
+                            <input class="st-input" data-st-field="previous_version" type="text"
+                                placeholder="Vincular versão anterior…"
+                                value="${frappe.utils.escape_html(doc.previous_version || '')}">
+                            <svg class="st-link-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                        </div>
+                        <span class="st-desc">Aponta para o GF Content Registry que esta versão substitui.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    `);
+
+    // Atualiza icon preview após render
+    gf_st_update_icon_preview($root, doc.icon);
+    gf_load_lucide(() => lucide.createIcons({ attrs: { style: 'display:block' } }));
+
+    gf_st_bind(frm, $root);
+}
+
+// ── Bind de eventos ──────────────────────────────────────────────────────────
+
+function gf_st_bind(frm, $root) {
+    // Data / Text / Textarea / Number / Date / Select
+    $root.find('[data-st-field]').not('[type="checkbox"]').not('[type="color"]').on('change', function() {
+        const field = $(this).data('st-field');
+        const val   = $(this).val();
+        frm.set_value(field, val);
+
+        // Atualiza chip de status no header do card se for o campo status
+        if (field === 'status') {
+            const STATUSES = ['Draft','Em Desenvolvimento','Em Teste','Submetido','Obsoleto','Arquivado'];
+            const map = {
+                'Draft':'#768390','Em Desenvolvimento':'#d29922','Em Teste':'#388bfd',
+                'Submetido':'#3fb950','Obsoleto':'#da3633','Arquivado':'#484f58'
+            };
+            const color = map[val] || '#768390';
+            $root.find('.st-status-chip').html(
+                `<span class="st-dot"></span>${val}`
+            ).css({'background': color + '22', 'color': color, 'border': `1px solid ${color}44`});
+        }
+    });
+
+    // Checkboxes (toggles)
+    $root.find('[data-st-field][type="checkbox"]').on('change', function() {
+        frm.set_value($(this).data('st-field'), $(this).is(':checked') ? 1 : 0);
+    });
+
+    // Color — native picker + hex input
+    $root.find('#gf-st-color-native').on('input', function() {
+        const hex = $(this).val();
+        $root.find('#gf-st-color-swatch').css('background', hex);
+        $root.find('[data-st-field="color"]').val(hex);
+        frm.set_value('color', hex);
+    });
+    $root.find('[data-st-field="color"]').on('change', function() {
+        const hex = $(this).val();
+        if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+            $root.find('#gf-st-color-swatch').css('background', hex);
+            $root.find('#gf-st-color-native').val(hex);
+        }
+    });
+    $root.find('#gf-st-color-swatch').on('click', function() {
+        $root.find('#gf-st-color-native').trigger('click');
+    });
+
+    // Testar URL
+    $root.find('#gf-st-test-url').on('click', function() {
+        const url = frm.doc.route_url;
+        if (!url || url.startsWith('🔍')) return;
+        window.open(/^https?:\/\//.test(url) ? url : window.location.origin + url, '_blank');
+    });
+
+    // Link fields — autocomplete
+    $root.find('.st-link-wrap').each(function() {
+        const $wrap    = $(this);
+        const doctype  = $wrap.data('doctype');
+        const fieldname = $wrap.data('field');
+        const $input   = $wrap.find('input');
+        gf_st_bind_link($input, $wrap, doctype, fieldname, frm);
+    });
+
+    // title → auto-slug internal_name
+    $root.find('[data-st-field="title"]').on('input', function() {
+        if (!frm.doc.__islocal) return;
+        const ver  = (frm.doc.version || '1.0.0').replace(/\./g, '_');
+        const slug = $(this).val()
+            .toLowerCase()
+            .normalize('NFD').replace(/[̀-ͯ]/g, '')
+            .replace(/[^a-z0-9]+/g, '_')
+            .replace(/^_+|_+$/g, '');
+        const newName = slug ? `${slug}_v${ver}` : '';
+        $root.find('[data-st-field="internal_name"]').val(newName);
+        frm.doc.internal_name = newName;
+    });
+    $root.find('[data-st-field="title"]').on('change', function() {
+        frm.set_value('title', $(this).val());
+    });
+
+    // content_group → preenche access_group
+    $root.find('[data-st-field="content_group"]').on('_linkselect', function(e, val) {
+        if (!val) return;
+        frappe.db.get_value('GF Content Group', val, ['default_access_group', 'external_reference'], (r) => {
+            if (!r) return;
+            if (r.default_access_group && !frm.doc.access_group) {
+                frm.set_value('access_group', r.default_access_group);
+                $root.find('[data-st-field="access_group"]').val(r.default_access_group);
+            }
+            if (r.external_reference) {
+                const preview = `🔍 Pasta: ${r.external_reference} (será resolvida ao salvar)`;
+                frm.doc.route_url = preview;
+                $root.find('#gf-st-route-display').text(preview);
+            }
+        });
+    });
+}
+
+// ── Link autocomplete ────────────────────────────────────────────────────────
+
+function gf_st_bind_link($input, $wrap, doctype, fieldname, frm) {
+    let $dd = null;
+    let _t  = null;
+
+    function showDd(rows) {
+        if ($dd) $dd.remove();
+        $dd = $('<div class="st-dd"></div>');
+        if (!rows.length) {
+            $dd.append('<div class="st-dd-empty">Nenhum resultado</div>');
+        } else {
+            rows.forEach((r, i) => {
+                const label = r.title && r.title !== r.name
+                    ? `<span>${frappe.utils.escape_html(r.name)}</span><span style="color:var(--st-text3);font-size:11px">${frappe.utils.escape_html(r.title)}</span>`
+                    : `<span>${frappe.utils.escape_html(r.name)}</span>`;
+                $(`<div class="st-dd-item${i===0?' active':''}" data-val="${frappe.utils.escape_html(r.name)}">${label}</div>`)
+                    .appendTo($dd)
+                    .on('mousedown', function(e) {
+                        e.preventDefault();
+                        const val = $(this).data('val');
+                        $input.val(val);
+                        frm.set_value(fieldname, val);
+                        $input.trigger('_linkselect', [val]);
+                        $dd.remove(); $dd = null;
+                    });
+            });
+        }
+        $wrap.append($dd);
+    }
+
+    function search(q) {
+        const filters = [['name', 'like', `%${q}%`]];
+        frappe.db.get_list(doctype, { filters, fields: ['name', 'title'], limit: 8 })
+            .then(rows => showDd(rows));
+    }
+
+    $input.on('focus', function() {
+        search($(this).val());
+    });
+    $input.on('input', function() {
+        clearTimeout(_t);
+        _t = setTimeout(() => search($(this).val()), 220);
+    });
+    $input.on('blur', function() {
+        setTimeout(() => { if ($dd) { $dd.remove(); $dd = null; } }, 200);
+        // Se o usuário limpou o campo, propaga
+        if (!$(this).val()) frm.set_value(fieldname, '');
+    });
+    $input.on('keydown', function(e) {
+        if (!$dd) return;
+        const $items = $dd.find('.st-dd-item');
+        const $cur   = $items.filter('.active');
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            const $next = $cur.next('.st-dd-item');
+            if ($next.length) { $cur.removeClass('active'); $next.addClass('active'); }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            const $prev = $cur.prev('.st-dd-item');
+            if ($prev.length) { $cur.removeClass('active'); $prev.addClass('active'); }
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            const $a = $dd.find('.st-dd-item.active');
+            if ($a.length) $a.trigger('mousedown');
+        } else if (e.key === 'Escape') {
+            $dd.remove(); $dd = null;
+        }
+    });
+}
+
+// ── Icon preview no Settings ──────────────────────────────────────────────
+
+function gf_st_update_icon_preview($root, icon) {
+    const $preview = $root.find('#gf-st-icon-preview');
+    if (!$preview.length) return;
+    if (icon) {
+        $preview.html(`<i data-lucide="${icon}" style="width:16px;height:16px"></i><span style="font-size:12px;color:var(--st-text2)">${icon}</span>`);
+        gf_load_lucide(() => lucide.createIcons({ attrs: { style: 'display:block' } }));
+    } else {
+        $preview.html('<span style="opacity:.4;font-size:11.5px">Nenhum ícone</span>');
+    }
 }
