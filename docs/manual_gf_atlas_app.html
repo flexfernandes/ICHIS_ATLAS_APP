@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -320,10 +320,10 @@
       <div class="card-header"><h2>🗺️ 1. Visão Geral e Importância</h2></div>
       <div class="card-body">
         <div class="intro-card">
-          <p>O <strong>GF Atlas App</strong> é a fundação estrutural do ecossistema digital da GREENFARMS. Seu papel é criar uma camada organizacional centralizada que conecta <em>quem pode acessar o quê</em> dentro do ERPNext, de forma rastreável, hierárquica e gerenciável.</p>
+          <p>O <strong>GF Atlas App</strong> é a fundação estrutural do ecossistema digital da GREENFARMS. Seu papel é criar uma camada organizacional centralizada que conecta <em>quem pode acessar o quê</em> dentro do Atlas, de forma rastreável, hierárquica e gerenciável.</p>
         </div>
 
-        <p>Toda organização com múltiplos sistemas, relatórios, dashboards, documentos e aplicações enfrenta o mesmo desafio: <strong>como organizar o acesso ao conhecimento de forma eficiente?</strong> O ERPNext oferece controle de permissões por Role, mas esse controle é binário — o usuário tem ou não tem acesso a um DocType inteiro.</p>
+        <p>Toda organização com múltiplos sistemas, relatórios, dashboards, documentos e aplicações enfrenta o mesmo desafio: <strong>como organizar o acesso ao conhecimento de forma eficiente?</strong> O Atlas oferece controle de permissões por Role, mas esse controle é binário — o usuário tem ou não tem acesso a um DocType inteiro.</p>
 
         <p>O GF Atlas resolve um problema mais fino: <strong>catálogo de conteúdo com controle de acesso por grupo</strong>. Em vez de gerenciar permissões individualmente para cada relatório ou página, você agrupa conteúdos em categorias (Content Groups) e define quem acessa cada categoria (Access Groups). O conteúdo herda automaticamente o grupo de acesso padrão de sua categoria.</p>
 
@@ -352,7 +352,7 @@
     <div class="card">
       <div class="card-header"><h2>🏗️ 2. Arquitetura do App</h2></div>
       <div class="card-body">
-        <p>O GF Atlas App é um aplicativo Frappe customizado instalado como dependência no ERPNext. Ele é composto por <strong>4 DocTypes</strong>, <strong>3 Roles</strong>, um <strong>script de instalação automática</strong> e <strong>2 campos custom</strong> no DocType nativo Web Page.</p>
+        <p>O GF Atlas App é um aplicativo Frappe customizado instalado como dependência no Atlas. Ele é composto por <strong>4 DocTypes</strong>, <strong>3 Roles</strong>, um <strong>script de instalação automática</strong> e <strong>2 campos custom</strong> no DocType nativo Web Page.</p>
 
         <h3 style="margin:18px 0 10px;font-size:14px;color:#1a202c">Estrutura do Repositório</h3>
         <div class="code-block">ICHIS_ATLAS_APP/<br>
@@ -398,7 +398,7 @@
     <div class="card">
       <div class="card-header"><h2>🏷️ 3. Roles e Permissões</h2></div>
       <div class="card-body">
-        <p>O GF Atlas App cria automaticamente 3 Roles durante a instalação. Elas controlam o acesso aos DocTypes do próprio app (não são Roles do ERPNext padrão).</p>
+        <p>O GF Atlas App cria automaticamente 3 Roles durante a instalação. Elas controlam o acesso aos DocTypes do próprio app (não são Roles do Atlas padrão).</p>
 
         <table class="data-table" style="margin-top:16px">
           <thead>
@@ -437,7 +437,7 @@
         </div>
 
         <h3 style="margin:20px 0 10px;font-size:14px;color:#1a202c">Como atribuir as Roles</h3>
-        <p>Após a instalação, acesse <strong>ERPNext → Configurações → Usuário</strong>, abra o usuário desejado, vá na aba <em>Roles</em> e adicione a Role correspondente.</p>
+        <p>Após a instalação, acesse <strong>Atlas → Configurações → Usuário</strong>, abra o usuário desejado, vá na aba <em>Roles</em> e adicione a Role correspondente.</p>
         <div class="example-block">
           <h4>Exemplo de atribuição</h4>
           <ul style="padding-left:20px;font-size:13.5px;color:#4a5568;line-height:2">
@@ -460,12 +460,12 @@
     <div class="card">
       <div class="card-header"><h2>🔑 4. DocType: GF Access Group (Grupo de Acesso)</h2></div>
       <div class="card-body">
-        <p>O <strong>GF Access Group</strong> é o coração do controle de acesso do GF Atlas. Ele define <em>quem é</em> em termos de perfil de acesso — não apenas através de uma Role do ERPNext, mas por meio de um grupo com identidade própria, flags comportamentais e uma lista explícita de usuários com permissões individuais.</p>
+        <p>O <strong>GF Access Group</strong> é o coração do controle de acesso do GF Atlas. Ele define <em>quem é</em> em termos de perfil de acesso — não apenas através de uma Role do Atlas, mas por meio de um grupo com identidade própria, flags comportamentais e uma lista explícita de usuários com permissões individuais.</p>
 
         <p>Cada grupo representa um perfil de acesso da empresa: pode ser um departamento, um tipo de colaborador (interno, externo, consultor), uma combinação de acesso (público, restrito, executivo) ou qualquer segmentação relevante para o negócio.</p>
 
         <div class="alert alert-tip">
-          <strong>💡 Diferença do ERPNext padrão:</strong> No ERPNext nativo, permissão = Role aplicada ao DocType. No GF Atlas, permissão = usuário listado em um Access Group com flags específicas (pode criar? pode deletar? está ativo?). Isso permite controlar acesso a conteúdos que nem são DocTypes — como URLs, relatórios externos e links.
+          <strong>💡 Diferença do Atlas padrão:</strong> No Atlas nativo, permissão = Role aplicada ao DocType. No GF Atlas, permissão = usuário listado em um Access Group com flags específicas (pode criar? pode deletar? está ativo?). Isso permite controlar acesso a conteúdos que nem são DocTypes — como URLs, relatórios externos e links.
         </div>
 
         <a class="section-anchor" id="access-group-campos"></a>
@@ -535,7 +535,7 @@
               <td>Workspace Padrão</td>
               <td><span class="badge badge-link">Data</span></td>
               <td><span class="badge badge-opt">Não</span></td>
-              <td>Workspace do ERPNext para onde usuários deste grupo são direcionados ao logar.</td>
+              <td>Workspace do Atlas para onde usuários deste grupo são direcionados ao logar.</td>
             </tr>
             <tr>
               <td><code>sort_order</code></td>
@@ -649,7 +649,7 @@
               <td><code>user</code></td>
               <td>Usuário</td>
               <td><span class="badge badge-link">Link → User</span></td>
-              <td>Usuário do ERPNext a ser adicionado ao grupo. Campo obrigatório.</td>
+              <td>Usuário do Atlas a ser adicionado ao grupo. Campo obrigatório.</td>
             </tr>
             <tr>
               <td><code>full_name</code></td>
@@ -1055,12 +1055,12 @@
             <tr><th>Tipo</th><th>Quando usar</th><th>Exemplo de route_url</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>WEB_PAGE</strong></td><td>Páginas criadas no ERPNext Web Builder</td><td><code>/knowledge-hub</code></td></tr>
-            <tr><td><strong>REPORT</strong></td><td>Relatórios do ERPNext (Query Report, Script Report)</td><td><code>/app/query-report/Timesheet</code></td></tr>
-            <tr><td><strong>DASHBOARD</strong></td><td>Dashboards do ERPNext ou externos</td><td><code>/app/dashboard-view/Vendas</code></td></tr>
+            <tr><td><strong>WEB_PAGE</strong></td><td>Páginas criadas no Atlas Web Builder</td><td><code>/knowledge-hub</code></td></tr>
+            <tr><td><strong>REPORT</strong></td><td>Relatórios do Atlas (Query Report, Script Report)</td><td><code>/app/query-report/Timesheet</code></td></tr>
+            <tr><td><strong>DASHBOARD</strong></td><td>Dashboards do Atlas ou externos</td><td><code>/app/dashboard-view/Vendas</code></td></tr>
             <tr><td><strong>PDF</strong></td><td>Arquivos PDF hospedados ou gerados</td><td><code>/files/manual-rh-2026.pdf</code></td></tr>
             <tr><td><strong>HTML</strong></td><td>Páginas HTML customizadas, documentações internas</td><td><code>/pages/instrucoes-admissao</code></td></tr>
-            <tr><td><strong>DOCUMENT</strong></td><td>Documentos ERPNext (NF, Pedido, Projeto, etc.)</td><td><code>/app/project/PROJ-2026-001</code></td></tr>
+            <tr><td><strong>DOCUMENT</strong></td><td>Documentos Atlas (NF, Pedido, Projeto, etc.)</td><td><code>/app/project/PROJ-2026-001</code></td></tr>
             <tr><td><strong>APPLICATION</strong></td><td>Sistemas e aplicações internas ou externas</td><td><code>https://app.interno.greenfarms.com</code></td></tr>
             <tr><td><strong>WORKFLOW</strong></td><td>Fluxos de aprovação e automações</td><td><code>/app/workflow/Aprovacao-de-Compras</code></td></tr>
             <tr><td><strong>EXTERNAL_LINK</strong></td><td>URLs externas (fornecedores, portais gov.)</td><td><code>https://esocial.fazenda.gov.br</code></td></tr>
@@ -1277,7 +1277,7 @@ bench --site greenfarmsagro.frappe.cloud migrate</div>
             <div class="step-num">2</div>
             <div class="step-content">
               <h4>create_access_groups()</h4>
-              <p>Cria os <strong>37 grupos de acesso</strong> pré-definidos — todos os departamentos e perfis da GREENFARMS. Cada grupo é criado apenas se não existir (idempotente). Inclui: público, visitante, terceirizado, consultoria, cliente, fornecedor, engenharia, automação, produção, qualidade, manutenção, suprimentos, logística, financeiro, comercial, RH, marketing, TI, ERPNext, IA & automações, gerência, diretoria, administrador, jurídico, controladoria, auditoria, segurança do trabalho, P&D, laboratório, processos industriais, integrações, dashboards, web applications, documentações, projetos especiais, arquivo morto, obsoleto.</p>
+              <p>Cria os <strong>37 grupos de acesso</strong> pré-definidos — todos os departamentos e perfis da GREENFARMS. Cada grupo é criado apenas se não existir (idempotente). Inclui: público, visitante, terceirizado, consultoria, cliente, fornecedor, engenharia, automação, produção, qualidade, manutenção, suprimentos, logística, financeiro, comercial, RH, marketing, TI, Atlas, IA & automações, gerência, diretoria, administrador, jurídico, controladoria, auditoria, segurança do trabalho, P&D, laboratório, processos industriais, integrações, dashboards, web applications, documentações, projetos especiais, arquivo morto, obsoleto.</p>
             </div>
           </div>
           <div class="step-item">
@@ -1385,7 +1385,7 @@ fixtures = [<br>
             <tr><td><code>rh</code></td><td>Recursos Humanos</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>22</td><td style="color:#718096">Gestão de pessoas</td></tr>
             <tr><td><code>marketing</code></td><td>Marketing</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>23</td><td style="color:#718096">Marketing e comunicação</td></tr>
             <tr><td><code>ti</code></td><td>Tecnologia da Informação</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>24</td><td style="color:#718096">TI e infraestrutura</td></tr>
-            <tr><td><code>erpnext</code></td><td>ERPNext</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>25</td><td style="color:#718096">Gestores e usuários do ERPNext</td></tr>
+            <tr><td><code>Atlas</code></td><td>Atlas</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>25</td><td style="color:#718096">Gestores e usuários do Atlas</td></tr>
             <tr><td><code>ia_e_automacoes</code></td><td>IA e Automações</td><td><span style="background:#e6f0ff;border:1px solid #b3d4ff;padding:2px 8px;border-radius:10px;font-size:11px;color:#1a4a8a">🏢 Interno</span></td><td>26</td><td style="color:#718096">Projetos de IA e automações digitais</td></tr>
 
             <tr><td colspan="5" style="background:#faf5ff;font-weight:700;color:#553c9a;font-size:12px;letter-spacing:0.05em;padding:8px 14px">GESTÃO</td></tr>
@@ -1446,7 +1446,7 @@ fixtures = [<br>
             <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#dc2626;vertical-align:middle"></span></td><td><code>g08</code></td><td>08 Jurídico e Compliance</td><td><code>scale</code></td><td>6</td></tr>
             <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#ec4899;vertical-align:middle"></span></td><td><code>g09</code></td><td>09 Recursos Humanos</td><td><code>users</code></td><td>6</td></tr>
             <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#a855f7;vertical-align:middle"></span></td><td><code>g10</code></td><td>10 Marketing e Comunicação</td><td><code>megaphone</code></td><td>7</td></tr>
-            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#0ea5e9;vertical-align:middle"></span></td><td><code>g11</code></td><td>11 Tecnologia e ERPNext</td><td><code>monitor</code></td><td>7</td></tr>
+            <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#0ea5e9;vertical-align:middle"></span></td><td><code>g11</code></td><td>11 Tecnologia e Atlas</td><td><code>monitor</code></td><td>7</td></tr>
             <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#f43f5e;vertical-align:middle"></span></td><td><code>g12</code></td><td>12 Projetos Especiais</td><td><code>rocket</code></td><td>6</td></tr>
             <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#14b8a6;vertical-align:middle"></span></td><td><code>g13</code></td><td>13 Clientes e Obras</td><td><code>hard-hat</code></td><td>6</td></tr>
             <tr><td><span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:#64748b;vertical-align:middle"></span></td><td><code>g14</code></td><td>14 Manuais Técnicos</td><td><code>book-open</code></td><td>6</td></tr>
@@ -1610,9 +1610,9 @@ fixtures = [<br>
 
         <!-- g11 -->
         <div style="border-left:4px solid #0ea5e9;margin:6px 0;padding:10px 18px;background:#f0f9ff;border-radius:0 8px 8px 0">
-          <div style="font-size:13px;font-weight:700;color:#0369a1;margin-bottom:4px">g11 — 11 Tecnologia e ERPNext <span style="font-weight:400;color:#38bdf8;font-family:Consolas,monospace;font-size:11px">monitor</span></div>
+          <div style="font-size:13px;font-weight:700;color:#0369a1;margin-bottom:4px">g11 — 11 Tecnologia e Atlas <span style="font-weight:400;color:#38bdf8;font-family:Consolas,monospace;font-size:11px">monitor</span></div>
           <div style="font-size:13px;color:#4a5568;line-height:1.9">
-            <code>g11_erpnext</code> ERPNext &nbsp;·&nbsp;
+            <code>g11_Atlas</code> Atlas &nbsp;·&nbsp;
             <code>g11_frappe_cloud</code> Frappe Cloud &nbsp;·&nbsp;
             <code>g11_ichis</code> Aplicativo ICHIS &nbsp;·&nbsp;
             <code>g11_relatorios</code> Relatórios Customizados &nbsp;·&nbsp;
@@ -1776,7 +1776,7 @@ fixtures = [<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frappe.get_doc({<span class="str">"doctype"</span>: <span class="str">"Custom Field"</span>, <span class="str">"dt"</span>: <span class="str">"Web Page"</span>, **f}).insert(ignore_permissions=<span class="kw">True</span>)</div>
 
         <h3 style="margin:20px 0 10px;font-size:14px;color:#1a202c">Como usar no Knowledge Hub</h3>
-        <p>Após a instalação, abra qualquer Web Page no ERPNext. Role até o final do formulário — a seção <em>Auxiliary Blocks</em> estará disponível. Escreva HTML diretamente nos editores.</p>
+        <p>Após a instalação, abra qualquer Web Page no Atlas. Role até o final do formulário — a seção <em>Auxiliary Blocks</em> estará disponível. Escreva HTML diretamente nos editores.</p>
         <p>No template Jinja da página ou via API Python, acesse os campos assim:</p>
         <div class="code-block">
 <span class="cm"># Via API Python (template Jinja no Web Page)</span><br>
@@ -1793,7 +1793,7 @@ GET /api/resource/Web Page/knowledge-hub<br>
 <span class="cm"># Retorna auxiliary_block_1 e auxiliary_block_2 no JSON</span></div>
 
         <div class="alert alert-tip">
-          <strong>💡 Caso de uso prático:</strong> O Knowledge Hub da GREENFARMS usa <code>auxiliary_block_1</code> para renderizar um painel de acesso rápido aos conteúdos mais visitados, e <code>auxiliary_block_2</code> para um bloco de avisos e comunicados. Tudo gerenciado diretamente pelo editor do ERPNext, sem deploy de código.
+          <strong>💡 Caso de uso prático:</strong> O Knowledge Hub da GREENFARMS usa <code>auxiliary_block_1</code> para renderizar um painel de acesso rápido aos conteúdos mais visitados, e <code>auxiliary_block_2</code> para um bloco de avisos e comunicados. Tudo gerenciado diretamente pelo editor do Atlas, sem deploy de código.
         </div>
       </div>
     </div>
@@ -1818,7 +1818,7 @@ GET /api/resource/Web Page/knowledge-hub<br>
             <div class="step-num">1</div>
             <div class="step-content">
               <h4>Acesse GF Content Registry → Novo</h4>
-              <p>Menu ERPNext → GF Atlas App → GF Content Registry → botão <em>+ Novo</em>.</p>
+              <p>Menu Atlas → GF Atlas App → GF Content Registry → botão <em>+ Novo</em>.</p>
             </div>
           </div>
           <div class="step-item">
@@ -1891,7 +1891,7 @@ GET /api/resource/Web Page/knowledge-hub<br>
           <div class="step-item">
             <div class="step-num">1</div>
             <div class="step-content">
-              <h4>Garanta que o usuário existe no ERPNext</h4>
+              <h4>Garanta que o usuário existe no Atlas</h4>
               <p>Configurações → Usuário → verifique que o e-mail do novo colaborador já está cadastrado e ativo.</p>
             </div>
           </div>
@@ -1949,7 +1949,7 @@ GET /api/resource/Web Page/knowledge-hub<br>
 
         <h3 style="margin:20px 0 10px;font-size:14px;color:#1a5c2a">Verificação dos Custom Fields</h3>
         <ul class="checklist">
-          <li>Abra qualquer Web Page no ERPNext e role até o final — a seção "Auxiliary Blocks" deve aparecer</li>
+          <li>Abra qualquer Web Page no Atlas e role até o final — a seção "Auxiliary Blocks" deve aparecer</li>
           <li>Os campos auxiliary_block_1 e auxiliary_block_2 são do tipo HTML Editor</li>
           <li>É possível salvar conteúdo HTML nesses campos sem erros</li>
           <li>Os campos aparecem na API: GET /api/resource/Web Page/{nome} retorna os dois campos</li>
@@ -1976,8 +1976,8 @@ GET /api/resource/Web Page/knowledge-hub<br>
       <div class="card-body">
 
         <div style="margin-bottom:20px">
-          <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">O GF Atlas substitui o controle de permissões do ERPNext?</h3>
-          <p style="font-size:14px;color:#4a5568;line-height:1.7">Não. O GF Atlas é complementar. O ERPNext controla quem pode acessar cada DocType. O GF Atlas controla quais <em>itens de conteúdo catalogados</em> (relatórios, links, PDFs…) cada grupo de usuários pode ver em portais e dashboards personalizados. Os dois sistemas coexistem.</p>
+          <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">O GF Atlas substitui o controle de permissões do Atlas?</h3>
+          <p style="font-size:14px;color:#4a5568;line-height:1.7">Não. O GF Atlas é complementar. O Atlas controla quem pode acessar cada DocType. O GF Atlas controla quais <em>itens de conteúdo catalogados</em> (relatórios, links, PDFs…) cada grupo de usuários pode ver em portais e dashboards personalizados. Os dois sistemas coexistem.</p>
         </div>
 
         <div style="margin-bottom:20px">
@@ -1987,7 +1987,7 @@ GET /api/resource/Web Page/knowledge-hub<br>
 
         <div style="margin-bottom:20px">
           <h3 style="font-size:14px;color:#1a202c;margin-bottom:6px">Posso adicionar novos campos aos DocTypes do GF Atlas?</h3>
-          <p style="font-size:14px;color:#4a5568;line-height:1.7">Sim, via <em>Custom Fields</em> do ERPNext. Evite alterar diretamente os arquivos JSON do repositório, pois isso pode causar conflitos em atualizações futuras. Use a interface de Customização de Formulário do ERPNext.</p>
+          <p style="font-size:14px;color:#4a5568;line-height:1.7">Sim, via <em>Custom Fields</em> do Atlas. Evite alterar diretamente os arquivos JSON do repositório, pois isso pode causar conflitos em atualizações futuras. Use a interface de Customização de Formulário do Atlas.</p>
         </div>
 
         <div style="margin-bottom:20px">
@@ -2024,3 +2024,4 @@ GET /api/resource/Web Page/knowledge-hub<br>
 
 </body>
 </html>
+

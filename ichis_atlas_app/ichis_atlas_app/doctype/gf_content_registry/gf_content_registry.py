@@ -367,7 +367,7 @@ def ns_append_timeline_entry(doc_name, entry_json):
     entry = json.loads(entry_json)
     timeline.append(entry)
     doc.prompt_timeline = json.dumps(timeline, ensure_ascii=False)
-    doc.save(ignore_permissions=True)
+    doc.save(ignore_permissions=True, ignore_version=True)
     return timeline
 
 
@@ -376,5 +376,5 @@ def ns_clear_timeline(doc_name):
     """Limpa toda a timeline do registro."""
     doc = frappe.get_doc("GF Content Registry", doc_name)
     doc.prompt_timeline = "[]"
-    doc.save(ignore_permissions=True)
+    doc.save(ignore_permissions=True, ignore_version=True)
     return []

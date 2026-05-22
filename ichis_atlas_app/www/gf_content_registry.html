@@ -1059,6 +1059,7 @@ class GFContentRegistryApp {
     const isView = this.mode === 'view';
     return `<div class="gfcr-tabs">${TABS.map((t,i) => {
       if (t.viewOnly && !isView) return '';
+      if (t.id === 'natural_studio' && isView && (this.selected || {}).status !== 'Draft') return '';
       const active = i === this.activeTab ? ' active' : '';
       const nsStyle = t.id === 'natural_studio'
         ? ';background:linear-gradient(90deg,rgba(109,40,217,.08),rgba(37,99,235,.08))'
@@ -1502,7 +1503,7 @@ class GFContentRegistryApp {
                   'Skill corporativo associado.', true)}
                 ${grp('Web Page',
                   dd('web_page', this._webPages, o=>o.name, o=>o.title||o.name),
-                  'Página web do ERPNext vinculada.')}
+                  'Página web do Atlas vinculada.')}
                 ${grp('Responsável',
                   inp('responsible_user','usuario@empresa.com'),
                   'Usuário responsável pelo conteúdo.')}
@@ -1512,7 +1513,7 @@ class GFContentRegistryApp {
           <div class="cfg-form-section">
             <div class="cfg-form-divider"><i data-lucide="globe" style="width:10px;height:10px"></i>Referência</div>
             <div class="form-grid">
-              ${grp('URL / Rota', inp('route_url','Ex: /app/query-report/timesheet'), 'Rota interna do ERPNext ou URL externa completa.')}
+              ${grp('URL / Rota', inp('route_url','Ex: /app/query-report/timesheet'), 'Rota interna do Atlas ou URL externa completa.')}
               ${grp('DocType de Referência', inp('reference_doctype','Ex: Timesheet'), 'DocType do Frappe relacionado a este conteúdo.')}
             </div>
           </div>

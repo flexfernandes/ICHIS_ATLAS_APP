@@ -700,7 +700,7 @@ const STATUS_COLORS = {
 };
 
 const CATEGORIES = [
-  'Documentação','HTML','ERPNext','Relatórios','Prompt Engineering','Automação',
+  'Documentação','HTML','Atlas','Relatórios','Prompt Engineering','Automação',
   'IA e Agentes','Programação','SQL e Banco de Dados','APIs e Integrações',
   'Frontend','Backend','DevOps e Cloud','Segurança','Comercial','Engenharia',
   'Industrial','Qualidade','Financeiro','Jurídico','RH','Templates','Padrões Corporativos','Outros'
@@ -1394,7 +1394,7 @@ class GFSkillApp {
             'Nome do arquivo para exportação.')}
           ${grp('Default Language', inp('default_language','Ex: Português (BR)'),
             'Idioma principal das respostas.')}
-          ${grp('Related Module', inp('related_module'), 'Módulo relacionado no ERPNext.')}
+          ${grp('Related Module', inp('related_module'), 'Módulo relacionado no Atlas.')}
           ${grp('Related Doctype', inp('related_doctype'), 'DocType relacionado.')}
           ${grp('Skill Priority', dd('skill_priority', PRIORITIES),
             'Prioridade operacional.')}
