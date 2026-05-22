@@ -349,3 +349,32 @@ def ns_delete_file(file_id):
         return {"success": True}
 
     frappe.throw(f"Erro ao excluir arquivo do Google Drive (HTTP {r.status_code}).")
+
+
+@frappe.whitelist()
+def ns_append_timeline_entry(doc_name, entry_json):
+    """Acrescenta uma entrada JSON à timeline do registro e retorna a lista atualizada."""
+    import json
+
+    doc = frappe.get_doc("GF Content Registry", doc_name)
+    try:
+        timeline = json.loads(doc.prompt_timeline or "[]")
+        if not isinstance(timeline, list):
+            timeline = []
+    except Exception:
+        timeline = []
+
+    entry = json.loads(entry_json)
+    timeline.append(entry)
+    doc.prompt_timeline = json.dumps(timeline, ensure_ascii=False)
+    doc.save(ignore_permissions=True)
+    return timeline
+
+
+@frappe.whitelist()
+def ns_clear_timeline(doc_name):
+    """Limpa toda a timeline do registro."""
+    doc = frappe.get_doc("GF Content Registry", doc_name)
+    doc.prompt_timeline = "[]"
+    doc.save(ignore_permissions=True)
+    return []

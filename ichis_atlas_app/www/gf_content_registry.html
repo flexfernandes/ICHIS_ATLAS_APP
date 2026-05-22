@@ -350,47 +350,133 @@ select.form-control{cursor:pointer}
 .cr-links-right{flex:1;display:flex;flex-direction:column;gap:12px;min-width:200px;max-width:280px;overflow-y:auto}
 .cr-links-right-hdr{font-size:10.5px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:5px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 
-/* ── Natural Studio — dark mode ───────────────────── */
+/* ══ Natural Studio — AI Workspace ════════════════════════════════════════ */
 .gfcr-tab-body.ns-active{padding:0!important;background:#080e1c!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
 .ns-wrap{display:flex;flex-direction:column;height:100%;background:#080e1c;color:#e2e8f0;overflow:hidden;min-height:0}
-.ns-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#0d1526;border-bottom:1px solid #1a2540;flex-shrink:0}
-.ns-topbar-left{display:flex;align-items:center;gap:12px}
-.ns-topbar-icon{width:38px;height:38px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
-.ns-topbar-title{font-size:15px;font-weight:700;color:#f1f5f9;letter-spacing:-.2px}
-.ns-topbar-sub{font-size:11px;color:#475569;margin-top:2px}
+
+/* Top bar */
+.ns-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#0d1526;border-bottom:1px solid #1a2540;flex-shrink:0}
+.ns-topbar-left{display:flex;align-items:center;gap:10px}
+.ns-topbar-icon{width:34px;height:34px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.ns-topbar-title{font-size:14px;font-weight:700;color:#f1f5f9;letter-spacing:-.2px}
+.ns-topbar-sub{font-size:10.5px;color:#334155;margin-top:1px}
 .ns-mono{font-family:var(--mono);color:#38bdf8}
-.ns-topbar-right{display:flex;align-items:center;gap:8px}
-.ns-btn-upload{display:flex;align-items:center;gap:6px;padding:7px 16px;background:linear-gradient(135deg,#6d28d9,#4338ca);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity 150ms;white-space:nowrap}
+.ns-topbar-right{display:flex;align-items:center;gap:7px}
+.ns-btn-upload{display:flex;align-items:center;gap:5px;padding:6px 13px;background:linear-gradient(135deg,#6d28d9,#4338ca);color:#fff;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;transition:opacity 150ms;white-space:nowrap}
 .ns-btn-upload:hover{opacity:.85}
-.ns-btn-refresh{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:#0f1e38;border:1px solid #1e3a5f;border-radius:7px;color:#64748b;cursor:pointer;transition:all 150ms}
+.ns-btn-refresh{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:#0f1e38;border:1px solid #1e3a5f;border-radius:6px;color:#64748b;cursor:pointer;transition:all 150ms}
 .ns-btn-refresh:hover{background:#1e3a5f;color:#93c5fd}
-.ns-dropzone{margin:14px 20px 0;border:2px dashed #1a3560;border-radius:12px;padding:18px 20px;display:flex;align-items:center;justify-content:center;gap:10px;color:#334155;font-size:13px;cursor:pointer;transition:all 200ms;flex-shrink:0}
-.ns-dropzone:hover,.ns-drag-active{border-color:#3b82f6;background:rgba(59,130,246,.06);color:#93c5fd}
-.ns-gallery{flex:1;overflow-y:auto;padding:14px 20px 20px;min-height:0}
+
+/* ── Split row (top 50/50) ── */
+.ns-split-row{display:flex;flex-direction:row;flex-shrink:0;height:var(--ns-top-h,300px);min-height:140px;overflow:hidden}
+
+/* ── Panel shared ── */
+.ns-panel-hdr{display:flex;align-items:center;gap:7px;padding:7px 12px;background:#0b1320;border-bottom:1px solid #1a2540;flex-shrink:0}
+.ns-panel-hdr-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#4b6a94}
+
+/* ── Images panel (left) ── */
+.ns-panel-images{flex:var(--ns-img-flex,1);display:flex;flex-direction:column;overflow:hidden;border-right:1px solid #1a2540;min-width:180px}
+.ns-dropzone-compact{margin:6px 10px;border:1.5px dashed #1a3560;border-radius:7px;padding:6px 12px;display:flex;align-items:center;gap:7px;color:#334155;font-size:11px;cursor:pointer;transition:all 200ms;flex-shrink:0}
+.ns-dropzone-compact:hover,.ns-drag-active{border-color:#3b82f6;background:rgba(59,130,246,.06);color:#93c5fd}
+.ns-upload-bar-wrap{margin:0 10px 4px;background:#0d1526;border:1px solid #1a2540;border-radius:7px;padding:7px 12px;display:none;flex-shrink:0}
+.ns-upload-bar-label{font-size:10.5px;color:#64748b;margin-bottom:5px}
+.ns-upload-bar-track{background:#1a2540;border-radius:10px;height:3px;overflow:hidden}
+.ns-upload-bar-fill{height:100%;background:linear-gradient(90deg,#6d28d9,#2563eb);border-radius:10px;transition:width 200ms;width:0%}
+.ns-gallery{flex:1;overflow-y:auto;padding:8px 10px 10px;min-height:0}
 .ns-gallery::-webkit-scrollbar{width:4px}
-.ns-gallery::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
-.ns-gallery-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:48px 20px}
-.ns-gallery-empty{text-align:center;padding:56px 20px;color:#1e3a5f;line-height:1.7}
-.ns-gallery-empty strong{display:block;color:#334155;font-size:14px;margin-bottom:6px}
-.ns-gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
-.ns-img-card{background:#0d1526;border:1px solid #1a2540;border-radius:10px;overflow:hidden;transition:all 180ms;position:relative;cursor:pointer}
-.ns-img-card:hover{border-color:#2563eb;box-shadow:0 4px 20px rgba(37,99,235,.2)}
+.ns-gallery::-webkit-scrollbar-thumb{background:#1a293b;border-radius:4px}
+.ns-gallery-loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:24px 12px}
+.ns-gallery-empty{text-align:center;padding:24px 12px;color:#1e3a5f;line-height:1.7}
+.ns-gallery-empty strong{display:block;color:#2d4a6d;font-size:12.5px;margin-bottom:4px}
+.ns-gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:7px}
+.ns-img-card{background:#0d1526;border:1px solid #1a2540;border-radius:8px;overflow:hidden;transition:all 180ms;position:relative;cursor:pointer}
+.ns-img-card:hover{border-color:#2563eb;box-shadow:0 3px 14px rgba(37,99,235,.2)}
 .ns-img-card:hover .ns-img-overlay{opacity:1}
 .ns-img-thumb{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#0a1020}
 .ns-img-thumb-icon{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#0a1020;color:#1e3a5f}
-.ns-img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity 180ms}
-.ns-img-overlay-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:#fff;cursor:pointer;transition:background 150ms}
+.ns-img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;gap:5px;opacity:0;transition:opacity 180ms}
+.ns-img-overlay-btn{width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:6px;color:#fff;cursor:pointer;transition:background 150ms}
 .ns-img-overlay-btn:hover{background:rgba(255,255,255,.28)}
 .ns-img-overlay-btn.del:hover{background:rgba(220,38,38,.55);border-color:rgba(220,38,38,.5)}
-.ns-img-info{padding:8px 10px;border-top:1px solid #1a2540}
-.ns-img-name{font-size:11px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ns-img-size{font-size:10px;color:#334155;margin-top:2px}
-.ns-upload-bar-wrap{margin:10px 20px 0;background:#0d1526;border:1px solid #1a2540;border-radius:8px;padding:10px 14px;display:none;flex-shrink:0}
-.ns-upload-bar-label{font-size:11px;color:#64748b;margin-bottom:6px}
-.ns-upload-bar-track{background:#1a2540;border-radius:10px;height:4px;overflow:hidden}
-.ns-upload-bar-fill{height:100%;background:linear-gradient(90deg,#6d28d9,#2563eb);border-radius:10px;transition:width 200ms;width:0%}
-.ns-info-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;background:#0a1020;border-top:1px solid #1a2540;flex-shrink:0;font-size:10.5px;color:#334155}
+.ns-img-info{padding:4px 7px;border-top:1px solid #1a2540}
+.ns-img-name{font-size:9.5px;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ns-img-size{font-size:9px;color:#2d4a6d;margin-top:1px}
+
+/* ── Vertical resize handle (between panels) ── */
+.ns-vsplit-handle{width:5px;background:#080e1c;cursor:col-resize;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background 150ms;user-select:none}
+.ns-vsplit-handle:hover,.ns-vsplit-handle.dragging{background:#162035}
+.ns-vsplit-grip{width:2px;height:22px;background:#1a3560;border-radius:1px}
+
+/* ── Studio AI panel (right) ── */
+.ns-panel-studio{flex:var(--ns-studio-flex,1);display:flex;flex-direction:column;overflow:hidden;min-width:180px;background:#080e1c}
+.ns-studio-identity{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #0d1a30;flex-shrink:0}
+.ns-studio-logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,rgba(109,40,217,.28),rgba(37,99,235,.22));border:1px solid rgba(99,102,241,.25);display:flex;align-items:center;justify-content:center;color:#818cf8;flex-shrink:0}
+.ns-studio-name{font-size:13px;font-weight:700;color:#f1f5f9;letter-spacing:-.2px}
+.ns-studio-sub{font-size:9.5px;color:#1e3a5f;margin-top:1px}
+.ns-studio-beta{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;color:#1e3a5f;background:#0a1020;border:1px solid #0f1e33;border-radius:20px;padding:1px 6px;font-family:var(--mono)}
+.ns-studio-body{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:10px}
+.ns-studio-body::-webkit-scrollbar{width:4px}
+.ns-studio-body::-webkit-scrollbar-thumb{background:#1a2540;border-radius:4px}
+.ns-qs-section-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#2d4a6d;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.ns-ai-chips{display:flex;flex-wrap:wrap;gap:5px}
+.ns-ai-chip{padding:4px 10px;background:#0d1526;border:1px solid #1e3a5f;border-radius:20px;color:#60a5fa;font-size:10.5px;cursor:pointer;transition:all 150ms;white-space:nowrap;font-family:var(--font)}
+.ns-ai-chip:hover{background:#162035;border-color:#3b82f6;color:#93c5fd}
+.ns-ai-chip.chip-active{background:#1e3a8a;border-color:#3b82f6;color:#93c5fd}
+.ns-context-box{background:#0a1020;border:1px solid #0f1e33;border-radius:8px;padding:9px 11px}
+.ns-context-row{display:flex;align-items:center;gap:6px;font-size:10.5px;color:#334155;margin-bottom:3px;min-width:0}
+.ns-context-row:last-child{margin-bottom:0}
+.ns-context-row strong{color:#4b6a94;flex-shrink:0}
+.ns-context-val{flex:1;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--mono);font-size:10px}
+
+/* ── Horizontal resize handle ── */
+.ns-hsplit-handle{height:5px;background:#060b18;cursor:row-resize;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background 150ms;user-select:none}
+.ns-hsplit-handle:hover,.ns-hsplit-handle.dragging{background:#162035}
+.ns-hsplit-grip{height:2px;width:36px;background:#1a3560;border-radius:1px}
+
+/* ── Timeline panel ── */
+.ns-timeline-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:80px}
+.ns-timeline-hdr{display:flex;align-items:center;gap:7px;padding:6px 14px;background:#0b1320;border-bottom:1px solid #1a2540;flex-shrink:0}
+.ns-tl-hdr-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#2d4a6d}
+.ns-tl-count{font-size:9.5px;color:#1e3a5f;background:#080e1c;border:1px solid #0f1e33;border-radius:20px;padding:1px 7px;font-family:var(--mono)}
+.ns-tl-clear{margin-left:auto;background:none;border:1px solid #162035;border-radius:5px;color:#2d4a6d;font-size:9.5px;padding:2px 8px;cursor:pointer;transition:all 120ms;font-family:var(--font)}
+.ns-tl-clear:hover{border-color:#7f1d1d;color:#f87171;background:#120808}
+.ns-timeline-body{flex:1;overflow-y:auto;padding:10px 14px 8px;display:flex;flex-direction:column;gap:8px}
+.ns-timeline-body::-webkit-scrollbar{width:4px}
+.ns-timeline-body::-webkit-scrollbar-thumb{background:#1a2540;border-radius:4px}
+.ns-tl-empty{text-align:center;padding:24px 14px;color:#1e3a5f;font-size:11.5px;line-height:1.7}
+.ns-tl-empty strong{display:block;color:#2d4a6d;font-size:12px;margin-bottom:4px}
+
+/* Timeline bubbles */
+.ns-tl-entry{display:flex;gap:8px;align-items:flex-start}
+.ns-tl-entry.user{flex-direction:row-reverse}
+.ns-tl-avatar{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ns-tl-avatar.user-av{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#93c5fd}
+.ns-tl-avatar.ai-av{background:linear-gradient(135deg,rgba(109,40,217,.22),rgba(37,99,235,.18));border:1px solid rgba(99,102,241,.2);color:#818cf8}
+.ns-tl-bubble{display:flex;flex-direction:column;max-width:75%}
+.ns-tl-entry.user .ns-tl-bubble{align-items:flex-end}
+.ns-tl-text{padding:7px 11px;border-radius:10px;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.ns-tl-entry.user .ns-tl-text{background:#1e3a8a;color:#c7d2fe;border-radius:10px 10px 3px 10px}
+.ns-tl-entry.ai .ns-tl-text{background:#0d1526;color:#94a3b8;border:1px solid #1a2540;border-radius:10px 10px 10px 3px}
+.ns-tl-ts{font-size:9px;color:#1e3a5f;margin-top:2px;font-family:var(--mono)}
+
+/* ── Input area ── */
+.ns-ai-input-area{padding:7px 12px 9px;flex-shrink:0;background:#080e1c;border-top:1px solid #0d1a30}
+.ns-ai-input-box{background:#0d1526;border:1px solid #1a2540;border-radius:10px;overflow:hidden;transition:border-color 150ms}
+.ns-ai-input-box:focus-within{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.ns-ai-textarea{width:100%;background:transparent;border:none;outline:none;padding:9px 12px 4px;font-size:12.5px;color:#e2e8f0;resize:none;font-family:var(--font);line-height:1.6;min-height:38px;max-height:90px}
+.ns-ai-textarea::placeholder{color:#2d4a6d}
+.ns-ai-input-actions{display:flex;align-items:center;justify-content:space-between;padding:4px 9px 6px}
+.ns-ai-icon-btn{width:25px;height:25px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;color:#2d4a6d;border-radius:5px;transition:all 120ms}
+.ns-ai-icon-btn:hover{background:#162035;color:#64748b}
+.ns-ai-model-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;color:#1e3a5f;background:#080e1c;border:1px solid #0f1e33;border-radius:20px;padding:2px 7px;margin-left:3px;font-family:var(--mono)}
+.ns-ai-btn-send{width:29px;height:29px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#6d28d9,#2563eb);border:none;border-radius:7px;color:#fff;cursor:pointer;transition:opacity 150ms;flex-shrink:0}
+.ns-ai-btn-send:hover{opacity:.85}
+.ns-ai-btn-send:disabled{opacity:.3;cursor:not-allowed}
+
+/* Info bar */
+.ns-info-bar{display:flex;align-items:center;justify-content:space-between;padding:5px 14px;background:#060b18;border-top:1px solid #0d1526;flex-shrink:0;font-size:9.5px;color:#1e3a5f}
 .ns-info-bar span{font-family:var(--mono)}
+
 /* Lightbox */
 .ns-lightbox{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.94);display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}
 .ns-lightbox-img{max-width:90vw;max-height:86vh;border-radius:8px;object-fit:contain;cursor:default;box-shadow:0 0 60px rgba(0,0,0,.8)}
@@ -575,35 +661,7 @@ select.form-control{cursor:pointer}
 #gfcr .gfcr-form-hdr-sub{color:#4b6a94!important}
 #gfcr .gfcr-form-foot{background:#0b1320!important;border-top-color:#162035!important}
 
-/* ── Natural Studio — file section wrapper ────────── */
-.ns-file-section{flex-shrink:0;max-height:220px;display:flex;flex-direction:column;overflow:hidden;border-bottom:1px solid #1a2540}
-.ns-file-section .ns-gallery{flex:1;overflow-y:auto;padding:12px 20px 14px;min-height:0}
 
-/* ── Natural Studio — AI interface ───────────────── */
-.ns-ai-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;background:#080e1c}
-.ns-ai-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 20px;border-bottom:1px solid #0d1a30;flex-shrink:0}
-.ns-ai-hdr-title{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#2d4a6d}
-.ns-ai-chat{flex:1;overflow-y:auto;min-height:0;display:flex;align-items:center;justify-content:center}
-.ns-ai-chat::-webkit-scrollbar{width:4px}
-.ns-ai-chat::-webkit-scrollbar-thumb{background:#1a2540;border-radius:4px}
-.ns-ai-welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px 20px;text-align:center}
-.ns-ai-welcome-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,rgba(109,40,217,.22),rgba(37,99,235,.18));border:1px solid rgba(99,102,241,.22);display:flex;align-items:center;justify-content:center;color:#818cf8;margin-bottom:2px}
-.ns-ai-welcome-title{font-size:14px;font-weight:700;color:#f1f5f9;letter-spacing:-.2px}
-.ns-ai-welcome-sub{font-size:11.5px;color:#334155;line-height:1.5}
-.ns-ai-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:4px}
-.ns-ai-chip{padding:5px 12px;background:#0d1526;border:1px solid #1e3a5f;border-radius:20px;color:#60a5fa;font-size:11px;cursor:pointer;transition:all 150ms;white-space:nowrap;font-family:var(--font)}
-.ns-ai-chip:hover{background:#162035;border-color:#3b82f6;color:#93c5fd}
-.ns-ai-input-area{padding:8px 16px 12px;flex-shrink:0;background:#080e1c}
-.ns-ai-input-box{background:#0d1526;border:1px solid #1a2540;border-radius:11px;overflow:hidden;transition:border-color 150ms}
-.ns-ai-input-box:focus-within{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.ns-ai-textarea{width:100%;background:transparent;border:none;outline:none;padding:10px 14px 5px;font-size:13px;color:#e2e8f0;resize:none;font-family:var(--font);line-height:1.6;min-height:40px;max-height:100px}
-.ns-ai-textarea::placeholder{color:#2d4a6d}
-.ns-ai-input-actions{display:flex;align-items:center;justify-content:space-between;padding:5px 10px 7px}
-.ns-ai-icon-btn{width:27px;height:27px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;color:#334155;border-radius:6px;transition:all 120ms}
-.ns-ai-icon-btn:hover{background:#162035;color:#64748b}
-.ns-ai-model-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:600;color:#1e3a5f;background:#0a1020;border:1px solid #0f1e33;border-radius:20px;padding:2px 8px;margin-left:4px;font-family:var(--mono)}
-.ns-ai-btn-send{width:31px;height:31px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#6d28d9,#2563eb);border:none;border-radius:8px;color:#fff;cursor:pointer;transition:opacity 150ms;flex-shrink:0}
-.ns-ai-btn-send:hover{opacity:.85}
 </style>
 {% endblock %}
 
@@ -1102,99 +1160,221 @@ class GFContentRegistryApp {
       }
 
       case 1: {
-        // ── Natural Studio ──────────────────────────
-        const nsName = (this.selected || {}).internal_name || '';
+        // ── Natural Studio — AI Workspace ───────────
+        const s      = this.selected || {};
+        const nsName = s.internal_name || '';
+        const title  = s.title || nsName || '—';
+        const skill  = s.skill || '—';
+        const group  = s.content_group || '—';
+        const status = s.status || '—';
         return `<div class="ns-wrap" id="ns-wrap">
+
+          <!-- ─── Top Bar ─── -->
           <div class="ns-topbar">
             <div class="ns-topbar-left">
               <div class="ns-topbar-icon">
-                <i data-lucide="sparkles" style="width:17px;height:17px"></i>
+                <i data-lucide="sparkles" style="width:16px;height:16px"></i>
               </div>
               <div>
                 <div class="ns-topbar-title">Natural Studio</div>
-                <div class="ns-topbar-sub">Mídia vinculada a <span class="ns-mono">${this._esc(nsName)}</span></div>
+                <div class="ns-topbar-sub">Workspace: <span class="ns-mono">${this._esc(nsName)}</span></div>
               </div>
             </div>
             <div class="ns-topbar-right">
               <button class="ns-btn-upload" onclick="app._nsTriggerUpload()">
-                <i data-lucide="upload" style="width:13px;height:13px"></i> Upload
+                <i data-lucide="upload" style="width:12px;height:12px"></i> Upload
               </button>
-              <button class="ns-btn-refresh" id="ns-btn-refresh" onclick="app._nsRefresh()" title="Atualizar lista">
-                <i data-lucide="refresh-cw" style="width:13px;height:13px"></i>
+              <button class="ns-btn-refresh" id="ns-btn-refresh" onclick="app._nsRefresh()" title="Atualizar">
+                <i data-lucide="refresh-cw" style="width:12px;height:12px"></i>
               </button>
             </div>
           </div>
-          <div class="ns-dropzone" id="ns-dropzone"
-               ondragover="event.preventDefault();document.getElementById('ns-dropzone').classList.add('ns-drag-active')"
-               ondragleave="document.getElementById('ns-dropzone').classList.remove('ns-drag-active')"
-               ondrop="app._nsDrop(event)"
-               onclick="app._nsTriggerUpload()">
-            <i data-lucide="image-plus" style="width:20px;height:20px"></i>
-            <span>Arraste arquivos aqui ou clique para fazer upload</span>
-          </div>
-          <input type="file" id="ns-file-input" multiple style="display:none"
-                 onchange="app._nsUploadFiles(this.files)">
-          <div class="ns-upload-bar-wrap" id="ns-upload-bar">
-            <div class="ns-upload-bar-label" id="ns-upload-label">Enviando arquivos...</div>
-            <div class="ns-upload-bar-track">
-              <div class="ns-upload-bar-fill" id="ns-upload-fill"></div>
-            </div>
-          </div>
-          <div class="ns-file-section">
-            <div class="ns-gallery" id="ns-gallery">
-              <div class="ns-gallery-loading">
-                <div class="spinner" style="width:24px;height:24px;border-color:#1a2540;border-top-color:#38bdf8"></div>
-                <span style="color:#475569;font-size:13px;margin-left:8px">Carregando arquivos...</span>
+
+          <!-- ─── 50/50 Split Row ─── -->
+          <div class="ns-split-row" id="ns-split-row">
+
+            <!-- Left: Images Panel -->
+            <div class="ns-panel-images" id="ns-panel-images">
+              <div class="ns-panel-hdr">
+                <i data-lucide="image" style="width:11px;height:11px;color:#2d4a6d;flex-shrink:0"></i>
+                <span class="ns-panel-hdr-title">Imagens</span>
+                <span id="ns-file-count" style="font-size:9px;color:#1e3a5f;font-family:var(--mono);margin-left:4px">—</span>
               </div>
-            </div>
-          </div>
-          <div class="ns-ai-wrap">
-            <div class="ns-ai-hdr">
-              <div class="ns-ai-hdr-title">
-                <i data-lucide="sparkles" style="width:11px;height:11px"></i> Studio AI
+              <div class="ns-dropzone-compact" id="ns-dropzone"
+                   ondragover="event.preventDefault();document.getElementById('ns-dropzone').classList.add('ns-drag-active')"
+                   ondragleave="document.getElementById('ns-dropzone').classList.remove('ns-drag-active')"
+                   ondrop="app._nsDrop(event)"
+                   onclick="app._nsTriggerUpload()">
+                <i data-lucide="image-plus" style="width:14px;height:14px;flex-shrink:0"></i>
+                <span>Arraste arquivos aqui ou clique para fazer upload</span>
               </div>
-              <span class="ns-ai-model-badge" style="margin-left:0">
-                <i data-lucide="cpu" style="width:9px;height:9px"></i> Atlas AI · Beta
-              </span>
-            </div>
-            <div class="ns-ai-chat" id="ns-ai-chat">
-              <div class="ns-ai-welcome">
-                <div class="ns-ai-welcome-icon">
-                  <i data-lucide="sparkles" style="width:22px;height:22px"></i>
+              <input type="file" id="ns-file-input" multiple style="display:none"
+                     onchange="app._nsUploadFiles(this.files)">
+              <div class="ns-upload-bar-wrap" id="ns-upload-bar">
+                <div class="ns-upload-bar-label" id="ns-upload-label">Enviando...</div>
+                <div class="ns-upload-bar-track">
+                  <div class="ns-upload-bar-fill" id="ns-upload-fill"></div>
                 </div>
-                <div class="ns-ai-welcome-title">Studio AI</div>
-                <div class="ns-ai-welcome-sub">Assistente inteligente vinculado a este conteúdo</div>
-                <div class="ns-ai-chips">
-                  <button class="ns-ai-chip" onclick="document.getElementById('ns-ai-textarea').value='Gerar documento para este conteúdo';document.getElementById('ns-ai-textarea').focus()">Gerar documento</button>
-                  <button class="ns-ai-chip" onclick="document.getElementById('ns-ai-textarea').value='Analisar o conteúdo e identificar pontos de melhoria';document.getElementById('ns-ai-textarea').focus()">Analisar conteúdo</button>
-                  <button class="ns-ai-chip" onclick="document.getElementById('ns-ai-textarea').value='Descrever as imagens enviadas neste registro';document.getElementById('ns-ai-textarea').focus()">Descrever imagens</button>
-                  <button class="ns-ai-chip" onclick="document.getElementById('ns-ai-textarea').value='Criar uma revisão atualizada deste conteúdo';document.getElementById('ns-ai-textarea').focus()">Criar revisão</button>
+              </div>
+              <div class="ns-gallery" id="ns-gallery">
+                <div class="ns-gallery-loading">
+                  <div class="spinner" style="width:20px;height:20px;border-color:#1a2540;border-top-color:#38bdf8"></div>
+                  <span style="color:#334155;font-size:11.5px;margin-left:7px">Conectando...</span>
                 </div>
               </div>
             </div>
-            <div class="ns-ai-input-area">
-              <div class="ns-ai-input-box">
-                <textarea class="ns-ai-textarea" id="ns-ai-textarea" placeholder="Pergunte algo sobre este conteúdo..." rows="2"></textarea>
-                <div class="ns-ai-input-actions">
-                  <div style="display:flex;gap:4px;align-items:center">
-                    <button class="ns-ai-icon-btn" title="Anexar arquivo"><i data-lucide="paperclip" style="width:14px;height:14px"></i></button>
-                    <button class="ns-ai-icon-btn" title="Adicionar imagem"><i data-lucide="image" style="width:14px;height:14px"></i></button>
-                    <button class="ns-ai-icon-btn" title="Inserir link"><i data-lucide="link-2" style="width:14px;height:14px"></i></button>
-                    <span class="ns-ai-model-badge">
-                      <i data-lucide="cpu" style="width:9px;height:9px"></i> Atlas AI
-                    </span>
+
+            <!-- Vertical resize handle -->
+            <div class="ns-vsplit-handle" id="ns-vsplit-handle">
+              <div class="ns-vsplit-grip"></div>
+            </div>
+
+            <!-- Right: Studio AI Panel -->
+            <div class="ns-panel-studio" id="ns-panel-studio">
+              <div class="ns-panel-hdr">
+                <i data-lucide="sparkles" style="width:11px;height:11px;color:#818cf8;flex-shrink:0"></i>
+                <span class="ns-panel-hdr-title">Studio AI</span>
+                <span class="ns-studio-beta" style="margin-left:4px">
+                  <i data-lucide="cpu" style="width:8px;height:8px"></i> Atlas AI · Beta
+                </span>
+              </div>
+              <div class="ns-studio-identity">
+                <div class="ns-studio-logo">
+                  <i data-lucide="sparkles" style="width:18px;height:18px"></i>
+                </div>
+                <div style="min-width:0;flex:1">
+                  <div class="ns-studio-name">Studio AI</div>
+                  <div class="ns-studio-sub">Assistente corporativo inteligente</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+                  <span style="font-size:9px;color:#1e3a5f;font-family:var(--mono)">v1.0 · Beta</span>
+                  <span style="width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade8066"></span>
+                </div>
+              </div>
+              <div class="ns-studio-body">
+                <!-- Quick actions -->
+                <div>
+                  <div class="ns-qs-section-title">
+                    <i data-lucide="zap" style="width:9px;height:9px"></i> Ações Rápidas
                   </div>
-                  <button class="ns-ai-btn-send" title="Enviar">
-                    <i data-lucide="send" style="width:13px;height:13px"></i>
-                  </button>
+                  <div class="ns-ai-chips">
+                    <button class="ns-ai-chip" onclick="app._nsChip('Gerar documento para este conteúdo')">Gerar documento</button>
+                    <button class="ns-ai-chip" onclick="app._nsChip('Analisar o conteúdo e identificar pontos de melhoria')">Analisar conteúdo</button>
+                    <button class="ns-ai-chip" onclick="app._nsChip('Descrever as imagens enviadas neste registro')">Descrever imagens</button>
+                    <button class="ns-ai-chip" onclick="app._nsChip('Criar uma revisão atualizada deste conteúdo')">Criar revisão</button>
+                    <button class="ns-ai-chip" onclick="app._nsChip('Sugerir melhorias de SEO para este conteúdo')">SEO</button>
+                    <button class="ns-ai-chip" onclick="app._nsChip('Gerar um resumo executivo deste conteúdo')">Resumo exec.</button>
+                  </div>
                 </div>
+                <!-- Context info -->
+                <div>
+                  <div class="ns-qs-section-title">
+                    <i data-lucide="info" style="width:9px;height:9px"></i> Contexto Ativo
+                  </div>
+                  <div class="ns-context-box">
+                    <div class="ns-context-row">
+                      <i data-lucide="file" style="width:10px;height:10px;flex-shrink:0;color:#2d4a6d"></i>
+                      <strong>Conteúdo</strong>
+                      <span class="ns-context-val">${this._esc(title)}</span>
+                    </div>
+                    <div class="ns-context-row">
+                      <i data-lucide="zap" style="width:10px;height:10px;flex-shrink:0;color:#2d4a6d"></i>
+                      <strong>Skill</strong>
+                      <span class="ns-context-val">${this._esc(skill)}</span>
+                    </div>
+                    <div class="ns-context-row">
+                      <i data-lucide="folder" style="width:10px;height:10px;flex-shrink:0;color:#2d4a6d"></i>
+                      <strong>Grupo</strong>
+                      <span class="ns-context-val">${this._esc(group)}</span>
+                    </div>
+                    <div class="ns-context-row">
+                      <i data-lucide="activity" style="width:10px;height:10px;flex-shrink:0;color:#2d4a6d"></i>
+                      <strong>Status</strong>
+                      <span class="ns-context-val">${this._esc(status)}</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- Suggestions -->
+                <div>
+                  <div class="ns-qs-section-title">
+                    <i data-lucide="lightbulb" style="width:9px;height:9px"></i> Sugestões
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:#0a1020;border:1px solid #0f1e33;border-radius:7px;cursor:pointer;transition:border-color 150ms"
+                         onmouseover="this.style.borderColor='#1e3a5f'" onmouseout="this.style.borderColor='#0f1e33'"
+                         onclick="app._nsChip('Identificar lacunas de conhecimento neste conteúdo')">
+                      <i data-lucide="search" style="width:10px;height:10px;color:#2d4a6d;flex-shrink:0"></i>
+                      <span style="font-size:10.5px;color:#334155">Identificar lacunas de conhecimento</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:#0a1020;border:1px solid #0f1e33;border-radius:7px;cursor:pointer;transition:border-color 150ms"
+                         onmouseover="this.style.borderColor='#1e3a5f'" onmouseout="this.style.borderColor='#0f1e33'"
+                         onclick="app._nsChip('Sugerir tags e categorias para este conteúdo')">
+                      <i data-lucide="tag" style="width:10px;height:10px;color:#2d4a6d;flex-shrink:0"></i>
+                      <span style="font-size:10.5px;color:#334155">Sugerir tags e categorias</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:#0a1020;border:1px solid #0f1e33;border-radius:7px;cursor:pointer;transition:border-color 150ms"
+                         onmouseover="this.style.borderColor='#1e3a5f'" onmouseout="this.style.borderColor='#0f1e33'"
+                         onclick="app._nsChip('Avaliar a qualidade técnica deste conteúdo')">
+                      <i data-lucide="check-circle" style="width:10px;height:10px;color:#2d4a6d;flex-shrink:0"></i>
+                      <span style="font-size:10.5px;color:#334155">Avaliar qualidade técnica</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /ns-panel-studio -->
+
+          </div><!-- /ns-split-row -->
+
+          <!-- ─── Horizontal resize handle ─── -->
+          <div class="ns-hsplit-handle" id="ns-hsplit-handle">
+            <div class="ns-hsplit-grip"></div>
+          </div>
+
+          <!-- ─── Timeline Panel ─── -->
+          <div class="ns-timeline-panel" id="ns-timeline-panel">
+            <div class="ns-timeline-hdr">
+              <i data-lucide="message-square" style="width:11px;height:11px;color:#2d4a6d;flex-shrink:0"></i>
+              <span class="ns-tl-hdr-title">Linha do Tempo</span>
+              <span class="ns-tl-count" id="ns-tl-count">0</span>
+              <button class="ns-tl-clear" id="ns-tl-clear" onclick="app._nsClearTimeline()" title="Limpar histórico">
+                <i data-lucide="trash-2" style="width:9px;height:9px;margin-right:3px"></i>Limpar
+              </button>
+            </div>
+            <div class="ns-timeline-body" id="ns-timeline-body">
+              <div class="ns-tl-empty">
+                <strong>Nenhuma interação ainda</strong>
+                Use o campo abaixo para iniciar uma conversa com o Studio AI
               </div>
             </div>
           </div>
-          <div class="ns-info-bar" id="ns-info-bar">
-            <span id="ns-file-count" style="color:#334155">—</span>
-            <span style="color:#1a2540">Natural Studio · ${this._esc(nsName)}</span>
+
+          <!-- ─── Input Area ─── -->
+          <div class="ns-ai-input-area">
+            <div class="ns-ai-input-box">
+              <textarea class="ns-ai-textarea" id="ns-ai-textarea"
+                        placeholder="Pergunte algo sobre este conteúdo..." rows="2"
+                        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();app._nsSend()}"></textarea>
+              <div class="ns-ai-input-actions">
+                <div style="display:flex;gap:3px;align-items:center">
+                  <button class="ns-ai-icon-btn" title="Anexar arquivo"><i data-lucide="paperclip" style="width:12px;height:12px"></i></button>
+                  <button class="ns-ai-icon-btn" title="Adicionar imagem"><i data-lucide="image" style="width:12px;height:12px"></i></button>
+                  <span class="ns-ai-model-badge">
+                    <i data-lucide="cpu" style="width:8px;height:8px"></i> Atlas AI
+                  </span>
+                </div>
+                <button class="ns-ai-btn-send" id="ns-ai-btn-send" title="Enviar (Enter)" onclick="app._nsSend()">
+                  <i data-lucide="send" style="width:12px;height:12px"></i>
+                </button>
+              </div>
+            </div>
           </div>
+
+          <!-- ─── Info Bar ─── -->
+          <div class="ns-info-bar" id="ns-info-bar">
+            <span id="ns-info-left">—</span>
+            <span>Natural Studio · ${this._esc(nsName)}</span>
+          </div>
+
         </div>`;
       }
 
@@ -1925,6 +2105,7 @@ class GFContentRegistryApp {
 
   // ── Natural Studio ─────────────────────────────────
   _applyTabClass($body, idx) {
+
     if (!$body) return;
     $body.classList.remove('ns-active', 'cfg-active');
     const $main = document.getElementById('gfcr-main');
@@ -1940,11 +2121,16 @@ class GFContentRegistryApp {
   _nsInit() {
     const docName = (this.selected || {}).name;
     if (!docName) return;
+    // Init resize handles
+    setTimeout(() => this._nsInitResize(), 60);
+    // Init timeline from cached selected data
+    this._nsInitTimeline();
+    // Load GD gallery
     const $gal = document.getElementById('ns-gallery');
     if ($gal) $gal.innerHTML = `
       <div class="ns-gallery-loading">
-        <div class="spinner" style="width:24px;height:24px;border-color:#1a2540;border-top-color:#38bdf8"></div>
-        <span style="color:#475569;font-size:13px;margin-left:8px">Conectando ao Google Drive...</span>
+        <div class="spinner" style="width:20px;height:20px;border-color:#1a2540;border-top-color:#38bdf8"></div>
+        <span style="color:#334155;font-size:11.5px;margin-left:7px">Conectando ao Google Drive...</span>
       </div>`;
     frappe.call({
       method: 'ichis_atlas_app.ichis_atlas_app.doctype.gf_content_registry.gf_content_registry.ns_get_workspace',
@@ -1972,9 +2158,12 @@ class GFContentRegistryApp {
   _nsRenderGallery(files) {
     const $gal  = document.getElementById('ns-gallery');
     const $cnt  = document.getElementById('ns-file-count');
+    const $info = document.getElementById('ns-info-left');
     if (!$gal) return;
-    if ($cnt) $cnt.textContent = files.length
-      ? `${files.length} arquivo${files.length > 1 ? 's' : ''}`
+    const label = files.length ? `${files.length} arq.` : '0';
+    if ($cnt)  $cnt.textContent  = label;
+    if ($info) $info.textContent = files.length
+      ? `${files.length} arquivo${files.length > 1 ? 's' : ''} no Google Drive`
       : 'Nenhum arquivo';
     if (!files.length) {
       $gal.innerHTML = `<div class="ns-gallery-empty">
@@ -2122,6 +2311,195 @@ class GFContentRegistryApp {
     });
     document.body.appendChild(el);
     if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+  }
+
+  // ── NS Chip — fill textarea with quick action ────
+  _nsChip(text) {
+    const $ta = document.getElementById('ns-ai-textarea');
+    if ($ta) { $ta.value = text; $ta.focus(); }
+  }
+
+  // ── NS Send — submit message to timeline ─────────
+  _nsSend() {
+    const $ta  = document.getElementById('ns-ai-textarea');
+    const $btn = document.getElementById('ns-ai-btn-send');
+    const text = ($ta ? $ta.value : '').trim();
+    if (!text) return;
+    const docName = (this.selected || {}).name;
+    if (!docName) return;
+
+    if ($ta)  $ta.value   = '';
+    if ($btn) $btn.disabled = true;
+
+    const tsNow = new Date().toISOString();
+    const userEntry = { id: Date.now() + '_u', ts: tsNow, role: 'user', text };
+
+    // Append user entry locally + render
+    if (!this._nsTimeline) this._nsTimeline = [];
+    this._nsTimeline.push(userEntry);
+    this._nsRenderTimeline(this._nsTimeline);
+
+    // Persist user entry to DB
+    this._nsSaveEntry(userEntry, docName);
+
+    // Simulate AI response (placeholder — replace with real API call)
+    setTimeout(() => {
+      const aiEntry = {
+        id: Date.now() + '_ai',
+        ts: new Date().toISOString(),
+        role: 'ai',
+        text: `Recebi sua solicitação: "${userEntry.text.substring(0,80)}${userEntry.text.length > 80 ? '…' : ''}"\n\nA integração com o modelo de IA estará disponível em breve. Por enquanto, a interação foi registrada na linha do tempo.`
+      };
+      this._nsTimeline.push(aiEntry);
+      this._nsRenderTimeline(this._nsTimeline);
+      this._nsSaveEntry(aiEntry, docName);
+      if ($btn) $btn.disabled = false;
+    }, 900);
+  }
+
+  // ── NS Init Timeline ─────────────────────────────
+  _nsInitTimeline() {
+    try {
+      const raw = (this.selected || {}).prompt_timeline || '[]';
+      this._nsTimeline = JSON.parse(raw);
+      if (!Array.isArray(this._nsTimeline)) this._nsTimeline = [];
+    } catch(e) {
+      this._nsTimeline = [];
+    }
+    this._nsRenderTimeline(this._nsTimeline);
+  }
+
+  // ── NS Render Timeline ───────────────────────────
+  _nsRenderTimeline(entries) {
+    const $body  = document.getElementById('ns-timeline-body');
+    const $count = document.getElementById('ns-tl-count');
+    if (!$body) return;
+    if ($count) $count.textContent = entries.length || '0';
+    if (!entries.length) {
+      $body.innerHTML = `<div class="ns-tl-empty">
+        <strong>Nenhuma interação ainda</strong>
+        Use o campo abaixo para iniciar uma conversa com o Studio AI
+      </div>`;
+      return;
+    }
+    $body.innerHTML = entries.map(e => {
+      const isUser = e.role === 'user';
+      const ts = e.ts ? new Date(e.ts).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }) : '';
+      const avatarIcon = isUser
+        ? `<i data-lucide="user" style="width:12px;height:12px"></i>`
+        : `<i data-lucide="sparkles" style="width:12px;height:12px"></i>`;
+      return `<div class="ns-tl-entry ${isUser ? 'user' : 'ai'}">
+        <div class="ns-tl-avatar ${isUser ? 'user-av' : 'ai-av'}">${avatarIcon}</div>
+        <div class="ns-tl-bubble">
+          <div class="ns-tl-text">${this._esc(e.text)}</div>
+          <div class="ns-tl-ts">${ts}</div>
+        </div>
+      </div>`;
+    }).join('');
+    if (window.lucide) lucide.createIcons({ attrs:{ style:'display:block' } });
+    // Scroll to bottom
+    $body.scrollTop = $body.scrollHeight;
+  }
+
+  // ── NS Save Entry ────────────────────────────────
+  _nsSaveEntry(entry, docName) {
+    frappe.call({
+      method: 'ichis_atlas_app.ichis_atlas_app.doctype.gf_content_registry.gf_content_registry.ns_append_timeline_entry',
+      args: { doc_name: docName, entry_json: JSON.stringify(entry) },
+      callback: (r) => {
+        // Update selected cache with latest timeline
+        if (r && r.message && this.selected) {
+          this.selected.prompt_timeline = JSON.stringify(r.message);
+          this._nsTimeline = r.message;
+        }
+      },
+      error: () => { /* silently fail — data already displayed locally */ }
+    });
+  }
+
+  // ── NS Clear Timeline ────────────────────────────
+  _nsClearTimeline() {
+    const docName = (this.selected || {}).name;
+    if (!docName) return;
+    frappe.confirm('Limpar toda a linha do tempo desta sessão?', () => {
+      frappe.call({
+        method: 'ichis_atlas_app.ichis_atlas_app.doctype.gf_content_registry.gf_content_registry.ns_clear_timeline',
+        args: { doc_name: docName },
+        callback: () => {
+          this._nsTimeline = [];
+          if (this.selected) this.selected.prompt_timeline = '[]';
+          this._nsRenderTimeline([]);
+          this._toast('Linha do tempo limpa.', 'info');
+        },
+        error: () => this._toast('Erro ao limpar a linha do tempo.', 'error')
+      });
+    });
+  }
+
+  // ── NS Resize Handles ────────────────────────────
+  _nsInitResize() {
+    // ── Vertical handle: resize Images ↔ Studio AI ──
+    const vHandle = document.getElementById('ns-vsplit-handle');
+    const imgPanel  = document.getElementById('ns-panel-images');
+    const stPanel   = document.getElementById('ns-panel-studio');
+    if (vHandle && imgPanel && stPanel) {
+      let vDragging = false, vStartX = 0, vStartImgW = 0, vTotalW = 0;
+      vHandle.addEventListener('mousedown', e => {
+        e.preventDefault();
+        vDragging  = true;
+        vStartX    = e.clientX;
+        vStartImgW = imgPanel.getBoundingClientRect().width;
+        vTotalW    = imgPanel.parentElement.getBoundingClientRect().width - vHandle.offsetWidth;
+        vHandle.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+      document.addEventListener('mousemove', e => {
+        if (!vDragging) return;
+        const delta  = e.clientX - vStartX;
+        const newW   = Math.max(160, Math.min(vTotalW - 160, vStartImgW + delta));
+        const pct    = (newW / vTotalW * 100).toFixed(2);
+        imgPanel.style.flex = `0 0 ${pct}%`;
+        stPanel.style.flex  = `0 0 ${(100 - parseFloat(pct)).toFixed(2)}%`;
+      });
+      document.addEventListener('mouseup', () => {
+        if (!vDragging) return;
+        vDragging = false;
+        vHandle.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      });
+    }
+
+    // ── Horizontal handle: resize SplitRow ↔ Timeline ──
+    const hHandle    = document.getElementById('ns-hsplit-handle');
+    const splitRow   = document.getElementById('ns-split-row');
+    const tlPanel    = document.getElementById('ns-timeline-panel');
+    if (hHandle && splitRow && tlPanel) {
+      let hDragging = false, hStartY = 0, hStartH = 0;
+      hHandle.addEventListener('mousedown', e => {
+        e.preventDefault();
+        hDragging = true;
+        hStartY   = e.clientY;
+        hStartH   = splitRow.getBoundingClientRect().height;
+        hHandle.classList.add('dragging');
+        document.body.style.cursor = 'row-resize';
+        document.body.style.userSelect = 'none';
+      });
+      document.addEventListener('mousemove', e => {
+        if (!hDragging) return;
+        const delta  = e.clientY - hStartY;
+        const newH   = Math.max(120, Math.min(600, hStartH + delta));
+        splitRow.style.height = newH + 'px';
+      });
+      document.addEventListener('mouseup', () => {
+        if (!hDragging) return;
+        hDragging = false;
+        hHandle.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      });
+    }
   }
 
   // ── Helpers ───────────────────────────────────────

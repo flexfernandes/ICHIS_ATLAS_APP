@@ -34,7 +34,8 @@
   "favorite",
   "active",
   "last_reviewed_on",
-  "previous_version"
+  "previous_version",
+  "prompt_timeline"
  ],
  "fields": [
   {
@@ -219,6 +220,12 @@
    "fieldtype": "Link",
    "label": "Versão Anterior",
    "options": "GF Content Registry",
+   "hidden": 1
+  },
+  {
+   "fieldname": "prompt_timeline",
+   "fieldtype": "Long Text",
+   "label": "Prompt Timeline",
    "hidden": 1
   }
  ],
