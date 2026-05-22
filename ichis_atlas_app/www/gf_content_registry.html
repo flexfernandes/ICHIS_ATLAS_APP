@@ -1,7 +1,8 @@
 {% extends "templates/web.html" %}
 
-{# Suprime o navbar do Frappe website nesta página — o app tem seu próprio header #}
+{# Suprime navbar e footer do Frappe website — o app tem seus próprios elementos #}
 {% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block head_include %}
 <script src="/assets/ichis_atlas_app/js/lucide.min.js"></script>

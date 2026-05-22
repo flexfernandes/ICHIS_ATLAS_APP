@@ -353,12 +353,12 @@ def ns_delete_file(file_id):
 
 @frappe.whitelist()
 def ns_append_timeline_entry(doc_name, entry_json):
-    """Acrescenta uma entrada JSON à timeline do registro e retorna a lista atualizada."""
+    """Acrescenta uma entrada JSON à timeline usando db.set_value (sem hooks, sem conflito de versão)."""
     import json
 
-    doc = frappe.get_doc("GF Content Registry", doc_name)
+    current = frappe.db.get_value("GF Content Registry", doc_name, "prompt_timeline") or "[]"
     try:
-        timeline = json.loads(doc.prompt_timeline or "[]")
+        timeline = json.loads(current)
         if not isinstance(timeline, list):
             timeline = []
     except Exception:
@@ -366,15 +366,15 @@ def ns_append_timeline_entry(doc_name, entry_json):
 
     entry = json.loads(entry_json)
     timeline.append(entry)
-    doc.prompt_timeline = json.dumps(timeline, ensure_ascii=False)
-    doc.save(ignore_permissions=True, ignore_version=True)
+    new_json = json.dumps(timeline, ensure_ascii=False)
+    frappe.db.set_value("GF Content Registry", doc_name, "prompt_timeline", new_json, update_modified=False)
+    frappe.db.commit()
     return timeline
 
 
 @frappe.whitelist()
 def ns_clear_timeline(doc_name):
     """Limpa toda a timeline do registro."""
-    doc = frappe.get_doc("GF Content Registry", doc_name)
-    doc.prompt_timeline = "[]"
-    doc.save(ignore_permissions=True, ignore_version=True)
+    frappe.db.set_value("GF Content Registry", doc_name, "prompt_timeline", "[]", update_modified=False)
+    frappe.db.commit()
     return []
