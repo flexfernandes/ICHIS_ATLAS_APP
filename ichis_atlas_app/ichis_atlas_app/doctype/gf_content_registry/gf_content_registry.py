@@ -41,9 +41,11 @@ class GFContentRegistry(Document):
 
     def after_insert(self):
         self._ensure_ns_directories()
+        self._ensure_gd_ns_folder()
 
     def on_update(self):
         self._ensure_ns_directories()
+        self._ensure_gd_ns_folder()
 
     def _ensure_ns_directories(self):
         if not self.internal_name:
@@ -51,6 +53,26 @@ class GFContentRegistry(Document):
         import os
         ns_path = frappe.get_site_path('public', 'files', 'natural_studio', self.internal_name)
         os.makedirs(ns_path, exist_ok=True)
+
+    def _ensure_gd_ns_folder(self):
+        """Cria/garante pasta {internal_name} dentro de route_url no Google Drive."""
+        if not self.internal_name or not self.route_url:
+            return
+        try:
+            settings = frappe.get_single("GF Integration Settings")
+            try:
+                token = settings.get_password("gd_access_token") or ""
+            except Exception:
+                token = ""
+            if not token:
+                return
+            base_id = _resolve_path_to_id(token, self.route_url)
+            if not base_id:
+                return
+            if not _find_folder(token, self.internal_name, base_id):
+                _create_folder(token, self.internal_name, base_id)
+        except Exception as e:
+            frappe.log_error(f"NS GD folder creation failed for {self.internal_name}: {e}")
 
     def _resolve_drive_path(self):
         external_ref = frappe.db.get_value("GF Content Group", self.content_group, "external_reference")

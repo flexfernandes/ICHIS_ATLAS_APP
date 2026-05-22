@@ -526,6 +526,19 @@ select.form-control{cursor:pointer}
 #gfcr .vk-ver-label{color:#4ade80}
 /* Scrollbar */
 #gfcr .gfcr-tab-body::-webkit-scrollbar-thumb{background:#1e3a5f!important}
+/* Força dark em todos os elementos de formulário (input/textarea/select) */
+#gfcr input,#gfcr input.form-control,
+#gfcr textarea,#gfcr textarea.form-control,
+#gfcr select,#gfcr select.form-control{
+  background:#0e1825!important;color:#cbd5e1!important;
+  border-color:#162035!important
+}
+#gfcr input::placeholder,#gfcr textarea::placeholder{color:#2d4a6d!important}
+#gfcr input:focus,#gfcr textarea:focus,#gfcr select:focus{
+  background:#0f1e33!important;border-color:#2563eb!important;
+  box-shadow:0 0 0 3px rgba(37,99,235,.15)!important
+}
+#gfcr select option{background:#0e1825!important;color:#cbd5e1!important}
 /* Natural Studio — ocultar cabeçalho superior da página */
 #gfcr-main.ns-mode .gfcr-det-hdr,
 #gfcr-main.ns-mode .ver-panel,
@@ -1917,26 +1930,26 @@ class GFContentRegistryApp {
   }
 
   _nsInit() {
-    const intName = (this.selected || {}).internal_name;
-    if (!intName) return;
-    frappe.call({
-      method: 'ichis_atlas_app.api.natural_studio.ensure_record_directories',
-      args: { internal_name: intName, route_url: (this.selected || {}).route_url || '' },
-      error: (e) => { console.warn('[NS] Falha ao criar diretório:', e); }
-    });
+    const docName = (this.selected || {}).name;
+    if (!docName) return;
     const $gal = document.getElementById('ns-gallery');
     if ($gal) $gal.innerHTML = `
       <div class="ns-gallery-loading">
         <div class="spinner" style="width:24px;height:24px;border-color:#1a2540;border-top-color:#38bdf8"></div>
-        <span style="color:#475569;font-size:13px;margin-left:8px">Carregando arquivos...</span>
+        <span style="color:#475569;font-size:13px;margin-left:8px">Conectando ao Google Drive...</span>
       </div>`;
     frappe.call({
-      method: 'ichis_atlas_app.api.natural_studio.list_files',
-      args: { internal_name: intName },
-      callback: (r) => { this._nsRenderGallery(r.message || []); },
+      method: 'ichis_atlas_app.ichis_atlas_app.doctype.gf_content_registry.gf_content_registry.ns_get_workspace',
+      args: { doc_name: docName },
+      callback: (r) => {
+        const data = r.message || {};
+        this._nsGdFolderId = data.folder_id || null;
+        this._nsRenderGallery(data.images || []);
+      },
       error: () => {
         if ($gal) $gal.innerHTML = `<div class="ns-gallery-empty">
-          <strong>Erro ao carregar arquivos</strong>Verifique as permissões e tente novamente.</div>`;
+          <strong>Erro ao conectar ao Google Drive</strong>
+          Verifique a integração em <em>GF Integration Settings</em> e tente novamente.</div>`;
       }
     });
   }
@@ -1969,24 +1982,30 @@ class GFContentRegistryApp {
   }
 
   _nsFileCard(f) {
-    const sz = f.size < 1024 ? f.size + ' B'
-      : f.size < 1048576 ? (f.size / 1024).toFixed(1) + ' KB'
-      : (f.size / 1048576).toFixed(1) + ' MB';
-    const thumb = f.is_image
-      ? `<img class="ns-img-thumb" src="${this._esc(f.url)}" alt="${this._esc(f.name)}" loading="lazy">`
+    const isImage = (f.mimeType || '').startsWith('image/');
+    const bytes   = parseInt(f.size || 0);
+    const sz      = bytes < 1024 ? bytes + ' B'
+      : bytes < 1048576 ? (bytes / 1024).toFixed(1) + ' KB'
+      : (bytes / 1048576).toFixed(1) + ' MB';
+    // thumbnailLink do GD: substitui o parâmetro de tamanho para 240px
+    const thumbUrl = f.thumbnailLink ? f.thumbnailLink.replace(/=s\d+/, '=s240') : '';
+    const bigUrl   = f.thumbnailLink ? f.thumbnailLink.replace(/=s\d+/, '=s1200') : '';
+    const thumb = isImage && thumbUrl
+      ? `<img class="ns-img-thumb" src="${this._esc(thumbUrl)}" alt="${this._esc(f.name)}" loading="lazy">`
       : `<div class="ns-img-thumb-icon"><i data-lucide="file" style="width:36px;height:36px"></i></div>`;
-    const viewBtn = f.is_image
-      ? `<button class="ns-img-overlay-btn" onclick="event.stopPropagation();app._nsLightbox('${this._escJs(f.url)}','${this._escJs(f.name)}')" title="Visualizar">
+    const copyUrl = `https://drive.google.com/file/d/${f.id}/view`;
+    const viewBtn = isImage && bigUrl
+      ? `<button class="ns-img-overlay-btn" onclick="event.stopPropagation();app._nsLightbox('${this._escJs(bigUrl)}','${this._escJs(f.name)}')" title="Visualizar">
            <i data-lucide="zoom-in" style="width:14px;height:14px"></i>
          </button>` : '';
     return `<div class="ns-img-card">
       ${thumb}
       <div class="ns-img-overlay">
         ${viewBtn}
-        <button class="ns-img-overlay-btn" onclick="event.stopPropagation();app._nsCopyUrl('${this._escJs(f.url)}')" title="Copiar URL">
+        <button class="ns-img-overlay-btn" onclick="event.stopPropagation();app._nsCopyUrl('${this._escJs(copyUrl)}')" title="Copiar link GD">
           <i data-lucide="copy" style="width:14px;height:14px"></i>
         </button>
-        <button class="ns-img-overlay-btn del" onclick="event.stopPropagation();app._nsDelete('${this._escJs(f.name)}')" title="Excluir">
+        <button class="ns-img-overlay-btn del" onclick="event.stopPropagation();app._nsDelete('${this._escJs(f.id)}','${this._escJs(f.name)}')" title="Excluir">
           <i data-lucide="trash-2" style="width:14px;height:14px"></i>
         </button>
       </div>
@@ -2012,8 +2031,8 @@ class GFContentRegistryApp {
 
   async _nsUploadFiles(files) {
     if (!files || !files.length) return;
-    const intName = (this.selected || {}).internal_name;
-    if (!intName) return;
+    const docName = (this.selected || {}).name;
+    if (!docName) return;
     const $bar   = document.getElementById('ns-upload-bar');
     const $fill  = document.getElementById('ns-upload-fill');
     const $label = document.getElementById('ns-upload-label');
@@ -2023,16 +2042,20 @@ class GFContentRegistryApp {
     for (const file of Array.from(files)) {
       if ($label) $label.textContent = `Enviando ${done + 1} de ${total}: ${file.name}`;
       try {
-        const fd = new FormData();
-        fd.append('file', file);
-        fd.append('internal_name', intName);
+        // Converte para base64 para enviar via Google Drive
+        const b64 = await new Promise((res, rej) => {
+          const reader = new FileReader();
+          reader.onload  = e => res(e.target.result.split(',')[1]);
+          reader.onerror = rej;
+          reader.readAsDataURL(file);
+        });
         await new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', '/api/method/ichis_atlas_app.api.natural_studio.upload_file');
-          xhr.setRequestHeader('X-Frappe-CSRF-Token', frappe.csrf_token);
-          xhr.onload  = () => xhr.status === 200 ? resolve() : reject();
-          xhr.onerror = reject;
-          xhr.send(fd);
+          frappe.call({
+            method: 'ichis_atlas_app.ichis_atlas_app.doctype.gf_content_registry.gf_content_registry.ns_upload_file',
+            args: { doc_name: docName, filename: file.name, file_base64: b64, mime_type: file.type || 'image/jpeg' },
+            callback: () => resolve(),
+            error:    () => reject(new Error('upload_failed'))
+          });
         });
         done++;
       } catch(e) {
@@ -2047,22 +2070,21 @@ class GFContentRegistryApp {
     }, 600);
     if (done > 0) {
       this._toast(
-        done === total ? `${done} arquivo${done > 1 ? 's' : ''} enviado${done > 1 ? 's' : ''} com sucesso!` :
-        `${done}/${total} arquivos enviados.`,
+        done === total
+          ? `${done} arquivo${done > 1 ? 's' : ''} enviado${done > 1 ? 's' : ''} ao Google Drive!`
+          : `${done}/${total} arquivos enviados.`,
         done === total ? 'success' : 'info'
       );
       this._nsInit();
     }
   }
 
-  _nsDelete(filename) {
-    const intName = (this.selected || {}).internal_name;
-    if (!intName) return;
+  _nsDelete(fileId, filename) {
     frappe.confirm(`Excluir o arquivo "<strong>${this._esc(filename)}</strong>"?<br>Esta ação não pode ser desfeita.`, () => {
       frappe.call({
-        method: 'ichis_atlas_app.api.natural_studio.delete_file',
-        args: { internal_name: intName, filename },
-        callback: () => { this._toast('Arquivo excluído.', 'info'); this._nsInit(); },
+        method: 'ichis_atlas_app.ichis_atlas_app.doctype.gf_content_registry.gf_content_registry.ns_delete_file',
+        args: { file_id: fileId },
+        callback: () => { this._toast('Arquivo excluído do Google Drive.', 'info'); this._nsInit(); },
         error:    () => this._toast('Erro ao excluir o arquivo.', 'error')
       });
     });
