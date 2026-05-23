@@ -172,6 +172,9 @@ def _test_gemini():
 
     doc = frappe.get_single("GF Integration Settings")
 
+    if not doc.gemini_enabled:
+        return {"status": "error", "message": "Integração Gemini não está habilitada."}
+
     try:
         api_key = doc.get_password("gemini_api_key") or ""
     except Exception:
@@ -348,3 +351,60 @@ def google_oauth_callback(code=None, state=None, error=None):
     except Exception:
         frappe.log_error(frappe.get_traceback(), "OAuth Callback Error")
         return _redirect(f"{redirect_base}?oauth_error=server_error")
+
+
+@frappe.whitelist()
+def call_gemini(doc_name, prompt):
+    """
+    Chama a Gemini API para geração de conteúdo a partir do Natural Studio.
+    Usa as configurações de model, temperature, max_tokens e system_instruction
+    definidas em GF Integration Settings.
+    """
+    import requests
+
+    settings = frappe.get_single("GF Integration Settings")
+
+    if not settings.gemini_enabled:
+        frappe.throw("Integração Gemini não está habilitada. Acesse GF Integration Settings.")
+
+    try:
+        api_key = settings.get_password("gemini_api_key") or ""
+    except Exception:
+        api_key = ""
+
+    if not api_key:
+        frappe.throw("API Key do Gemini não configurada. Acesse GF Integration Settings.")
+
+    model = settings.gemini_default_model or "gemini-2.0-flash"
+    temperature = float(settings.gemini_temperature or 0.7)
+    max_tokens = int(settings.gemini_max_tokens or 2048)
+    system_instruction = settings.gemini_system_instruction or ""
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+
+    body = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "temperature": temperature,
+            "maxOutputTokens": max_tokens,
+        },
+    }
+
+    if system_instruction:
+        body["systemInstruction"] = {"parts": [{"text": system_instruction}]}
+
+    try:
+        resp = requests.post(url, json=body, timeout=60)
+    except Exception as e:
+        frappe.throw(f"Erro de rede ao chamar Gemini: {e}")
+
+    if resp.status_code != 200:
+        frappe.throw(f"Erro Gemini API (HTTP {resp.status_code}): {resp.text[:300]}")
+
+    data = resp.json()
+    try:
+        text = data["candidates"][0]["content"]["parts"][0]["text"]
+    except (KeyError, IndexError):
+        frappe.throw("Resposta inesperada da Gemini API.")
+
+    return {"text": text, "model": model}
