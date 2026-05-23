@@ -99,68 +99,33 @@ class GFContentRegistry(Document):
                 "<b>GF Integration Settings</b> antes de salvar."
             )
 
-        def _search(token):
-            safe_ref = external_ref.replace("'", "\\'")
-            return requests.get(
-                "https://www.googleapis.com/drive/v3/files",
-                params={
-                    "q": f"name='{safe_ref}' and mimeType='application/vnd.google-apps.folder' and trashed=false",
-                    "fields": "files(id,name,parents)",
-                    "pageSize": 10,
-                },
-                headers={"Authorization": f"Bearer {token}"},
-                timeout=15,
-            )
-
-        resp = _search(access_token)
-
-        if resp.status_code == 401:
+        # Verificação de token; renova se expirado
+        probe = _drive_get(access_token, "https://www.googleapis.com/drive/v3/about", {"fields": "user"})
+        if probe.status_code == 401:
             from ichis_atlas_app.ichis_atlas_app.doctype.gf_integration_settings.gf_integration_settings import _refresh_google_token
             new_token = _refresh_google_token(settings_doc)
             if new_token:
                 access_token = new_token
-                resp = _search(access_token)
             else:
                 frappe.throw(
                     "Token do Google Drive expirou e não foi possível renová-lo. "
                     "Reconecte em <b>GF Integration Settings</b>."
                 )
+        elif probe.status_code != 200:
+            frappe.throw(f"Erro ao consultar o Google Drive (HTTP {probe.status_code}).")
 
-        if resp.status_code != 200:
-            frappe.throw(f"Erro ao consultar o Google Drive (HTTP {resp.status_code}).")
+        # 1. Garante pasta gf_atlas na raiz do Drive
+        gf_atlas_id = _find_folder(access_token, "gf_atlas", "root")
+        if not gf_atlas_id:
+            gf_atlas_id = _create_folder(access_token, "gf_atlas", "root")
 
-        files = resp.json().get("files", [])
-        if not files:
-            folder_id = _create_folder(access_token, external_ref, "root")
-        else:
-            folder_id = files[0]["id"]
-        auth_headers = {"Authorization": f"Bearer {access_token}"}
-        self.route_url = self._build_drive_path(folder_id, auth_headers)
+        # 2. Garante pasta external_ref dentro de gf_atlas
+        ext_folder_id = _find_folder(access_token, external_ref, gf_atlas_id)
+        if not ext_folder_id:
+            _create_folder(access_token, external_ref, gf_atlas_id)
 
-    def _build_drive_path(self, folder_id, headers):
-        parts = []
-        current_id = folder_id
-        visited = set()
-
-        while current_id and current_id not in visited and len(parts) < 20:
-            visited.add(current_id)
-            resp = requests.get(
-                f"https://www.googleapis.com/drive/v3/files/{current_id}",
-                params={"fields": "id,name,parents"},
-                headers=headers,
-                timeout=10,
-            )
-            if resp.status_code != 200:
-                break
-            data = resp.json()
-            parts.append(data.get("name", ""))
-            parents = data.get("parents", [])
-            current_id = parents[0] if parents else None
-
-        parts.reverse()
-        if parts and parts[0] in ("My Drive", "Meu Drive"):
-            parts = parts[1:]
-        return "/".join(parts)
+        # route_url sempre reflete a hierarquia: gf_atlas/{external_ref}
+        self.route_url = f"gf_atlas/{external_ref}"
 
     def _generate_internal_name(self, title):
         name = unicodedata.normalize("NFD", title.lower())
