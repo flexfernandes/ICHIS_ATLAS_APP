@@ -201,6 +201,18 @@ def _resolve_path_to_id(token, path):
     return parent_id
 
 
+def _ensure_gd_path(token, path):
+    """Garante cada nível do caminho no Drive; cria os que não existirem. Retorna o ID da pasta folha."""
+    parts = [p for p in path.split("/") if p]
+    parent_id = "root"
+    for part in parts:
+        folder_id = _find_folder(token, part, parent_id)
+        if not folder_id:
+            folder_id = _create_folder(token, part, parent_id)
+        parent_id = folder_id
+    return parent_id
+
+
 def _list_images(token, folder_id):
     IMAGE_MIME = (
         "image/jpeg,image/png,image/gif,image/webp,image/svg+xml,"
@@ -227,7 +239,7 @@ def _list_images(token, folder_id):
 def ns_get_workspace(doc_name):
     """
     Retorna o folder_id do diretório NS e a lista de imagens.
-    Cria a pasta internal_name dentro de route_url se não existir.
+    Cria automaticamente qualquer nível da hierarquia que não existir no Drive.
     """
     doc = frappe.get_doc("GF Content Registry", doc_name)
     if not doc.route_url or not doc.internal_name:
@@ -235,10 +247,8 @@ def ns_get_workspace(doc_name):
 
     settings, token = _get_drive_token()
 
-    # Resolve o caminho base (route_url)
-    base_id = _resolve_path_to_id(token, doc.route_url)
-    if not base_id:
-        frappe.throw(f"Caminho base '{doc.route_url}' não encontrado no Google Drive.")
+    # Garante cada nível do caminho base (cria se não existir)
+    base_id = _ensure_gd_path(token, doc.route_url)
 
     # Verifica/cria a pasta do internal_name
     ns_folder_id = _find_folder(token, doc.internal_name, base_id)

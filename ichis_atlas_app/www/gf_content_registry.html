@@ -1788,13 +1788,22 @@ class GFContentRegistryApp {
                   error: (e) => { console.warn('[NS] Falha ao criar diretório:', e); }
                 });
               }
-              this._loadRecords().then(() => {
-                this.selected  = saved;
-                this.mode      = 'view';
-                this.activeTab = 0;
-                this._renderView();
-                this._markActive(saved.name);
-              });
+              // Atualiza registro no array local sem recarregar a lista toda
+              const $list = document.getElementById('gfcr-list');
+              const scrollTop = $list ? $list.scrollTop : 0;
+              const idx = this.records.findIndex(r => r.name === saved.name);
+              if (idx >= 0) {
+                this.records[idx] = Object.assign({}, this.records[idx], saved);
+              } else {
+                this.records.unshift(saved);
+              }
+              this.selected  = saved;
+              this.mode      = 'view';
+              this.activeTab = 0;
+              this._renderList();
+              this._renderView();
+              this._markActive(saved.name);
+              if ($list) $list.scrollTop = scrollTop;
             };
             if (originToObsolete) {
               frappe.call({
@@ -2127,6 +2136,15 @@ class GFContentRegistryApp {
     setTimeout(() => this._nsInitResize(), 60);
     // Init timeline from cached selected data
     this._nsInitTimeline();
+    // Garante diretórios locais silenciosamente (fire-and-forget)
+    const sel = this.selected || {};
+    if (sel.internal_name) {
+      frappe.call({
+        method: 'ichis_atlas_app.api.natural_studio.ensure_record_directories',
+        args: { internal_name: sel.internal_name, route_url: sel.route_url || '' },
+        error: (e) => { console.warn('[NS] dir create:', e); }
+      });
+    }
     // Load GD gallery
     const $gal = document.getElementById('ns-gallery');
     if ($gal) $gal.innerHTML = `
