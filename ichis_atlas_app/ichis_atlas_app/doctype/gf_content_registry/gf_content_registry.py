@@ -51,7 +51,16 @@ class GFContentRegistry(Document):
         if not self.internal_name:
             return
         import os
-        ns_path = frappe.get_site_path('public', 'files', 'natural_studio', self.internal_name)
+        base = frappe.get_site_path('public', 'files', 'gf_atlas')
+        # gf_atlas/ sempre existe
+        os.makedirs(base, exist_ok=True)
+        # gf_atlas/{route_url_parts...}/{internal_name}/
+        path = base
+        if self.route_url:
+            for part in [p for p in self.route_url.split('/') if p]:
+                path = os.path.join(path, part)
+                os.makedirs(path, exist_ok=True)
+        ns_path = os.path.join(path, self.internal_name)
         os.makedirs(ns_path, exist_ok=True)
 
     def _ensure_gd_ns_folder(self):

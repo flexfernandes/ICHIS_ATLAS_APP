@@ -3,15 +3,33 @@ import os
 import re
 from werkzeug.utils import secure_filename
 
-NS_URL_BASE = '/files/natural_studio/'
+NS_ROOT     = 'gf_atlas'
 IMAGE_EXTS  = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp', '.ico', '.tiff', '.avif'}
 
 
-def _get_ns_path(internal_name=None):
-    base = frappe.get_site_path('public', 'files', 'natural_studio')
-    if internal_name:
-        return os.path.join(base, internal_name)
-    return base
+def _get_ns_path(internal_name=None, route_url=None):
+    """Retorna o caminho local: public/files/gf_atlas/{route_url...}/{internal_name}"""
+    base = frappe.get_site_path('public', 'files', NS_ROOT)
+    if not internal_name:
+        return base
+    if route_url is None:
+        route_url = frappe.db.get_value(
+            "GF Content Registry", {"internal_name": internal_name}, "route_url"
+        ) or ""
+    path = base
+    for part in [p for p in (route_url or "").split('/') if p]:
+        path = os.path.join(path, part)
+    return os.path.join(path, internal_name)
+
+
+def _ns_url(internal_name, filename, route_url=None):
+    """Monta a URL pública correspondente ao path local."""
+    if route_url is None:
+        route_url = frappe.db.get_value(
+            "GF Content Registry", {"internal_name": internal_name}, "route_url"
+        ) or ""
+    parts = [NS_ROOT] + [p for p in (route_url or "").split('/') if p] + [internal_name, filename]
+    return '/files/' + '/'.join(parts)
 
 
 def _safe_name(name):
@@ -34,7 +52,7 @@ def list_files(internal_name):
             stat = os.stat(fpath)
             result.append({
                 'name':     fname,
-                'url':      NS_URL_BASE + internal_name + '/' + fname,
+                'url':      _ns_url(internal_name, fname),
                 'size':     stat.st_size,
                 'is_image': ext in IMAGE_EXTS,
             })
@@ -81,7 +99,7 @@ def upload_file(internal_name):
     final_name = os.path.basename(dest)
     return {
         'name': final_name,
-        'url':  NS_URL_BASE + internal_name + '/' + final_name,
+        'url':  _ns_url(internal_name, final_name),
     }
 
 
@@ -89,21 +107,18 @@ def upload_file(internal_name):
 def ensure_record_directories(internal_name, route_url=None):
     _safe_name(internal_name)
 
-    # Sempre garante: public/files/natural_studio/{internal_name}/
-    ns_path = _get_ns_path(internal_name)
+    # gf_atlas/ (raiz)
+    base = frappe.get_site_path('public', 'files', NS_ROOT)
+    os.makedirs(base, exist_ok=True)
+
+    # gf_atlas/{route_url_parts...}/{internal_name}/
+    path = base
+    if route_url:
+        for part in [p for p in route_url.split('/') if p]:
+            path = os.path.join(path, part)
+            os.makedirs(path, exist_ok=True)
+
+    ns_path = os.path.join(path, internal_name)
     os.makedirs(ns_path, exist_ok=True)
 
-    created = [ns_path]
-
-    if route_url:
-        # Sanitiza route_url em nome de diretório seguro
-        clean = re.sub(r'[^a-zA-Z0-9._-]', '_', route_url.strip('/'))
-        clean = re.sub(r'_+', '_', clean).strip('_')
-        if clean and '..' not in clean and len(clean) <= 200:
-            route_base = frappe.get_site_path('public', 'files', clean)
-            os.makedirs(route_base, exist_ok=True)
-            route_sub = os.path.join(route_base, internal_name)
-            os.makedirs(route_sub, exist_ok=True)
-            created.extend([route_base, route_sub])
-
-    return {'ok': True, 'created': created}
+    return {'ok': True, 'path': ns_path}
