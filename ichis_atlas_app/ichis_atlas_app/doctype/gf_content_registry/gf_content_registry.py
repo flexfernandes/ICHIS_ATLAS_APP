@@ -48,20 +48,16 @@ class GFContentRegistry(Document):
         self._ensure_gd_ns_folder()
 
     def _ensure_ns_directories(self):
-        if not self.internal_name:
+        if not self.internal_name or not self.route_url:
             return
         import os
         base = frappe.get_site_path('public', 'files', 'gf_atlas')
-        # gf_atlas/ sempre existe
         os.makedirs(base, exist_ok=True)
-        # gf_atlas/{route_url_parts...}/{internal_name}/
         path = base
-        if self.route_url:
-            for part in [p for p in self.route_url.split('/') if p]:
-                path = os.path.join(path, part)
-                os.makedirs(path, exist_ok=True)
-        ns_path = os.path.join(path, self.internal_name)
-        os.makedirs(ns_path, exist_ok=True)
+        for part in [p for p in self.route_url.split('/') if p]:
+            path = os.path.join(path, part)
+            os.makedirs(path, exist_ok=True)
+        os.makedirs(os.path.join(path, self.internal_name), exist_ok=True)
 
     def _ensure_gd_ns_folder(self):
         """Cria/garante pasta {internal_name} dentro de route_url no Google Drive."""

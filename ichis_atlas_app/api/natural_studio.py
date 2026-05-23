@@ -107,17 +107,23 @@ def upload_file(internal_name):
 def ensure_record_directories(internal_name, route_url=None):
     _safe_name(internal_name)
 
-    # gf_atlas/ (raiz)
+    if not route_url:
+        # Sem route_url não é possível montar a hierarquia completa; cria apenas a raiz
+        base = frappe.get_site_path('public', 'files', NS_ROOT)
+        os.makedirs(base, exist_ok=True)
+        return {'ok': False, 'reason': 'route_url ausente; hierarquia incompleta não criada'}
+
+    # gf_atlas/
     base = frappe.get_site_path('public', 'files', NS_ROOT)
     os.makedirs(base, exist_ok=True)
 
-    # gf_atlas/{route_url_parts...}/{internal_name}/
+    # gf_atlas/{route_url_parts...}/
     path = base
-    if route_url:
-        for part in [p for p in route_url.split('/') if p]:
-            path = os.path.join(path, part)
-            os.makedirs(path, exist_ok=True)
+    for part in [p for p in route_url.split('/') if p]:
+        path = os.path.join(path, part)
+        os.makedirs(path, exist_ok=True)
 
+    # gf_atlas/{route_url_parts...}/{internal_name}/
     ns_path = os.path.join(path, internal_name)
     os.makedirs(ns_path, exist_ok=True)
 
